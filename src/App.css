@@ -1,3 +1,11 @@
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +43,16 @@
   to {
     transform: rotate(360deg);
   }
+}
+.fff:hover{
+  color: rgba(71, 71, 236, 0.95);
+  box-shadow: 0px 0px 1px 1px;
+}
+
+.fff{
+  border: none;
+  color: rgb(71, 71, 236);
+  background: transparent;
+  stroke-opacity: 0;
+  stroke: none;
 }
