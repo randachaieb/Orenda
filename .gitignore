@@ -1,3 +1,6 @@
+# File folder
+/server/public/card_images/*
+
 # Logs
 logs
 *.log
