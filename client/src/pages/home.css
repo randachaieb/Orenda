@@ -1,0 +1,50 @@
+.contenu {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.align-items {
+    display: block;
+}
+
+.search-b {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+
+.paragh {
+    font-family: Lato, sans-serif;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.heading {
+    font-family: Lato, sans-serif;
+    text-align: center;
+    font-size: 55px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 820px) {
+    .heading {
+        font-size: 22px;
+    }
+    .paragh {
+        font-size: 14px;
+    }
+   
+}

@@ -93,7 +93,7 @@ router.delete("/delete", auth, async (req, res) => {
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id).populate("User");
+  const card = await Card.findById(id); //.populate("user");
   res.json({ card });
 });
 

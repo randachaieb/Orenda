@@ -19,11 +19,8 @@ const cardSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 50,
   },
+  // for places, scholorship, hackathon..
   categories: {
-    type: [String],
-    required: true,
-  },
-  opportunities: {
     type: [String],
     required: true,
   },
@@ -45,7 +42,6 @@ const validateCard = (card) => {
     description: Joi.string().min(50).required(),
     region: Joi.string().min(3).max(50).required(),
     categories: Joi.array().items(Joi.string().required()),
-    opportunities: Joi.array().items(Joi.string().required()),
     user: Joi.string().min(5).max(255).required(),
   };
   return Joi.validate(card, schema);
