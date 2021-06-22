@@ -4,8 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server/server.js",
-    "start": "node server/server.js"
+    "server": "nodemon server/server.js",
+    "client": "cd ./client && npm start",
+    "start": "node server/server.js",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +29,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "concurrently": "^6.2.0",
     "nodemon": "^2.0.7"
   }
 }
