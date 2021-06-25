@@ -8,6 +8,10 @@ const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
 
+const uploadCardImage=require('../../middleware/uploadCardImage')
+const fs =require('fs')
+
+
 // @route   GET api/v1/card
 // @desc    Get user card
 // @access  private
@@ -17,51 +21,31 @@ router.get("/", auth, async (req, res) => {
   res.json(all_cards);
 });
 
-// @route   POST api/v1/card
-// @desc    Add card's image
-// @access  private
-router.post("/image/:card_id", auth, async (req, res) => {
-  const { card_id } = req.params;
-  const newCard = await Card.findOne({ _id: card_id, user: req.user._id });
-  debug(newCard);
-  if (!newCard) return res.status(400).json({ message: "no such card!" });
-  if (req.files === null) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-  // picture upload
-  const file = req.files.picture;
-  const regex = /^image\/(png|jpg|jpeg)$/;
-  if (!regex.test(file.mimetype))
-    return res
-      .status(400)
-      .json({ message: "File type should be png, jpg, or jpeg" });
-  // save image in a folder
-  const err = await file.mv(
-    path.join(__dirname, "..", "..", "public", "card_images", file.name)
-  );
-  if (err) throw err;
-  newCard.picture = `/static/card_images/${file.name}`;
-  debug(newCard);
-
-  const savedCard = await newCard.save();
-  return res.json({ card: savedCard });
-});
 
 // @route   POST api/v1/card
 // @desc    Add card
 // @access  private
-router.post("/", auth, async (req, res) => {
-  const { error } = validateCard({ ...req.body, user: req.user._id });
-  if (error) return res.status(400).json(error.details[0].message);
-  if (req.files === null) {
-    return res.status(400).json({ message: "No file uploaded" });
+router.post("/",auth, uploadCardImage.single('picture') , async (req, res) => {
+  if (!req.file ) { 
+    return res.status(400).json({ message: "No image uploaded" });
+  }else{
+    const { error } = validateCard({ ...req.body, user: req.user._id });
+    if (error) return res.status(400).json(error.details[0].message);
+
+    const image=req.file.path 
+    const newCard = new Card({
+      ...req.body,
+      picture:image,
+      user: req.user._id,
+    });
+    const savedCard = await newCard.save();
+    return res.json({ card: savedCard });
+  
   }
-  const newCard = new Card({
-    ...req.body,
-    user: req.user._id,
-  });
-  const savedCard = await newCard.save();
-  return res.json({ card: savedCard });
+
+
+
+ 
 });
 
 // @route   PATCH api/v1/card
@@ -77,6 +61,7 @@ router.patch("/update/:id", auth, async (req, res) => {
   res.json({ message: "card updated", success: true });
 });
 
+
 // @route   DELETE api/v1/card
 // @desc    delete a card
 // @access  private
@@ -86,16 +71,61 @@ router.delete("/delete", auth, async (req, res) => {
   debug(l);
   if (l.deletedCount === 0) return res.json({ success: false });
   return res.json({ message: "card deleted", success: true });
+
 });
+
+
+
+// @route   DELETE api/v1/card
+// @desc    delete a single card
+// @access  private
+router.delete("/card_delete", auth, async (req, res) => {
+  const { id } = req.body;
+  const card= await Card.findByIdAndDelete(id);
+
+  if(card===null) return res.status(400).json({ message: "Card not exists" });
+  else{
+
+    fs.unlink(card.picture, function() {
+      res.json ({
+      message:"card deleted"
+      });
+    });
+  }
+});
+
+
 
 // @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
-router.get("/:id", async (req, res) => {
+router.get("/:id", async(req, res) => {
   const { id } = req.params;
   const card = await Card.findById(id); //.populate("user");
   res.json({ card });
+
+
+
 });
+
+
+// @route   GET api/v1/card
+// @desc    Get card image 
+// @access  public
+router.get("/:filename", (req, res) => {
+  const { filename } = req.params;
+  let fileLocation = path.join(__dirname, '..', '..','..', 'server//uploads//card_images', filename);
+  //res.sendFile(`${fileLocation}`);
+  res.json(fileLocation)
+
+
+ }); 
+
+
+
+
+
+
 
 const validate_update = (req) => {
   const schema = {
@@ -103,9 +133,11 @@ const validate_update = (req) => {
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
-    opportunities: Joi.array().items(Joi.string().required()),
+    //opportunities: Joi.array().items(Joi.string().required()),
   };
   return Joi.validate(req, schema);
 };
+
+
 
 module.exports = router;

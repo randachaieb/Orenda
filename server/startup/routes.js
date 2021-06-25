@@ -11,11 +11,11 @@ const card = require("../routes/api/card");
 const user = require("../routes/api/user");
 
 module.exports = (app) => {
-  app.use("/static", express.static(path.join(__dirname, "..", "public")));
+  app.use("/static",express.static(path.join(__dirname, "..", "public")));
   app.use(cors());
   app.use(error);
   app.use(express.json());
-  app.use(fileUploader()); // File uploader middleware
+  //app.use(fileUploader()); // File uploader middleware
   app.use(helmet());
   app.use(morgan("tiny"));
   app.use("/api/v1/user", user);
