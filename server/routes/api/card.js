@@ -54,22 +54,25 @@ router.post("/",auth, uploadCardImage.single('picture') , async (req, res) => {
 // @access  private
 router.patch("/update/:id", auth,uploadCardImage.single('picture'), async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id);
-  var path=card.picture; 
-  let image =path.split('/');
-  let image_filename=image[image.length-1] ;
-  if(req.file)  {    
-    if(req.file.filename!==image_filename) {
-      fs.unlink(PATH+'/'+image_filename, function(error) { 
+  var update_values=req.body; 
+
+  
+  if(req.file)  {   
+    const card = await Card.findById(id); 
+    var path=card.picture;  //current image
+    let image =path.split('/');
+    let image_filename=image[image.length-1] ;                          
+    if(req.file.filename!==image_filename) { //update a different image
+      fs.unlink(PATH+'/'+image_filename, function(error) {  //delete old one
         debug(error);
       });
     }
-    path= `/static/card_images/${req.file.filename}` 
+    path= `/static/card_images/${req.file.filename}`  //set the path of the new image
+    update_values={...update_values,picture:path}
   }
-const { error } = validate_update(req.body);
+  const { error } = validate_update(req.body);
   if (error) return res.status(400).json(error.details[0].message);
   debug(update_values);
-  const update_values={...req.body,picture:path}
   const newCard = await Card.findByIdAndUpdate(id, update_values);
    res.json({ message: "card updated", success: true });
 
