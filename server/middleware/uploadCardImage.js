@@ -1,6 +1,7 @@
 const multer = require("multer")
 
-const PATH="./server/uploads/card_images";
+const PATH="./server/public/card_images";
+
 
 const multerFilter = (req, file, cb) => {
    if (file.mimetype.startsWith('image')) {
@@ -26,4 +27,4 @@ let storage = multer.diskStorage({
 
  })
 
- module.exports=uploadCardImage
+ module.exports={uploadCardImage, PATH}

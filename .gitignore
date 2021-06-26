@@ -1,5 +1,6 @@
 # File folder
 /server/public/card_images/*
+
 /TODO.txt
 # Logs
 logs
