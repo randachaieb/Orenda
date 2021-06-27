@@ -1,17 +1,29 @@
 const express = require("express");
 const Joi = require("joi");
-const path = require("path");
 const router = express.Router();
+const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
+const fs = require("fs");
 
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
 
-const {uploadCardImage,PATH}=require('../../middleware/uploadCardImage')
-const fs =require('fs')
+const {
+  uploadCardImage,
+  fileUploadPaths,
+} = require("../../middleware/uploadCardImage");
 
-
+const moveFile = (from, to) => {
+  fs.rename(from, to, (err) => {
+    if (err) debug(`image was not moved to it's directory`);
+  });
+};
+const deleteFile = (filePath) => {
+  fs.unlink(filePath, function (error) {
+    debug(error);
+  });
+};
 
 // @route   GET api/v1/card
 // @desc    Get user card
@@ -22,62 +34,69 @@ router.get("/", auth, async (req, res) => {
   res.json(all_cards);
 });
 
-
 // @route   POST api/v1/card
 // @desc    Add card
 // @access  private
-router.post("/",auth, uploadCardImage.single('picture') , async (req, res) => {
-  if (!req.file ) { 
+router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
+  console.log(req.file);
+  console.log(req.body);
+
+  if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
-  }else{
+  } else {
     const { error } = validateCard({ ...req.body, user: req.user._id });
     if (error) return res.status(400).json(error.details[0].message);
 
-    const image=req.file.filename
+    const imageName = req.file.filename;
     const newCard = new Card({
       ...req.body,
-      picture:`/static/card_images/${image}`,
+      picture: `${fileUploadPaths.CART_IMAGE_URL}/${imageName}`,
       user: req.user._id,
     });
+    moveFile(
+      join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
+      join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, imageName)
+    );
     const savedCard = await newCard.save();
+
     return res.json({ card: savedCard });
-  
   }
-
-
-
- 
 });
 
 // @route   PATCH api/v1/card
 // @desc    update card
 // @access  private
-router.patch("/update/:id", auth,uploadCardImage.single('picture'), async (req, res) => {
-  const { id } = req.params;
-  var update_values=req.body; 
-
-  
-  if(req.file)  {   
-    const card = await Card.findById(id); 
-    var path=card.picture;  //current image
-    let image =path.split('/');
-    let image_filename=image[image.length-1] ;                          
-    if(req.file.filename!==image_filename) { //update a different image
-      fs.unlink(PATH+'/'+image_filename, function(error) {  //delete old one
-        debug(error);
-      });
+router.patch(
+  "/update/:id",
+  auth,
+  uploadCardImage.single("picture"),
+  async (req, res) => {
+    const { id } = req.params;
+    let update_values = req.body;
+    const card = await Card.findById(id);
+    if (!card) return res.json({ message: "card not found" });
+    // delete old image and create the new file;
+    if (req.file) {
+      let image_filename = basename(card.picture);
+      const imageName = req.file.filename;
+      if (imageName !== image_filename)
+        deleteFile(
+          join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, image_filename)
+        );
+      path = `${fileUploadPaths.CART_IMAGE_URL}/${req.file.filename}`; //set the path of the new image
+      update_values = { ...update_values, picture: path };
+      moveFile(
+        join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
+        join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, imageName)
+      );
     }
-    path= `/static/card_images/${req.file.filename}`  //set the path of the new image
-    update_values={...update_values,picture:path}
+    const { error } = validate_update(req.body);
+    if (error) return res.status(400).json(error.details[0].message);
+    debug(update_values);
+    const newCard = await Card.findByIdAndUpdate(id, update_values);
+    res.json({ message: "card updated", success: true });
   }
-  const { error } = validate_update(req.body);
-  if (error) return res.status(400).json(error.details[0].message);
-  debug(update_values);
-  const newCard = await Card.findByIdAndUpdate(id, update_values);
-   res.json({ message: "card updated", success: true });
-
-});
-
+);
 
 // @route   DELETE api/v1/card
 // @desc    delete a card
@@ -86,49 +105,38 @@ router.delete("/delete", auth, async (req, res) => {
   const { card_list } = req.body;
   const l = await Card.deleteMany({ _id: { $in: card_list } });
   debug(l);
+
   if (l.deletedCount === 0) return res.json({ success: false });
   return res.json({ message: "card deleted", success: true });
-
 });
-
-
 
 // @route   DELETE api/v1/card
 // @desc    delete a single card
 // @access  private
 router.delete("/card_delete", auth, async (req, res) => {
   const { id } = req.body;
-  const card= await Card.findByIdAndDelete(id);
+  const card = await Card.findByIdAndDelete(id);
 
-  if(card===null) return res.status(400).json({ message: "card not exists" });
-  else{
-let path =card.picture.split('/')
-
-    fs.unlink(PATH+'/'+path[path.length-1], function() {
-
-      res.json ({
-      message:"card deleted"
-      });
+  if (card === null)
+    return res.status(400).json({ message: "card not exists" });
+  else {
+    deleteFile(
+      join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, basename(card.picture))
+    );
+    res.json({
+      message: "card deleted",
     });
   }
 });
 
-
-
 // @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
-router.get("/:id", async(req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
   const card = await Card.findById(id); //.populate("user");
   res.json({ card });
-
-
-
 });
-
-
-
 
 const validate_update = (req) => {
   const schema = {
@@ -140,7 +148,5 @@ const validate_update = (req) => {
   };
   return Joi.validate(req, schema);
 };
-
-
 
 module.exports = router;
