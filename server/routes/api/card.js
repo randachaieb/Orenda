@@ -3,8 +3,7 @@ const Joi = require("joi");
 const router = express.Router();
 const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
-const fs = require("fs");
-
+const { moveFile, deleteFile } = require("../../utilities/fileManager");
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
@@ -13,17 +12,6 @@ const {
   uploadCardImage,
   fileUploadPaths,
 } = require("../../middleware/uploadCardImage");
-
-const moveFile = (from, to) => {
-  fs.rename(from, to, (err) => {
-    if (err) debug(`image was not moved to it's directory`);
-  });
-};
-const deleteFile = (filePath) => {
-  fs.unlink(filePath, function (error) {
-    debug(error);
-  });
-};
 
 // @route   GET api/v1/card
 // @desc    Get user card
