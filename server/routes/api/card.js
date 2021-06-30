@@ -3,27 +3,18 @@ const Joi = require("joi");
 const router = express.Router();
 const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
-const fs = require("fs");
 
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
 
 const {
-  uploadCardImage,
+  uploadImage,
   fileUploadPaths,
-} = require("../../middleware/uploadCardImage");
+} = require("../../middleware/uploadHandler");
 
-const moveFile = (from, to) => {
-  fs.rename(from, to, (err) => {
-    if (err) debug(`image was not moved to it's directory`);
-  });
-};
-const deleteFile = (filePath) => {
-  fs.unlink(filePath, function (error) {
-    debug(error);
-  });
-};
+const{moveFile,deleteFile}=require("../../utils/fileManager");
+
 
 // @route   GET api/v1/card
 // @desc    Get user card
@@ -37,7 +28,7 @@ router.get("/", auth, async (req, res) => {
 // @route   POST api/v1/card
 // @desc    Add card
 // @access  private
-router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
+router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
   console.log(req.file);
   console.log(req.body);
 
@@ -69,13 +60,12 @@ router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
 router.patch(
   "/update/:id",
   auth,
-  uploadCardImage.single("picture"),
+  uploadImage.single("picture"),
   async (req, res) => {
     const { id } = req.params;
     let update_values = req.body;
     const card = await Card.findById(id);
     if (!card) return res.json({ message: "card not found" });
-    // delete old image and create the new file;
     if (req.file) {
       let image_filename = basename(card.picture);
       const imageName = req.file.filename;
@@ -83,7 +73,7 @@ router.patch(
         deleteFile(
           join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, image_filename)
         );
-      path = `${fileUploadPaths.CART_IMAGE_URL}/${req.file.filename}`; //set the path of the new image
+      path = `${fileUploadPaths.CART_IMAGE_URL}/${req.file.filename}`; 
       update_values = { ...update_values, picture: path };
       moveFile(
         join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
