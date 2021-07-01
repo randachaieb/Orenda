@@ -13,7 +13,7 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-const{moveFile,deleteFile, fileType}=require("../../utils/fileManager");
+const{moveFile,deleteFile, fileType}=require("../../utilities/fileManager");
 
 
 // @route   GET api/v1/post
@@ -21,7 +21,7 @@ const{moveFile,deleteFile, fileType}=require("../../utils/fileManager");
 // @access  private
 router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_posts = await Post.find({ user_id: _id }).populate("User");
+  const all_posts = await Post.find({ user_id: _id , deleted:'false'}).populate("User");
   res.json(all_posts);
 });
 
@@ -73,7 +73,7 @@ router.patch(
   async (req, res) => {
     const { id } = req.params;
     const post = await Post.findById(id);
-    if (!post) return res.json({ message: "post not found" });
+    if (post.deleted) return res.json({ message: "post not found" });
    
     let update_values = {...req.body};
     const { error } = validate_update(update_values);

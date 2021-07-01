@@ -27,6 +27,7 @@ const cardSchema = new mongoose.Schema({
   picture: {
     type: String,
     // required: true,
+    default: "/static/card_images/default.jpg",
     minlength: 5,
     maxlength: 1024,
   },

@@ -4,6 +4,7 @@ const router = express.Router();
 const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
 
+const { moveFile, deleteFile} = require("../../utilities/fileManager");
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
@@ -13,7 +14,6 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-const{moveFile,deleteFile}=require("../../utils/fileManager");
 
 
 // @route   GET api/v1/card
@@ -36,7 +36,10 @@ router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
     const { error } = validateCard({ ...req.body, user: req.user._id });
-    if (error) return res.status(400).json(error.details[0].message);
+    if (error) {
+      deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
+      return res.status(400).json(error.details[0].message);
+    }
 
     const imageName = req.file.filename;
     const newCard = new Card({
@@ -63,6 +66,11 @@ router.patch(
   uploadImage.single("picture"),
   async (req, res) => {
     const { id } = req.params;
+    const { error } = validate_update(req.body);
+    if (error) {
+      if(req.file) deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
+      return res.status(400).json(error.details[0].message);
+    }
     let update_values = req.body;
     const card = await Card.findById(id);
     if (!card) return res.json({ message: "card not found" });
@@ -80,8 +88,7 @@ router.patch(
         join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, imageName)
       );
     }
-    const { error } = validate_update(req.body);
-    if (error) return res.status(400).json(error.details[0].message);
+
     debug(update_values);
     const newCard = await Card.findByIdAndUpdate(id, update_values);
     res.json({ message: "card updated", success: true });
@@ -95,7 +102,6 @@ router.delete("/delete", auth, async (req, res) => {
   const { card_list } = req.body;
   const l = await Card.deleteMany({ _id: { $in: card_list } });
   debug(l);
-
   if (l.deletedCount === 0) return res.json({ success: false });
   return res.json({ message: "card deleted", success: true });
 });
@@ -134,7 +140,6 @@ const validate_update = (req) => {
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
-    //opportunities: Joi.array().items(Joi.string().required()),
   };
   return Joi.validate(req, schema);
 };
