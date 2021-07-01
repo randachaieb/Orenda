@@ -15,7 +15,6 @@ const {
 } = require("../../middleware/uploadHandler");
 
 
-
 // @route   GET api/v1/card
 // @desc    Get user card
 // @access  private
