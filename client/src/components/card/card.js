@@ -11,8 +11,8 @@ export default function Card (props){
                 <p className="card-text">{props.description}</p>
             </div>
             <div className='card-footer'>
+                <a className='links'>Profile</a>
                 <a className='links'>website</a>
-                <a className='links'>Show</a>
             </div>
         </div>
     )

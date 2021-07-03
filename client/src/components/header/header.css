@@ -73,7 +73,8 @@
     padding-left: 10%;
     padding-right: 10%;
     z-index: 999;
-    position: fixed;
+    position: sticky;
+    top:0;
     background-color: #fafafa;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, .1);
 }

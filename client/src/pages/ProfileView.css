@@ -1,0 +1,108 @@
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+  min-height: 100vh;
+  background-color: #fafafa;
+  color: #262626;
+  padding-bottom: 3rem;
+}
+.container{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Profile Section*/
+.profile{
+  width: 70%;
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem 0;
+  margin-bottom: 10px;
+  border-bottom:1px solid #dbdbdb;
+}
+.profile_img{
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.Profile_desc{
+  
+  display: flex;
+  flex-direction: column;
+
+}
+.profile-user-settings{
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.profile-user-name{
+  font-size: 28px;
+  margin-right: 20px;
+  margin-top: 8px;
+
+}
+
+.profile-edit-btn {
+  line-height: 1.8;
+  border: 0.1rem solid #a0a0a0;
+  border-radius: 0.3rem;
+  padding: 0 1.4rem;
+  font-weight: 600;
+}
+
+.profile-stats {
+  margin-top: 15px;
+  display: flex;
+  margin-left: -31px;
+  
+}
+.profile-stats li {
+  display: inline;
+  list-style: none;
+  font-size: 18px;
+  line-height: 1.5;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.profile-stats li span{
+  margin-right: 10px;
+}
+.profile-bio {
+  word-wrap: break-word;
+  width: 500px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 20px;
+  padding-right: 30px;
+}
+
+.profile-stat-count,
+.profile-edit-btn {
+  font-weight: 600;
+}
+/* End of Profile Section */
+
+
+/* Add section */
+.add_btn{
+  line-height: 1.8;
+  border: 0.1rem solid #dbdbdb;
+  border-radius: 0.3rem;
+  padding: 0 1.4rem;
+  font-weight: 600;
+}
+
+
+/* End of Add section */
+
+.search-box {
+  margin-top: 50px;
+  margin-left: 28%;
+  font-size: 18px;
+}
+

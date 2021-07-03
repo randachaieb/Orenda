@@ -20,6 +20,7 @@
     color: #474747;
     font-size: 26px;
     font-weight: bold;
+    text-align: center;
 }
 
 .form-select:focus {
@@ -29,7 +30,7 @@
 }
 
 .display {
-    display: inherit;
+    display: flex;
     flex-wrap: wrap;
 }
 

@@ -1,7 +1,3 @@
- 
-
-
-
 import { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../../context/authContext';
@@ -25,11 +21,11 @@ const Signin = ()=>{
     headers: { 'Content-Type': 'application/json'}, 
     data:data
         }).then ((res)=>{
-           console.log(res.data)
+           console.log(res.data.token)
             setToken(res.data.token)
-            localStorage.setItem('token', token);
-            localStorage.setItem('email',email);
-            
+            console.log(token)
+            localStorage.setItem('token', res.data.token);
+            // localStorage.setItem('email',email);
         })
         if(token=='' ){
             setError('Wrong details!')

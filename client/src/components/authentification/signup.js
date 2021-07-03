@@ -25,13 +25,9 @@ const Signup = ()=>{
     headers: { 'Content-Type': 'application/json'}, 
     data: {
     name: name,
-    bio: bio,
-    region: region,
-    address: address,
     email: email,
     password: pass,
-    "isAdmin": "false",
-    "isPro": "false"} 
+    } 
    
         }).then((res)=> {
            
@@ -39,7 +35,7 @@ const Signup = ()=>{
            
         },
           (error) => {
-                    console.log(error);
+                    console.log(error.response);
                 })};
 
    return( <div className='items'>

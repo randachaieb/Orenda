@@ -19,9 +19,6 @@ function Home(){
     <h2 className="heading">Opportunities for students</h2>
     <p className="paragh">Time to start your exploring 
             journey!</p>
-   <div className='search-b'>
-    <SearchBox/>
-    </div>
      </div>
   </div>
 </div>

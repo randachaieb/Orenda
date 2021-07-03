@@ -4,13 +4,14 @@
     align-items: center;
     border-radius: 6px;
     overflow: hidden;
-    width: 700px;
+    width: 400px;
     color: rgb(119, 121, 140);
     background-color: rgb(255, 255, 255);
     border-width: 0px;
     border-style: solid;
     border-color: rgb(255, 255, 255);
     box-shadow: rgb(0 0 0 / 5%) 0px 1px 10px;
+    margin-top: 2.5%;
 }
 
 .search-input {
@@ -36,8 +37,8 @@
     align-items: center;
     border: 0px;
     outline: 0px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 15px;
+    padding-right: 10px;
     cursor: pointer;
     flex-shrink: 0;
 }
