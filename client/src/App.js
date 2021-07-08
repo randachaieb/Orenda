@@ -13,6 +13,7 @@ import Footer from './components/footer/footer'
 import ProfileView from "./pages/ProfileView";
 import ContactUs from "./components/Contact/ContactUs";
 import AboutUs from "./pages/AboutUs"; 
+import acceuil from './pages/acceuil'
 
 
 function App() {
@@ -33,8 +34,8 @@ function App() {
           <Route  path='/ContactUs'>
            <ContactUs />
           </Route>
-          <Route  path='/About'>
-           <AboutUs />
+          <Route  path='/Acceuil'>
+           <acceuil />
           </Route>
         </Switch>
         <Footer/> 

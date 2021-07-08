@@ -24,21 +24,17 @@ function Header(){
     <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
     { authContext.auth.email? (
         <>
-                        <div className='search-b'>
+                    <div className='search-b'>
                             <SearchBox/>
                         </div>
                         <div className="topnav">
-                        <Link className="active" to="/">Home</Link>
-                        <Link to="/ProfileView" >Profile</Link>
-                        <Link to="/ContactUs">Contact</Link>
-                        <a href="/About">About</a>
-
-                       <a className='link'  >{authContext.auth.email}</a>
+                        <Link className="link-to-active" to="/">Cards</Link>
+                        <Link className="link-to-active"to="/ProfileView" >Profile</Link>
+                        <Link className="link-to-active"to="/ContactUs">Contact</Link>
+                        <Link className="link-to-active"to="/Acceuil" >Home</Link>
+                       <Link className='link' to="/ProfileView" >{authContext.auth.email}</Link>
                        <a className="linkbi"><i className=" bi bi-card-list"></i></a>
-                
                    </div>
-                   
-
         </>           
                ):(<a className='link' href='/'>you need to login</a>)}
   </div>

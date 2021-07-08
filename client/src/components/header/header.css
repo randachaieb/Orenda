@@ -39,7 +39,11 @@
     color: white;
     height: 100%;
 }
-
+.topnav a.link-to-active:hover{
+    background-color: var(--primary);
+    color: white;
+    height: 100%;
+}
 .navbar-brand {
     font-weight: bold;
     font-size: 24px;
