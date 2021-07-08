@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './ProfileView.css'
 import {useState} from 'react'
 import avatar from'../assets/avatar.png'
@@ -7,6 +7,7 @@ import Popup from '../components/ProfileCard/Popup'
 import { AuthContext } from '../context/authContext';
 import { useContext } from 'react';
 import { useHistory } from 'react-router'
+import axios from 'axios'
 
 
 function ProfileView({data , newObject}) {
@@ -16,7 +17,7 @@ function ProfileView({data , newObject}) {
     
         authContext.setAuth({})
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
+     
         history.push('/')
     }
 
@@ -28,15 +29,30 @@ function ProfileView({data , newObject}) {
     const handleClose = () => setShow(false);
 
     
-    const [card , setCard] = useState([{
-        description : "Lorem ipsum dolor sit amet consectetur adipisicing Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis magnam tempora exercitationem repellat, a fuga eaque eum esse, non temporibus neque sunt numquam voluptatibus natus unde facilis, nesciunt nisi. Earum?",
-        img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/07_LSG_7338_010_Heidewald_Weg_durch_den_Wald_mit_alten_Robinien.jpg/1200px-07_LSG_7338_010_Heidewald_Weg_durch_den_Wald_mit_alten_Robinien.jpg",
-    },])
+    const [card , setCard] = useState([])
 
+
+     useEffect( async ()=>{
+          axios.get('http://localhost:5000/api/v1/post', {
+          headers:{
+            'Content-Type':'multipart/form-data;',
+            'x-auth-token': localStorage.getItem('token')
+          }
+        })
+
+        .then((res)=> {
+            console.log(res.data)
+            setCard(res.data)
+
+
+         } ).catch(err => err.message)
+     
+
+    },[])
 
     const SubmitPost=(newpost)=>{
            
-            setCard([newpost,...card]);
+         
             
             setShow(false);
          
@@ -53,7 +69,7 @@ function ProfileView({data , newObject}) {
             {/* Profile Image */}
             <img className="profile_img" src={avatar} alt="profile_img"/>
             {/* Profile Name */}
-            <h1 class="profile-user-name">{authContext.auth.email}</h1>
+            <h1 class="profile-user-name">{authContext.user.name}</h1>
             
             <div className="profile">
                 <div className="Profile_desc">
@@ -68,7 +84,8 @@ function ProfileView({data , newObject}) {
                     </div>
                     {/* Bio  */}
                     <div className="profile-bio">
-                        <p>  Lorem ipsum dolor sit, amet consectetur adipisicing elit </p>
+                        {authContext.user.bio ? <p>{ authContext.user.bio}</p>: <p>  you don't have bio </p>}
+                        
                     </div>
                 
                 </div>

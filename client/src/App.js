@@ -23,7 +23,7 @@ function App() {
         <Header/>
         <Switch>
           <Route exact path='/'>
-           {authContext.auth.email? <Home/> : <Signin/>}
+           {authContext.auth.token? <Home/> : <Signin/>}
           </Route>
           <Route  path='/signup'>
             <Signup/>

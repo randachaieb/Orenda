@@ -3,6 +3,11 @@
     background: #fff;
 }
 
+.title-region {
+    display: flex;
+    justify-content: space-between;
+}
+
 .cards-display {
     margin-top: 20px;
     display: flex;
@@ -19,10 +24,14 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     background-color: #fff;
     margin: 15px;
-    width: 280px;
+    width: 320px;
     height: 420px;
     display: grid;
     grid-template-rows: max-content 200px 1fr;
+}
+
+.mr {
+    margin-right: 3px;
 }
 
 .links {
@@ -54,8 +63,14 @@
     padding-bottom: 0.8rem;
 }
 
+.text-muted {
+    margin-top: 2px;
+    font-size: 14px;
+}
+
 .card-title {
     font-weight: bold;
+    font-size: 18px;
     font-family: Lato, sans-serif;
 }
 

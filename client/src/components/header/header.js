@@ -14,29 +14,32 @@ function Header(){
     
         authContext.setAuth({})
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
-        history.push('/')
+        
+       
     }
 
    return(
         <nav className="navb ">
   <div className="container-nav">
-    <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
-    { authContext.auth.email? (
+    
+    { authContext.auth.token? (
         <>
-                    <div className='search-b'>
+                       <div className='search-b'>
+                           <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
                             <SearchBox/>
                         </div>
                         <div className="topnav">
                         <Link className="link-to-active" to="/">Cards</Link>
-                        <Link className="link-to-active"to="/ProfileView" >Profile</Link>
-                        <Link className="link-to-active"to="/ContactUs">Contact</Link>
-                        <Link className="link-to-active"to="/Acceuil" >Home</Link>
-                       <Link className='link' to="/ProfileView" >{authContext.auth.email}</Link>
-                       <a className="linkbi"><i className=" bi bi-card-list"></i></a>
+                       
+                        <Link className="link-to-active"to="/" >Home</Link>
+                       <Link className='link-to-active' to="/ProfileView" >{authContext.user.name}</Link>
+                       <Link className="link-to-active" to="/"  onClick={()=>logout()}>Logout</Link>
                    </div>
         </>           
-               ):(<a className='link' href='/'>you need to login</a>)}
+               ) : (
+                       <div className="container-nav">
+                           <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
+                   <a className='link' href='/'>you need to login</a></div>)}
   </div>
 </nav>)
 }
