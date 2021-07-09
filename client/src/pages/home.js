@@ -4,9 +4,16 @@ import Cards from '../components/card/cards'
 import './home.css'
 import FilterBox from '../components/filter-box/filter'
 import SliderShow from '../components/Slider/Slider'
+import { useEffect } from 'react'
 
 
-function Home(){
+
+
+
+function Home() {
+   
+
+
    return(
     <div>
     <SliderShow />

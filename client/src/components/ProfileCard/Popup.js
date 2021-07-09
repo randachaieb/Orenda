@@ -39,6 +39,7 @@ import axios from  'axios'
 
         .then((res)=> {
             console.log(res.data)
+            window.location.reload(false);
 
 
          } ).catch(err => err.message);

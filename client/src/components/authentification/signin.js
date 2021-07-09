@@ -25,11 +25,10 @@ const Signin = ()=>{
             setToken(res.data.token)
             console.log(token)
             localStorage.setItem('token', res.data.token);
-            // localStorage.setItem('email',email);
-        })
-        if(token=='' ){
-            setError('Wrong details!')
-        }
+            window.location.reload(false);
+        }).catch(err=> setError('Wrong details!'))
+            
+        
         authContext.setAuth({token,email})
     }
 

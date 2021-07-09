@@ -37,7 +37,8 @@ export default function Cards(){
 
         .then((res)=> {
             console.log(res.data)
-            setCard(res.data)
+          setCard(res.data)
+          
 
 
          } ).catch(err => err.message)

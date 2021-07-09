@@ -11,7 +11,7 @@ export  function AuthProvider(props){
     });
 
 
-    useEffect (()=>{
+    useEffect ( async()=>{
      
      
         const token=localStorage.getItem('token');
@@ -28,7 +28,7 @@ export  function AuthProvider(props){
         .then((res)=> {
             console.log(res.data)
             setUser(res.data)
-
+            
 
          } ).catch(err => err.message)
         }
