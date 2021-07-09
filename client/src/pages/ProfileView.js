@@ -42,7 +42,8 @@ function ProfileView({data , newObject}) {
 
         .then((res)=> {
             console.log(res.data)
-            setCard(res.data)
+            const data=(res.data).reverse()
+            setCard(data)
 
 
          } ).catch(err => err.message)

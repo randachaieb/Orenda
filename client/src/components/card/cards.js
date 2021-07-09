@@ -37,7 +37,8 @@ export default function Cards(){
 
         .then((res)=> {
             console.log(res.data)
-          setCard(res.data)
+          const data=(res.data).reverse()
+            setCard(data)
           
 
 
