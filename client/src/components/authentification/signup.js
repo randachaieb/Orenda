@@ -31,7 +31,7 @@ const Signup = ()=>{
    
         }).then((res)=> {
            
-                router.push('/Signin')
+                router.push('/')
            
         },
           (error) => {

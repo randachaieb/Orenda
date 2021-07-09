@@ -133,8 +133,9 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                                     <option>Region</option>
                                     <option value="Tunis">Tunis</option>
                                     <option value="Sousse">Sousse</option>
-                                    <option value="Monastir">Monastir</option>
                                     <option value="Sfax">Sfax</option>
+                                    <option value="Monastir">Monastir</option>
+                                    
                                 </select>
                             </div>
                             <label>Description</label>
