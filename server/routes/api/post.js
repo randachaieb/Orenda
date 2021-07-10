@@ -29,12 +29,11 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add post
 // @access  private
 router.post("/", auth, uploadPost.single("link"), async (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
+if(!req.body.text && !req.file) return res.json({ message: "empty post" });
   let newPost = {
     ...req.body,
     user_id: req.user._id,
-    type:'text'
+    type:'text',
   };
     const { error } = validatePost(newPost);
   if (error) {
@@ -74,7 +73,7 @@ router.patch(
     const { id } = req.params;
     const post = await Post.findById(id);
     if (post.deleted) return res.json({ message: "post not found" });
-   
+    if(!req.body.text && !req.file) return res.json({ message: "empty post" });
     let update_values = {...req.body};
     const { error } = validate_update(update_values);
     if (error) {
@@ -86,13 +85,15 @@ router.patch(
     }
 
     if (req.file) {
-      let post_filename = basename(post.link);
-      let  post_type=fileType(req.file);
+      const  post_type=fileType(req.file);
       const updated_filename = req.file.filename;
-      if (updated_filename !== post_filename)
-        deleteFile(
-          join(fileUploadPaths.POST_FILE_UPLOAD_PATH, post_filename)
-        );
+      if(post.link){
+        const post_filename = basename(post.link);
+        if (updated_filename !== post_filename)
+          deleteFile(
+            join(fileUploadPaths.POST_FILE_UPLOAD_PATH, post_filename)
+          );
+      }
       let path = `${fileUploadPaths.POST_FILE_URL}/${updated_filename}`; 
       update_values = { ...update_values,type:post_type, link: path };
       moveFile(
@@ -144,7 +145,7 @@ else {
 
 const validate_update = (req) => {
   const schema = {
-    text: Joi.string().min(5).max(50).required(),   
+    text: Joi.string().allow('').allow(null),   
   };
   return Joi.validate(req, schema);
 };

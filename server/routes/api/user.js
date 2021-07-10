@@ -120,6 +120,7 @@ router.patch(
   }
 );
 
+
 const validateUser = (user) => {
   const schema = {
     name: Joi.string().min(5).max(50),

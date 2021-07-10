@@ -1,6 +1,6 @@
 
 
-const data=[{
+const data =  [{
     userId: '1',
     title :'Global Talent Aiesec',
     description:'global platform for young people to develop their leadership ',

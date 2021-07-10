@@ -11,12 +11,11 @@ const cardSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    minlength: 50,
   },
   region: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
     maxlength: 50,
   },
   // for places, scholorship, hackathon..
@@ -26,8 +25,7 @@ const cardSchema = new mongoose.Schema({
   },
   picture: {
     type: String,
-    // required: true,
-    default: "/static/card_images/default.jpg",
+    required: true,
     minlength: 5,
     maxlength: 1024,
   },
@@ -40,7 +38,7 @@ const cardSchema = new mongoose.Schema({
 const validateCard = (card) => {
   const schema = {
     name: Joi.string().min(5).max(50).required(),
-    description: Joi.string().min(50).required(),
+    description: Joi.string().required(),
     region: Joi.string().min(3).max(50).required(),
     categories: Joi.array().items(Joi.string().required()),
     user: Joi.string().min(5).max(255).required(),

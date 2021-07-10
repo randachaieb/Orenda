@@ -25,13 +25,9 @@ const Signup = ()=>{
     headers: { 'Content-Type': 'application/json'}, 
     data: {
     name: name,
-    bio: bio,
-    region: region,
-    address: address,
     email: email,
     password: pass,
-    "isAdmin": "false",
-    "isPro": "false"} 
+    } 
    
         }).then((res)=> {
            
@@ -39,7 +35,7 @@ const Signup = ()=>{
            
         },
           (error) => {
-                    console.log(error);
+                    console.log(error.response);
                 })};
 
    return( <div className='items'>
@@ -62,14 +58,10 @@ const Signup = ()=>{
             </div>
             <div className='space-between'>
             <div className='inputs'>
-            <input  className='form-ctrl mrg-input' placeholder='Full Name'  variant='filled' type='text' onChange={e=>setName(e.target.value)}/>
-            <textarea  className='form-area mrg-input' placeholder='Bio'  variant='filled' type='text' onChange={e=>setBio(e.target.value)} />
-            
-            </div><div className='inputs'>
-                <input  className='form-ctrl mrg-input' placeholder='Region'  variant='filled' type='text' onChange={e=>setRegion(e.target.value)} />
-            <input  className='form-ctrl mrg-input' placeholder='Address'  variant='filled' type='text' onChange={e=>setAddress(e.target.value)} />
+            <input  className='form-ctrl mrg-input' placeholder='Full Name'  variant='filled' type='text' onChange={e=>setName(e.target.value)}/>            
             <input  className='form-ctrl mrg-input' placeholder='Email'  variant='filled' type='email' onChange={e=>setEmail(e.target.value)}/>
             <input  className='form-ctrl mrg-input' placeholder='Password' variant='filled'  type='password' onChange={e=>setPass(e.target.value)}/>
+            <input  className='form-ctrl mrg-input' placeholder='Confirm Password' variant='filled'  type='password' onChange={e=>setPass(e.target.value)}/>
            </div>
             </div>
             <button className='btn-login mrg' onClick={e=> handleSubmit(e)}>Sign up</button>
@@ -80,6 +72,7 @@ const Signup = ()=>{
               
              </div>
         </div>
-    </div></div>)
+    </div>
+    </div>)
 }
 export default Signup

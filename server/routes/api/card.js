@@ -136,7 +136,7 @@ router.get("/:id", async (req, res) => {
 const validate_update = (req) => {
   const schema = {
     name: Joi.string().min(5).max(50),
-    description: Joi.string().min(50),
+    description: Joi.string(),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
   };

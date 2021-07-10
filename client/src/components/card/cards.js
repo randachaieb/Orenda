@@ -3,6 +3,7 @@ import { useHistory } from 'react-router'
 import Card from './card'
 import './cards.css'
 import data from '../../Data/data'
+import axios from 'axios'
 
 
 export default function Cards(){
@@ -27,7 +28,22 @@ export default function Cards(){
 
 
     useEffect( async ()=>{
-          setCard(data);
+          axios.get('http://localhost:5000/api/v1/card', {
+          headers:{
+            'Content-Type':'multipart/form-data;',
+            'x-auth-token': localStorage.getItem('token')
+          }
+        })
+
+        .then((res)=> {
+            console.log(res.data)
+          const data=(res.data).reverse()
+            setCard(data)
+          
+
+
+         } ).catch(err => err.message)
+     
 
     },[])
 
@@ -44,23 +60,22 @@ export default function Cards(){
         <div className='items'>
        
         <div className='cards-display'>
-        {}
         {
-        !loading? 
         
         card.map((c, index) =>(
            
-            c.title.includes(search)?
+           
                 <div onClick={e=>handleChange(e,c.id)}>
                 <Card
-                
-                title={c.title}
+                region={c.region}
+                picture={c.picture}
+                name={c.name}
                 description={c.description}
                 
-                /> </div>: null
-        )): <h1>Loading ...</h1>
-    }
-     
+                /> </div>
+      
+        ))}
+       
           </div>
          
           </div>

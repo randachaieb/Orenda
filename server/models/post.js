@@ -4,20 +4,14 @@ const Joi = require("joi");
 const postSchema = new mongoose.Schema({
 type: {
     type: String,
-    required: true,
     enum: ['text', 'image', 'video'] 
   },
   text: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 50,
   },
   link: {
     type: String,
-     required: false,
-  },
-
+  },  
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -42,8 +36,8 @@ type: {
 
 const validatePost = (post) => {
   const schema = {
-    type: Joi.string().required(),
-    text: Joi.string().min(5).max(50).required(),   
+    type: Joi.string(),
+    text: Joi.string().allow('').allow(null),   
     user_id: Joi.string().min(5).max(255).required(),
   };
   return Joi.validate(post, schema);
