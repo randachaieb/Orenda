@@ -46,9 +46,6 @@ router.post("/", auth, async (req, res) => {
 router.patch("/addPosts/:id", auth, async (req, res) => {
   const { id } = req.params;
   const new_posts=req.body.posts;
-  const group_posts = await Post_group.findById(id);
-
-
   const group = await Post_group.findOneAndUpdate(
     { _id: id }, 
     { $addToSet: { posts: { $each: new_posts } }},  
