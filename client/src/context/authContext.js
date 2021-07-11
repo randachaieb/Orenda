@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
 export const AuthContext=React.createContext();
+
 export  function AuthProvider(props){
     const [auth, setAuth]=useState({
       

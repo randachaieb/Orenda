@@ -13,9 +13,24 @@ body {
 }
 .container .photo_couverture{
   width: 70%;
+  height: 260px;
   /* position: relative; */
+  
 }
-
+ .Menu_Item{
+   width: 100%;
+ 
+  }
+.icon{
+  position: absolute;
+  left:74%;
+  bottom: 82%;
+  opacity: 0.7;
+  
+ }
+.icon:hover{
+  opacity: 1;
+}
  
 
 
@@ -36,6 +51,7 @@ body {
   border: 4px solid #fafafa;
   border-radius: 50%;
   cursor: pointer;
+  position: relative;
 }
 .Profile_desc{
   display: flex;
@@ -115,3 +131,8 @@ body {
   font-size: 18px;
 }
 
+.input-cover[type="file"] {
+  display: none;
+}
+
+ 

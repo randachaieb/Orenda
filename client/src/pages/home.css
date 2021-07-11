@@ -38,7 +38,11 @@
     margin-bottom: 15px;
     text-align: center;
 }
-
+.SliderShow {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
 @media only screen and (max-width: 820px) {
     .heading {
         font-size: 22px;
@@ -46,5 +50,4 @@
     .paragh {
         font-size: 14px;
     }
-   
 }

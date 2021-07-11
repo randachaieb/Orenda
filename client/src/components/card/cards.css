@@ -69,6 +69,9 @@
 }
 
 .card-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     font-weight: bold;
     font-size: 18px;
     font-family: Lato, sans-serif;
@@ -93,4 +96,9 @@
 
 .search-input {
     width: 500px;
+}
+.cards-dots {
+    position: absolute;
+    left: 100%;
+    opacity: 0.7;
 }
