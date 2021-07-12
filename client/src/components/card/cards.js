@@ -29,7 +29,7 @@ export default function Cards(props){
 
 
     useEffect( async ()=>{
-          axios.get('http://localhost:5000/api/v1/card', {
+          axios.get('/api/v1/card', {
           headers:{
             'Content-Type':'multipart/form-data;',
             'x-auth-token': localStorage.getItem('token')

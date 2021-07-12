@@ -31,7 +31,7 @@ function ProfileView({ data, newObject }) {
 
     useEffect(async () => {
         axios
-            .get("http://localhost:5000/api/v1/post", {
+            .get("/api/v1/post", {
                 headers: {
                     "Content-Type": "multipart/form-data;",
                     "x-auth-token": localStorage.getItem("token"),

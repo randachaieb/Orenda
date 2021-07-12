@@ -17,7 +17,7 @@ const Signin = ()=>{
         const data={email, password}
          console.log(data)
        axios({ method: 'POST', 
-    url: 'http://localhost:5000/api/v1/auth', 
+    url: '/api/v1/auth', 
     headers: { 'Content-Type': 'application/json'}, 
     data:data
         }).then ((res)=>{

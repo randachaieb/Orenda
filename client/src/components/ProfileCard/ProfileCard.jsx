@@ -38,7 +38,7 @@ const Card = ({ card }) => {
         console.log(idC)
 
         console.log(idC)
-        axios.delete('http://localhost:5000/api/v1/post/delete', {
+        axios.delete('/api/v1/post/delete', {
             data: { "id": idC }, // or data: jdId, depending on how you handle it in the back end
             headers: {
                 'Content-Type': 'Application/json',
@@ -146,7 +146,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
         }
 
 
-        axios.patch(`http://localhost:5000/api/v1/post/update/${ id }`, params,{
+        axios.patch(`/api/v1/post/update/${ id }`, params,{
             headers: {
                 'Content-Type': 'multipart/form-data',
 

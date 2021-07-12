@@ -30,7 +30,7 @@ export default function Card(props) {
              'x-auth-token': localStorage.getItem('token'),
         }
         console.log( localStorage.getItem('token'))
-        axios.delete('http://localhost:5000/api/v1/card/card_delete',
+        axios.delete('/api/v1/card/card_delete',
              {
         data: {"id": idC }, 
         headers: {
@@ -162,7 +162,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard, regionCard, cate
 }
         
 
-        axios.patch(`http://localhost:5000/api/v1/card/update/${idCard}`,params, {
+        axios.patch(`/api/v1/card/update/${idCard}`,params, {
           headers:{
                 'Content-Type': 'multipart/form-data;',
                 

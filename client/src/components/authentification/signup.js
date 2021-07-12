@@ -21,7 +21,7 @@ const Signup = ()=>{
     e.preventDefault()
         console.log({name , bio, email, pass, address, region})
     axios({ method: 'POST', 
-    url: 'http://localhost:5000/api/v1/user', 
+    url: '/api/v1/user', 
     headers: { 'Content-Type': 'application/json'}, 
     data: {
     name: name,
