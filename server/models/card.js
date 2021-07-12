@@ -27,12 +27,12 @@ const cardSchema = new mongoose.Schema({
   keywords: {
     type: [String],
     require: true,
-    validate: {
-      validator: (v) => {
-        return v.length <= 5;
-      },
-      message: (props) => `keywords must contain less than or equal to 5 items`,
-    },
+    // validate: {
+    //   validator: (v) => {
+    //     return v.length <= 5;
+    //   },
+    //   message: (props) => `keywords must contain less than or equal to 5 items`,
+    // },
   },
   picture: {
     type: String,
@@ -44,6 +44,9 @@ const cardSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+  },
+  website: {
+    type: String,
   },
 });
 
@@ -59,6 +62,7 @@ const validateCard = (card) => {
       .max(5)
       .min(1)
       .required(),
+    website: Joi.string(),
   };
   return Joi.validate(card, schema);
 };

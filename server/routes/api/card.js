@@ -177,7 +177,8 @@ const validate_update = (req) => {
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
-    keywords: Joi.array().items(Joi.string().require()).max(5),
+    keywords: Joi.array().items(Joi.string().required()).max(5),
+    website: Joi.string(),
   };
   return Joi.validate(req, schema);
 };
