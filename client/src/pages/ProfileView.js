@@ -122,7 +122,7 @@ function ProfileView({ data, newObject }) {
             />
 
             {/* Profile Image */}
-            <img className="profile_img" src={avatar} alt="profile_img" />
+            <img className="profile_img" src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
             {/* Profile Name */}
             <h1 class="profile-user-name">{authContext.user.name}</h1>
 
