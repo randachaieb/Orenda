@@ -13,12 +13,20 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadCardImage");
 
+const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
+  return await Card.find(query)
+    .populate({ path: "user", select: "name picture" })
+    .limit(perPage)
+    .skip(perPage * page);
+};
+
 // @route   GET api/v1/card
 // @desc    Get user card
 // @access  private
 router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_cards = await Card.find({ user: _id }).populate("User");
+  const page = req.query.page || 0;
+  const all_cards = await getCardsPages({ user: _id }, page);
   res.json(all_cards);
 });
 
@@ -26,13 +34,11 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add card
 // @access  private
 router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
-  debug(req.body);
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
     const { error } = validateCard({ ...req.body, user: req.user._id });
     if (error) return res.status(400).json(error.details[0].message);
-
     const imageName = req.file.filename;
     const newCard = new Card({
       ...req.body,
@@ -138,11 +144,23 @@ router.get("/search", async (req, res) => {
 });
 
 // @route   GET api/v1/card
+// @desc    Get user card
+// @access  private
+router.get("/all", async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const all_cards = await getCardsPages({}, page);
+  res.json(all_cards);
+});
+
+// @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id); //.populate("user");
+  const card = await Card.findById(id).populate({
+    path: "user",
+    select: "name picture",
+  });
   res.json({ card });
 });
 
