@@ -38,10 +38,11 @@ const Card = ({ card }) => {
         console.log(idC)
 
         console.log(idC)
-        axios.delete('http://localhost:5000/api/v1/post/delete', { "id": idC }, {
+        axios.delete('http://localhost:5000/api/v1/post/delete', {
+            data: { "id": idC }, // or data: jdId, depending on how you handle it in the back end
             headers: {
                 'Content-Type': 'Application/json',
-                'x-auth-token': localStorage.getItem('token')
+                'x-auth-token': localStorage.getItem('token'),
             }
         })
 

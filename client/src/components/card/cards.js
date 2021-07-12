@@ -69,7 +69,7 @@ export default function Cards(props){
         
         card.map((c, index) =>(
            
-         props.sregion && c.region.includes(props.sregion) ?
+          c.region.includes(props.sregion)  && c.categories[0].includes(props.sOffer)  && c.categories[1].includes(props.sPlace) ?
                 <div >
             <Card
                 id={c._id}
@@ -79,39 +79,8 @@ export default function Cards(props){
                 name={c.name}
                 description={c.description}
                 
-              /> </div> : props.sPlace && c.categories.includes(props.sPlace) ?
-                 <div >
-            <Card
-                id={c._id}
-                category={c.categories}
-                region={c.region}
-                picture={c.picture}
-                name={c.name}
-                description={c.description}
-                
-                /> </div> : props.sOffer && c.categories.includes(props.sOffer) ?
-                  <div >
-            <Card
-                id={c._id}
-                category={c.categories}
-                region={c.region}
-                picture={c.picture}
-                name={c.name}
-                description={c.description}
-                
-                  /> </div> : !props.sOffer && !props.sPlace && !props.sregion ?
-                      <div >
-            <Card
-                id={c._id}
-                category={c.categories}
-                region={c.region}
-                picture={c.picture}
-                name={c.name}
-                description={c.description}
-                
-              /> </div> :null
-          
-      
+              /> </div> : null
+           
         ))}
        
           </div>
