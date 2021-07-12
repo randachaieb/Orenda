@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
   bio: {
     type: String,
     // required: true,
-    minlength: 50,
   },
   region: {
     type: String,
@@ -41,9 +40,17 @@ const userSchema = new mongoose.Schema({
   },
   picture: {
     type: String,
-    default: "/static/user_profile/default.jpg",
+    default: "/static/user_profile/picture/default.jpg",
     minlength: 5,
     maxlength: 1024,
+  },
+  cover: {
+    type: String,
+    minlength: 5,
+    maxlength: 1024,
+  },
+  slides: {
+    type: [String]
   },
   isAdmin: {
     type: Boolean,
@@ -68,13 +75,9 @@ const User = mongoose.model("User", userSchema);
 const validateUser = (user) => {
   const schema = {
     name: Joi.string().min(5).max(50).required(),
-    // bio: Joi.string().min(50),
-    // region: Joi.string().min(5).max(50),
-    // address: Joi.string().min(5).max(50),
     email: Joi.string().min(5).max(50).required().email(),
     password: Joi.string().min(5).max(255).required(),
-    // isAdmin: Joi.boolean(),
-    // isPro: Joi.boolean(),
+ 
   };
 
   return Joi.validate(user, schema);

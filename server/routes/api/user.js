@@ -29,6 +29,7 @@ router.get("/me", auth, async (req, res) => {
       "region",
       "address",
       "picture",
+      "cover"
     ])
   );
 });
@@ -83,14 +84,35 @@ router.post("/", async (req, res) => {
 router.patch(
   "/update",
   auth,
-  uploadImage.single("picture"),
   async (req, res) => {
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
+    const updated_user = await User.findByIdAndUpdate(
+      req.user._id,
+      req.body
+    ).select("-password");
+    debug(updated_user);
+    res.json(
+      {
+      message: "user updated",
+      success: true,
+    }
+    );
+  }
+);
 
-    const user = await User.findById(req.user._id);
-    let update_values = req.body;
-    if (req.file) {
+// @route   GET api/v1/user/updatePicture
+// @desc    update profile picture
+// @access  private
+
+router.patch(
+  "/updatePicture",
+  auth,
+  uploadImage.single("picture"),
+  async (req, res) => {
+    
+    if (!req.file)  return res.status(400).json({ message: "No image uploaded" });
+      const user = await User.findById(req.user._id);
       let image_filename = basename(user.picture);
       const imageName = req.file.filename;
       if (imageName !== image_filename && image_filename !== "default.jpg")
@@ -100,21 +122,142 @@ router.patch(
 
       //set the path of the new image
       path = `${fileUploadPaths.USER_IMAGE_URL}/${imageName}`;
-      update_values = { ...update_values, picture: path };
+      const update_values = { picture: path };
       moveFile(
         join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
         join(fileUploadPaths.USER_IMAGE_UPLOAD_PATH, imageName)
       );
-    }
-    debug(update_values);
+    
 
-    const newUser = await User.findByIdAndUpdate(
+    const updated_user = await User.findByIdAndUpdate(
       req.user._id,
       update_values
     ).select("-password");
-    debug(newUser);
+    debug(updated_user);
     res.json({
-      message: "user updated",
+      message: "profile picture updated",
+      success: true,
+    });
+  }
+);
+
+// @route   GET api/v1/user/removePicture
+// @desc    remove profile picture
+// @access  private
+
+router.patch(
+  "/removePicture",
+  auth,
+  async (req, res) => {
+    const user = await User.findById(req.user._id);
+    let image_filename = basename(user.picture);
+    deleteFile(
+      join(fileUploadPaths.USER_IMAGE_UPLOAD_PATH, image_filename)
+    );
+    const updated_user = await User.findByIdAndUpdate(
+      req.user._id,
+      {picture:"/static/user_profile/picture/default.jpg"}
+    );
+    debug(updated_user);
+    res.json({
+      message: "profile picture removed",
+      success: true,
+    });
+  }
+);
+
+
+
+// @route   GET api/v1/user/addCover
+// @desc    add cover picture
+// @access  private
+
+router.patch(
+  "/addCover",
+  auth,
+  uploadImage.single("cover"),
+  async (req, res) => {
+    
+      if (!req.file)  return res.status(400).json({ message: "No image uploaded" });
+      const imageName = req.file.filename;
+      moveFile(
+        join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
+        join(fileUploadPaths.COVER_IMAGE_UPLOAD_PATH, imageName)
+      );
+      const path = `${fileUploadPaths.COVER_IMAGE_URL}/${imageName}`;
+      const updated_user = await User.findByIdAndUpdate(
+        req.user._id,
+        {cover:path}
+        );
+      debug(updated_user);
+      res.json({
+        message: "cover picture added",
+        success: true,
+      });
+  }
+);
+
+// @route   GET api/v1/user/updateCover
+// @desc    update cover picture
+// @access  private
+
+router.patch(
+  "/updateCover",
+  auth,
+  uploadImage.single("cover"),
+  async (req, res) => {
+    
+    if (!req.file)  return res.status(400).json({ message: "No image uploaded" });
+      const user = await User.findById(req.user._id);
+      let image_filename = basename(user.cover);
+      const imageName = req.file.filename;
+      if (imageName !== image_filename)
+        deleteFile(
+          join(fileUploadPaths.COVER_IMAGE_UPLOAD_PATH, image_filename)
+        );
+
+      //set the path of the new image
+      path = `${fileUploadPaths.COVER_IMAGE_URL}/${imageName}`;
+      moveFile(
+        join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
+        join(fileUploadPaths.COVER_IMAGE_UPLOAD_PATH, imageName)
+      );
+    
+
+    const updated_user = await User.findByIdAndUpdate(
+      req.user._id,
+      {cover: path }    
+      );
+    debug(updated_user);
+    res.json({
+      message: "cover picture updated",
+      success: true,
+    });
+  }
+);
+
+
+
+// @route   GET api/v1/user/removePicture
+// @desc    remove cover picture
+// @access  private
+
+router.patch(
+  "/removeCover",
+  auth,
+  async (req, res) => {
+    const user = await User.findById(req.user._id);
+    let image_filename = basename(user.cover);
+    deleteFile(
+      join(fileUploadPaths.COVER_IMAGE_UPLOAD_PATH, image_filename)
+    );
+    const updated_User = await User.findByIdAndUpdate(
+      req.user._id,
+      {$unset:{cover:""}}  
+    );
+    debug(updated_User);
+    res.json({
+      message: "cover picture removed",
       success: true,
     });
   }
@@ -124,7 +267,7 @@ router.patch(
 const validateUser = (user) => {
   const schema = {
     name: Joi.string().min(5).max(50),
-    bio: Joi.string().min(50),
+    bio: Joi.string(),
     region: Joi.string().min(5).max(50),
     address: Joi.string().min(5).max(50),
     email: Joi.string().min(5).max(50).email(),
