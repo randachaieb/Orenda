@@ -1,0 +1,129 @@
+/* The popup form - hidden by default */
+.form-popup {
+    position: fixed;
+    width: 500px;
+    right: 33%;
+    height: 390px;
+    border-radius: 10px;
+    background-color: white;
+    z-index: 1;
+    bottom: 10%;
+    box-shadow: 5px 10px 18px #888888;
+}
+
+/* Add styles to the form container */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%;
+}
+
+/* Full-width input fields */
+.form-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    font-size: 80px;
+}
+input::placeholder {
+    color: rgb(194, 194, 194);
+    font-size: 20px;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type="text-area"]:focus {
+    outline: none;
+}
+
+/* Set a style for the submit/login button */
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.field-description {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    width: 100%;
+    height: 200px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: none;
+    background-color: white;
+    font-size: 16px;
+    resize: none;
+}
+
+.field-description:focus {
+    outline: none;
+}
+
+.title-label {
+    display: flex;
+    justify-content: center;
+    color: rgb(194, 194, 194);
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    border-bottom: 1px solid #dbdbdb;
+}
+.button:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0cf;
+    border-radius: 10rem;
+    z-index: -2;
+}
+.button:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #008fb3;
+    transition: all 0.5s;
+    border-radius: 10rem;
+    z-index: -1;
+}
+.button:hover {
+    color: #fff;
+}
+.button:hover:before {
+    width: 100%;
+}
+.close {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+}
+.close:hover {
+    opacity: 1;
+}
+
+.close:before {
+    transform: rotate(45deg);
+}
+.close:after {
+    transform: rotate(-45deg);
+}
+.button {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10rem;
+    color: #333;
+    font-size: 1rem;
+    letter-spacing: 0.08rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+}

@@ -1,7 +1,3 @@
- 
-
-
-
 import { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../../context/authContext';
@@ -21,19 +17,18 @@ const Signin = ()=>{
         const data={email, password}
          console.log(data)
        axios({ method: 'POST', 
-    url: 'http://localhost:5000/api/v1/auth', 
+    url: '/api/v1/auth', 
     headers: { 'Content-Type': 'application/json'}, 
     data:data
         }).then ((res)=>{
-           console.log(res.data)
+           console.log(res.data.token)
             setToken(res.data.token)
-            localStorage.setItem('token', token);
-            localStorage.setItem('email',email);
+            console.log(token)
+            localStorage.setItem('token', res.data.token);
+            window.location.reload(false);
+        }).catch(err=> setError('Wrong details!'))
             
-        })
-        if(token=='' ){
-            setError('Wrong details!')
-        }
+        
         authContext.setAuth({token,email})
     }
 

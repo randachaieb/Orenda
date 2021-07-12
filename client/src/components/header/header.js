@@ -1,41 +1,49 @@
-
-
-
 import { useHistory } from 'react-router'
 import './header.css'
 import { AuthContext } from '../../context/authContext';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import {Link, NavLink} from 'react-router-dom'
+import SearchBox from '../search-box/search-box';
 
 
 function Header(){
 
-    const authContext=useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+    const [isAuth, setIsauth]=useState(false)
     let history =useHistory();
     function logout(){
     
         authContext.setAuth({})
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
         history.push('/')
+        window.location.reload(false);
+       
     }
 
-   return( <nav className="navb ">
-  <div className="container-nav">
-    <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
-    { authContext.auth.email? (
-                 
-                        <div className="topnav">
-                        <a className="active" href="#">Home</a>
-                        <a href="/profile">Profile</a>
-                        <a href="/contact">Contact</a>
-                        <a href="/about">About</a>
+  
 
-                       <a className='link'  onClick={logout} >{authContext.auth.email}</a>
-                        <a className="linkbi"><i className=" bi bi-card-list"></i></a>
-                
+   return(
+        <nav className="navb ">
+  <div className="container-nav">
+    
+    { authContext.auth.token? (
+        <>
+                       <div className='search-b'>
+                           <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
+                            <SearchBox/>
+                        </div>
+                        <div className="topnav">
+                        <NavLink className="link-to-active"  to="/">Cards</NavLink>
+                       
+                        <NavLink className="link-to-active" to="/" >Home</NavLink>
+                       <NavLink className='link-to-active'  to="/ProfileView" >{authContext.user.name}</NavLink>
+                       <NavLink className="link-to-active"  to="/"  onClick={()=>logout()}>Logout</NavLink>
                    </div>
-                   
-               ):(<a className='link' href='/'>you need to login</a>)}
+        </>           
+               ) : (
+                       <div className="container-nav">
+                           <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
+                   <a className='link' href='/'>you need to login</a></div>)}
   </div>
 </nav>)
 }

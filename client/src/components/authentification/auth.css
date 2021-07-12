@@ -47,7 +47,8 @@
 }
 
 .inputs {
-    margin: 10px
+    margin: 10px;
+    margin-left: 25%;
 }
 
 .space-between {
