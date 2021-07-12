@@ -15,7 +15,7 @@ const {
 
 const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
   return await Card.find(query)
-    .populate({ path: "user", select: "name picture" })
+    .populate({ path: "user", select: "name picture username" })
     .limit(perPage)
     .skip(perPage * page);
 };
@@ -159,7 +159,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   const card = await Card.findById(id).populate({
     path: "user",
-    select: "name picture",
+    select: "name picture username",
   });
   res.json({ card });
 });

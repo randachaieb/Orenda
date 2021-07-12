@@ -53,6 +53,11 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  username: {
+    type: String,
+    require: true,
+    unique: true,
+  },
 });
 
 userSchema.methods.generateAuthToken = function () {

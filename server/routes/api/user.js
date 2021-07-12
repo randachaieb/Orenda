@@ -19,11 +19,11 @@ const {
 // @access  private
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
-  debug(req.user);
   res.json(
     _.pick(user, [
       "_id",
       "name",
+      "username",
       "email",
       "bio",
       "region",
@@ -37,7 +37,6 @@ router.get("/me", auth, async (req, res) => {
 // @desc    register user
 // @access  Public
 router.post("/", async (req, res) => {
-  debug(req.body);
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -49,14 +48,14 @@ router.post("/", async (req, res) => {
 
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
-  debug({
-    ...req.body,
-    password: hash,
-  });
 
   user = new User({
     ...req.body,
     password: hash,
+    username: req.body.name
+      .split(" ")
+      .concat(Math.floor(Math.random() * 100))
+      .join("."),
   });
 
   user = await user.save();
@@ -68,6 +67,7 @@ router.post("/", async (req, res) => {
     user: _.pick(user, [
       "_id",
       "name",
+      "username",
       "email",
       "bio",
       "region",
