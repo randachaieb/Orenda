@@ -16,7 +16,7 @@ const cardSchema = new mongoose.Schema({
   region: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
     maxlength: 50,
   },
   // for places, scholorship, hackathon..

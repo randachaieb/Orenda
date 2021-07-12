@@ -11,5 +11,9 @@ const deleteFile = (filePath) => {
     debug(error);
   });
 };
+const fileType = (file) => {
+  if(file.mimetype.startsWith("image")) return 'image';
+  if(file.mimetype.startsWith("video")) return 'video';
+};
 
-module.exports = { moveFile, deleteFile };
+module.exports= {moveFile,deleteFile,fileType}

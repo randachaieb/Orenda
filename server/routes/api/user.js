@@ -10,9 +10,9 @@ const { join, basename } = require("path");
 const { moveFile, deleteFile } = require("../../utilities/fileManager");
 
 const {
-  uploadCardImage,
+  uploadImage,
   fileUploadPaths,
-} = require("../../middleware/uploadCardImage");
+} = require("../../middleware/uploadHandler");
 
 // @route   GET api/v1/user/me
 // @desc    user info
@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
 router.patch(
   "/update",
   auth,
-  uploadCardImage.single("picture"),
+  uploadImage.single("picture"),
   async (req, res) => {
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);

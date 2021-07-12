@@ -3,15 +3,16 @@ const Joi = require("joi");
 const router = express.Router();
 const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
+
 const { moveFile, deleteFile } = require("../../utilities/fileManager");
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
 
 const {
-  uploadCardImage,
+  uploadImage,
   fileUploadPaths,
-} = require("../../middleware/uploadCardImage");
+} = require("../../middleware/uploadHandler");
 
 const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
   return await Card.find(query)
@@ -38,7 +39,11 @@ router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
     const { error } = validateCard({ ...req.body, user: req.user._id });
-    if (error) return res.status(400).json(error.details[0].message);
+    if (error) {
+      deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
+      return res.status(400).json(error.details[0].message);
+    }
+
     const imageName = req.file.filename;
     const newCard = new Card({
       ...req.body,
@@ -61,13 +66,18 @@ router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
 router.patch(
   "/update/:id",
   auth,
-  uploadCardImage.single("picture"),
+  uploadImage.single("picture"),
   async (req, res) => {
     const { id } = req.params;
+    const { error } = validate_update(req.body);
+    if (error) {
+      if (req.file)
+        deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
+      return res.status(400).json(error.details[0].message);
+    }
     let update_values = req.body;
     const card = await Card.findById(id);
     if (!card) return res.json({ message: "card not found" });
-    // delete old image and create the new file;
     if (req.file) {
       let image_filename = basename(card.picture);
       const imageName = req.file.filename;
@@ -75,15 +85,14 @@ router.patch(
         deleteFile(
           join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, image_filename)
         );
-      path = `${fileUploadPaths.CART_IMAGE_URL}/${req.file.filename}`; //set the path of the new image
+      path = `${fileUploadPaths.CART_IMAGE_URL}/${req.file.filename}`;
       update_values = { ...update_values, picture: path };
       moveFile(
         join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
         join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, imageName)
       );
     }
-    const { error } = validate_update(req.body);
-    if (error) return res.status(400).json(error.details[0].message);
+
     debug(update_values);
     const newCard = await Card.findByIdAndUpdate(id, update_values);
     res.json({ message: "card updated", success: true });
@@ -100,7 +109,6 @@ router.delete("/delete", auth, async (req, res) => {
     user: req.user._id,
   });
   debug(l);
-
   if (l.deletedCount === 0) return res.json({ success: false });
   return res.json({ message: "card deleted", success: true });
 });
@@ -177,7 +185,7 @@ const validate_update = (req) => {
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
-    keywords: Joi.array().items(Joi.string().required()).max(5),
+    keywords: Joi.array().items(Joi.string().required()),
     website: Joi.string(),
   };
   return Joi.validate(req, schema);
