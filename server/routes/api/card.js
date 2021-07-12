@@ -26,9 +26,7 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add card
 // @access  private
 router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-
+  debug(req.body);
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
@@ -91,7 +89,10 @@ router.patch(
 // @access  private
 router.delete("/delete", auth, async (req, res) => {
   const { card_list } = req.body;
-  const l = await Card.deleteMany({ _id: { $in: card_list } });
+  const l = await Card.deleteMany({
+    _id: { $in: card_list },
+    user: req.user._id,
+  });
   debug(l);
 
   if (l.deletedCount === 0) return res.json({ success: false });
@@ -103,8 +104,7 @@ router.delete("/delete", auth, async (req, res) => {
 // @access  private
 router.delete("/card_delete", auth, async (req, res) => {
   const { id } = req.body;
-  const card = await Card.findByIdAndDelete(id);
-
+  const card = await Card.findOne({ id, user: req.user._id });
   if (card === null)
     return res.status(400).json({ message: "card not exists" });
   else {
@@ -118,6 +118,26 @@ router.delete("/card_delete", auth, async (req, res) => {
 });
 
 // @route   GET api/v1/card
+// @desc    Search for cards
+// @access  public
+router.get("/search", async (req, res) => {
+  const { error } = validate_search_schema(req.query);
+  if (error) return res.status(400).json(error.details[0].message);
+  const { q } = req.query;
+  const searchParams = [...q.split(" "), q];
+  searchParams.forEach((i, index, arr) => (arr[index] = new RegExp(i)));
+  debug(searchParams, new RegExp("[" + [...q.split(" "), q] + "]"));
+  const searchResualt = await Card.find({
+    $or: [
+      { name: new RegExp("[" + [...q.split(" "), q] + "]") },
+      { keywords: { $in: searchParams } },
+    ],
+  });
+
+  res.json(searchResualt);
+});
+
+// @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
 router.get("/:id", async (req, res) => {
@@ -126,13 +146,20 @@ router.get("/:id", async (req, res) => {
   res.json({ card });
 });
 
+const validate_search_schema = (query) => {
+  const schema = {
+    q: Joi.string().max(50).required(),
+  };
+  return Joi.validate(query, schema);
+};
+
 const validate_update = (req) => {
   const schema = {
     name: Joi.string().min(5).max(50),
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
-    //opportunities: Joi.array().items(Joi.string().required()),
+    keywords: Joi.array().items(Joi.string().require()).max(5),
   };
   return Joi.validate(req, schema);
 };
