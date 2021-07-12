@@ -1,62 +1,9 @@
 import './filter.css'
-import React  , {useState} from 'react';
+import React  , {useEffect, useState} from 'react';
 import axios from 'axios'
 
 
-function FilterBox (){
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-
-    return(
-        <div className=" category-search">
-            <button className="add_btn" onClick={handleShow} > Add Card </button>
-    
-            { show ? <PopupForm  handleClose={handleClose} /> : null }
-
-        <div className='display'>
-
-        <div className='category'>
-    <input className='form-select' list="browsers2" name="browser" id="browser" placeholder='Places By Category'></input>   
-   <datalist  id="browsers2" aria-label="Default select example">
-  
-  <option value="Training centers">Training centers</option>
-  <option value="Schools">Schools</option>
-  <option value="Coworking places">Coworking places</option>
-  <option value="Clubs">Clubs</option>
-</datalist>
-   </div>
-   <div className='category'>
-        
-        <input className='form-select' list="browsers3" name="browser" id="browser" placeholder='Offers By Category'></input>   
-         <datalist  id="browsers3" aria-label="Default select example">
-        
-        <option value="Scholarships">Scholarships</option>
-        <option value="Job offers">Job offers</option>
-        <option value="Competitions">Competitions</option>
-        <option value="Events">Events</option>
-      </datalist>
-         </div>
-    <div className='category'>
-        <input className='form-select' list="browsers" name="browser" id="browser" placeholder='Region'></input>   
-      <datalist  id="browsers" aria-label="Default select example">
-      
-      <option value="Tunis">Tunis</option>
-      <option value="Sousse">Sousse</option>
-      <option value="Monastir">Monastir</option>
-      <option value="Sfax">Sfax</option>
-      </datalist>
-   </div>
-        </div>
-
-           </div>
-
-    )
-
-}
-export default FilterBox;
 
 // popup window
 const PopupForm =  ({ handleClose , SubmitPost} )  => {
@@ -73,10 +20,12 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
     const handleSubmit = (e) => {
         
         e.preventDefault();
+         const cat = [categoriesO, categoriesP];
+            console.log(cat)
         //console.log(name, region, description, categoriesP, categoriesO, picture)
         const params = new FormData();
-        params.append("categories[]", [categoriesP ,categoriesO]);
-        
+        params.append("categories[]", cat[0]);
+        params.append("categories[]", cat[1]);
         params.append("name", name);
         params.append("region", region);
         params.append("description", description);
@@ -140,8 +89,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                             </div>
                             <label>Description</label>
                             <input type="text" placeholder="enter description" className="input"  onChange={(e)=>setDescription( e.target.value) }/>
-                            <label>Profile</label>
-                            <input type="text" placeholder="enter Profile   " className="input" />
+                           
                             <label>Website</label>
                             <input type="text" placeholder="enter Web Site Url" className="input"/>
                             <button className="button"  onClick={(e)=>handleSubmit(e)}>Add</button>
@@ -150,3 +98,4 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                     </>
                 );
 }
+export default PopupForm;

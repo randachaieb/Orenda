@@ -2,7 +2,7 @@ import { useHistory } from 'react-router'
 import './header.css'
 import { AuthContext } from '../../context/authContext';
 import { useContext, useEffect, useState } from 'react';
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import SearchBox from '../search-box/search-box';
 
 
@@ -33,11 +33,11 @@ function Header(){
                             <SearchBox/>
                         </div>
                         <div className="topnav">
-                        <Link className="link-to-active" to="/">Cards</Link>
+                        <NavLink className="link-to-active"  to="/">Cards</NavLink>
                        
-                        <Link className="link-to-active"to="/" >Home</Link>
-                       <Link className='link-to-active' to="/ProfileView" >{authContext.user.name}</Link>
-                       <Link className="link-to-active" to="/"  onClick={()=>logout()}>Logout</Link>
+                        <NavLink className="link-to-active" to="/" >Home</NavLink>
+                       <NavLink className='link-to-active'  to="/ProfileView" >{authContext.user.name}</NavLink>
+                       <NavLink className="link-to-active"  to="/"  onClick={()=>logout()}>Logout</NavLink>
                    </div>
         </>           
                ) : (

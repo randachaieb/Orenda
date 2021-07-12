@@ -132,7 +132,7 @@ function ProfileView({ data, newObject }) {
                         {/* Profile Stat */}
                         <ul>
                             <li>
-                                <span class="profile-stat-count">164</span>{" "}
+                                <span class="profile-stat-count">{ card.length}</span>{" "}
                                 publications
                             </li>
                             <li>

@@ -4,6 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import image from "./images.jpg";
+import axios from 'axios'
 import "./cards.css";
 export default function Card(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,6 +20,28 @@ export default function Card(props) {
     const handleShow = () => setShow(true);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+
+    const deleteCard = (e, idC) => {
+        e.preventDefault()
+        console.log(idC)
+        
+        console.log(idC)
+        axios.delete('http://localhost:5000/api/v1/card/card_delete', {"id": idC},  { 
+          headers:{
+                'Content-Type': 'Application/json',
+                'x-auth-token': localStorage.getItem('token')
+          }
+        })
+
+        .then((res)=> {
+            console.log(res.data)
+            window.location.reload(false);
+
+
+         } ).catch(err => err.message);
+        
+    }
+
     return (
         <div className="card" style={{ width: "18rem;", margin: "25px" }}>
             <div className="cards-dots">
@@ -28,7 +51,7 @@ export default function Card(props) {
                     aria-haspopup="true"
                     onClick={handleClick}
                 >
-                    <MoreHorizIcon fontSize="large" style={{ color: "red" }} />
+                    <MoreHorizIcon fontSize="large" style={{ color: "#333332" }} />
                 </IconButton>
 
                 <Menu
@@ -51,47 +74,104 @@ export default function Card(props) {
                     <MenuItem onClick={close}>
                         <div className="UP_Menu_Item">
                             <MenuItem onClick={handleShow}>Edit</MenuItem>
-                            <MenuItem>Delete</MenuItem>
+                            <MenuItem onClick={e=>deleteCard(e, props.id)}>Delete</MenuItem>
                         </div>
                     </MenuItem>
                 </Menu>
             </div>
-            {show ? <PopupForm handleClose={handleClose} /> : null}
+            {show ? <PopupForm handleClose={handleClose}
+                idCard={props.id}
+                nameCard={props.name}
+                regionCard={props.region}
+                categoryCard={props.category}
+                descriptionCard={props.description}
+                piCard={props.picture}
+                /> : null}
             <img
                 src={"http://localhost:5000" + props.picture}
                 className="card-img-top"
                 alt="..."
             ></img>
             <div className="card-body">
-                <h5 className="card-title">{props.name}</h5>
+               
                 <div className="title-region">
-                    {/* <h5>{props.category}</h5> */}
-                    <h5>category</h5>
+                    {/* <h5>{props.category}</h5> */ }
+ <h5 className="card-title">{props.name}</h5>
+                   
                     <p className="text-muted">
                         <i class="mr bi-geo-alt-fill"></i>
                         {props.region}
                     </p>
                 </div>
-                <p className="card-text">{props.description}</p>
+               
+                <p className="card-text">{props.description.replace(/^(.{70}[^\s]*).*/, "$1")}</p>
+                 <span className='cat'>{props.category[0]}</span>
+                 {props.category[1]?
+                <span className='cat'>{props.category[1]}</span> :null
+                }
+                
             </div>
-            <div className="card-footer">
-                <a className="links">website</a>
+            <div className="bottom">
+                <a className="links"> <i class="bi bi-display"></i> view website</a>
             </div>
+            
         </div>
     );
 }
 
 // popup window
-const PopupForm = ({ handleClose, SubmitPost }) => {
+const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard, regionCard, categoryCard, descriptionCard, piCard }) => {
     //New Empty Object To get Post Value
 
-    const [name, setName] = useState("");
-    const [region, setRegion] = useState("");
-    const [categories, setCategories] = useState([]);
-    const [categoriesO, setCategoriesO] = useState("");
-    const [categoriesP, setCategoriesP] = useState("");
-    const [description, setDescription] = useState("");
+    const [name, setName] = useState(nameCard);
+    const [region, setRegion] = useState(regionCard);
+    const [categoriesO, setCategoriesO] = useState(categoryCard[0]);
+    const [categoriesP, setCategoriesP] = useState(categoryCard[1]);
+    const [description, setDescription] = useState(descriptionCard);
     const [picture, setPicture] = useState();
+
+ console.log(nameCard, regionCard, descriptionCard,categoryCard,piCard, idCard)
+        const handleSubmit = (e, idCard) => {
+        
+            e.preventDefault();
+            const cat = [categoriesO, categoriesP];
+            console.log(cat)
+       
+        const params = new FormData();
+        params.append("categories[]",cat[0]);
+        params.append("categories[]",cat[1]);
+        params.append("name", name);
+        params.append("region", region);
+            params.append("description", description);
+            if (picture)
+            {
+                params.append("picture", picture);
+            }
+        
+        const token = localStorage.getItem('token');
+        console.log(token)
+        for (var value of params.values()) {
+   console.log(value);
+}
+        
+
+        axios.patch(`http://localhost:5000/api/v1/card/update/${idCard}`,params, {
+          headers:{
+                'Content-Type': 'multipart/form-data;',
+                
+                'x-auth-token': localStorage.getItem('token')
+          }
+        })
+
+        .then((res)=> {
+            console.log(res.data)
+            window.location.reload(false);
+
+
+         } ).catch(err => err.message);
+     
+    }
+   
 
     return (
         <>
@@ -105,6 +185,7 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
                     <input
                         type="file"
                         placeholder="enter img"
+                        
                         onChange={(e) => setPicture(e.target.files[0])}
                     />
                     <label>Title</label>
@@ -112,11 +193,13 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
                         type="text"
                         placeholder="enter title"
                         className="input"
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                     <div className="select-box">
                         <select
                             onChange={(e) => setCategoriesP(e.target.value)}
+                            value={categoriesP}
                         >
                             <option>Places By Category</option>
                             <option value="Training centers">
@@ -132,6 +215,7 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
                             id="browsers3"
                             aria-label="Default select example"
                             onChange={(e) => setCategoriesO(e.target.value)}
+                            value={categoriesO}
                         >
                             <option>Offers By Category</option>
                             <option value="Scholarships">Scholarships</option>
@@ -139,7 +223,9 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
                             <option value="Competitions">Competitions</option>
                             <option value="Events">Events</option>
                         </select>
-                        <select onChange={(e) => setRegion(e.target.value)}>
+                        <select onChange={(e) => setRegion(e.target.value)}
+                        value={region}
+                        >
                             <option>Region</option>
                             <option value="Tunis">Tunis</option>
                             <option value="Sousse">Sousse</option>
@@ -150,23 +236,19 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
                     <label>Description</label>
                     <input
                         type="text"
+                        value={description}
                         placeholder="enter description"
                         className="input"
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <label>Profile</label>
-                    <input
-                        type="text"
-                        placeholder="enter Profile   "
-                        className="input"
-                    />
+                   
                     <label>Website</label>
                     <input
                         type="text"
                         placeholder="enter Web Site Url"
                         className="input"
                     />
-                    <button className="button">Edit</button>
+                    <button className="button" onClick={e=>handleSubmit(e, idCard)}>Edit</button>
                 </div>
             </div>
         </>

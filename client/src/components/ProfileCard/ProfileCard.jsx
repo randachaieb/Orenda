@@ -4,6 +4,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import axios from "axios"
 
 function ProfileCard({ card }) {
     return (
@@ -32,9 +33,31 @@ const Card = ({ card }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
+    const deletePost = (e, idC) => {
+        e.preventDefault()
+        console.log(idC)
+
+        console.log(idC)
+        axios.delete('http://localhost:5000/api/v1/post/delete', { "id": idC }, {
+            headers: {
+                'Content-Type': 'Application/json',
+                'x-auth-token': localStorage.getItem('token')
+            }
+        })
+
+            .then((res) => {
+                console.log(res.data)
+                window.location.reload(false);
+
+
+            }).catch(err => err.message);
+
+    }
+
+
     return (
         <div>
-            {show ? <Repost handleClose={handleClose} /> : null}
+            {show ? <Repost handleClose={handleClose} id={card._id} text={card.text} picture={card.link} /> : null}
             {card.link === "" ? (
                 <div className="cardItems">
                     <div className="only-description" style={{ color: "red" }}>
@@ -78,7 +101,7 @@ const Card = ({ card }) => {
                                     <MenuItem onClick={handleShow}>
                                         edit
                                     </MenuItem>
-                                    <MenuItem>Delete</MenuItem>
+                                    <MenuItem onClick={e=>deletePost(e, card._id)}>Delete</MenuItem>
                                 </div>
                             </MenuItem>
                         </Menu>
@@ -96,7 +119,49 @@ const Card = ({ card }) => {
     );
 };
 
-const Repost = ({ handleClose }) => {
+const Repost = ({ handleClose,id, text, picture }) => {
+    const [txt, setTxt] = useState(text);
+    const [link, setLink] = useState();
+
+
+    const handleSubmit = (e,id) => {
+
+        e.preventDefault();
+        //console.log(name, region, description, categoriesP, categoriesO, picture)
+        const params = new FormData();
+
+        params.append("text", txt);
+        if (link)
+        {
+            params.append("link", link);
+        }
+
+
+        const token = localStorage.getItem('token');
+        console.log(token)
+        for (var value of params.values())
+        {
+            console.log(value);
+        }
+
+
+        axios.patch(`http://localhost:5000/api/v1/post/update/${ id }`, params,{
+            headers: {
+                'Content-Type': 'multipart/form-data',
+
+                'x-auth-token': localStorage.getItem('token')
+            }
+        })
+
+            .then((res) => {
+                console.log(res.data)
+                window.location.reload(false);
+
+
+            }).catch(err => err.message);
+
+    }
+
     return (
         <>
             <div className="form-popup">
@@ -114,17 +179,14 @@ const Repost = ({ handleClose }) => {
                             className="field-description"
                             name="description"
                             placeholder=" Write Here .. "
+                            value={txt}
+                            onChange={e=> setTxt(e.target.value)}
                         />
                     </div>
-                    {/* <div className="field">
-                        <input
-                            type="file"
-                            placeholder="image"
-                            name="img"
-                            accept="image/png, image/jpeg "
-                        />
-                    </div> */}
-                    <button className="button">Edit</button>
+                    <div className="field">
+                        <input type="file" placeholder="image" name="img" accept="image/png, image/jpeg " onChange={(e) => setLink(e.target.files[0])} />
+                    </div>
+                    <button className="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
                 </div>
             </div>
         </>

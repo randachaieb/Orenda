@@ -6,13 +6,14 @@ import data from '../../Data/data'
 import axios from 'axios'
 
 
-export default function Cards(){
+export default function Cards(props){
 
     const [card, setCard]= useState([
         
     ])
 
-    const [loading, setLoading]= useState(false)
+  const [loading, setLoading] = useState(false)
+ 
 
     
 
@@ -43,12 +44,15 @@ export default function Cards(){
 
 
          } ).catch(err => err.message)
-     
-
+      setSearch(localStorage.getItem('searchRegion'))
+          let byPlaces=localStorage.getItem('searchPlaces')
+        
     },[])
 
    
-    
+         
+      
+
 
     const [limit , setLimit]=useState(6);
     const items = card.slice(0,limit ) ;
@@ -58,27 +62,62 @@ export default function Cards(){
     return (
         <div className=''>
         <div className='items'>
-       
-        <div className='cards-display'>
+      
+          <div className='cards-display'>
+            
         {
         
         card.map((c, index) =>(
            
-           
-                <div onClick={e=>handleChange(e,c.id)}>
-                <Card
+         props.sregion && c.region.includes(props.sregion) ?
+                <div >
+            <Card
+                id={c._id}
+                category={c.categories}
                 region={c.region}
                 picture={c.picture}
                 name={c.name}
                 description={c.description}
                 
-                /> </div>
+              /> </div> : props.sPlace && c.categories.includes(props.sPlace) ?
+                 <div >
+            <Card
+                id={c._id}
+                category={c.categories}
+                region={c.region}
+                picture={c.picture}
+                name={c.name}
+                description={c.description}
+                
+                /> </div> : props.sOffer && c.categories.includes(props.sOffer) ?
+                  <div >
+            <Card
+                id={c._id}
+                category={c.categories}
+                region={c.region}
+                picture={c.picture}
+                name={c.name}
+                description={c.description}
+                
+                  /> </div> : !props.sOffer && !props.sPlace && !props.sregion ?
+                      <div >
+            <Card
+                id={c._id}
+                category={c.categories}
+                region={c.region}
+                picture={c.picture}
+                name={c.name}
+                description={c.description}
+                
+              /> </div> :null
+          
       
         ))}
        
           </div>
          
-          </div>
+        </div>
+         
           </div>
 
     )
