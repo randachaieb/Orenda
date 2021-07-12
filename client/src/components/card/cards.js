@@ -36,7 +36,8 @@ export default function Cards(props){
           }
         })
 
-        .then((res)=> {
+            .then((res) => {
+          setLoading(true)
             console.log(res.data)
           const data=(res.data).reverse()
             setCard(data)
@@ -65,8 +66,8 @@ export default function Cards(props){
       
           <div className='cards-display'>
             
-        {
-        
+        { loading?
+        card.length>0?
         card.map((c, index) =>(
            
           c.region.includes(props.sregion)  && c.categories[0].includes(props.sOffer)  && c.categories[1].includes(props.sPlace) ?
@@ -81,7 +82,7 @@ export default function Cards(props){
                 
               /> </div> : null
            
-        ))}
+        )) : <h1>Cards not found</h1> : <h1>Loading ...</h1>}
        
           </div>
          
