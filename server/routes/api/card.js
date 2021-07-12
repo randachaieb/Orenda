@@ -4,11 +4,7 @@ const router = express.Router();
 const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
 
-<<<<<<< HEAD
 const { moveFile, deleteFile } = require("../../utilities/fileManager");
-=======
-const { moveFile, deleteFile} = require("../../utilities/fileManager");
->>>>>>> 17dc11343de14328c0db226180a8e7075b3bd2de
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
 const debug = require("debug")("app:routes");
@@ -18,15 +14,12 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-<<<<<<< HEAD
 const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
   return await Card.find(query)
     .populate({ path: "user", select: "name picture username" })
     .limit(perPage)
     .skip(perPage * page);
 };
-=======
->>>>>>> 17dc11343de14328c0db226180a8e7075b3bd2de
 
 // @route   GET api/v1/card
 // @desc    Get user card
@@ -41,24 +34,13 @@ router.get("/", auth, async (req, res) => {
 // @route   POST api/v1/card
 // @desc    Add card
 // @access  private
-<<<<<<< HEAD
 router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
-=======
-router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-
->>>>>>> 17dc11343de14328c0db226180a8e7075b3bd2de
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
     const { error } = validateCard({ ...req.body, user: req.user._id });
     if (error) {
-<<<<<<< HEAD
       deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
-=======
-      deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
->>>>>>> 17dc11343de14328c0db226180a8e7075b3bd2de
       return res.status(400).json(error.details[0].message);
     }
 
