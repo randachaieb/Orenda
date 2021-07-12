@@ -203,11 +203,8 @@ const validate_update = (req) => {
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
-<<<<<<< HEAD
     keywords: Joi.array().items(Joi.string().required()),
     website: Joi.string(),
-=======
->>>>>>> 17dc11343de14328c0db226180a8e7075b3bd2de
   };
   return Joi.validate(req, schema);
 };
