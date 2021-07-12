@@ -23,7 +23,7 @@ export default function Card(props) {
 
     const deleteCard = (e, idC) => {
         e.preventDefault()
-        console.log(idC)
+        console.log(idC) 
         
         const headers = {
              'Content-Type': 'Application/json',
@@ -32,7 +32,7 @@ export default function Card(props) {
         console.log( localStorage.getItem('token'))
         axios.delete('http://localhost:5000/api/v1/card/card_delete',
              {
-        data: {"id": idC }, // or data: jdId, depending on how you handle it in the back end
+        data: {"id": idC }, 
         headers: {
              'Content-Type': 'Application/json',
              'x-auth-token': localStorage.getItem('token'),

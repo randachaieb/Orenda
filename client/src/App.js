@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 
-import {BrowserRouter, Route , Switch} from 'react-router-dom'
+import {BrowserRouter, Redirect, Route , Switch} from 'react-router-dom'
 import Signin from "./components/authentification/signin";
 import Signup from "./components/authentification/signup";
 import Header from "./components/header/header"
@@ -23,10 +23,13 @@ function App() {
         <Header/>
         <Switch>
           <Route exact path='/'>
-           {authContext.auth.token? <Home/> : <Signin/>}
+           {authContext.auth.token? <Home/> : <Redirect to='/signin' />}
           </Route>
           <Route  path='/signup'>
             <Signup/>
+        </Route>
+        <Route  path='/signin'>
+            {!authContext.auth.token? <Signin/> : <Redirect to='/' />}
           </Route>
           <Route  path='/ProfileView'>
            <ProfileView />
