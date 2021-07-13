@@ -138,7 +138,7 @@ export default function Card(props) {
                 
             </div>
             <div className="bottom">
-                <a className="links"> <i class="bi bi-display"></i> view website</a>
+                <a className="links" target="_blank" rel="noopener noreferrer" href={props.website}> <i class="bi bi-display"></i> view website</a>
             </div>
             
         </div>
