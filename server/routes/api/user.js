@@ -14,11 +14,11 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-// @route   GET api/v1/user/
+// @route   GET api/v1/user/profile
 // @desc    user profile
 // @access  private
-router.get("/:username", auth, async (req, res) => {
-  const user = await User.find({username:req.params.username})
+router.get("/profile/:username", auth, async (req, res) => {
+  const user = await User.findOne({'username':req.params.username}).select("-password")
                           .populate("folowing",["name","picture"])
                           .populate("folowers",["name","picture"])
 
