@@ -14,11 +14,37 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
+// @route   GET api/v1/user/
+// @desc    git user list
+// @access  private
+router.get("/", auth,async (req, res) => {
+  const all_users = await User.find();
+  debug(req.user);
+  res.json(
+    all_users
+  );
+});
+
+// @route   DELETE api/v1/user/remove
+// @desc    remove a user
+// @access  private
+router.delete("/remove", auth, async (req, res) => {
+  const user = await User.findByIdAndDelete(req.body.id)
+  if (user === null)
+  return res.status(400).json({ message: "user not exists" });
+  res.json({
+    message: "user deleted",
+  });
+});
+
 // @route   GET api/v1/user/me
 // @desc    user info
 // @access  private
 router.get("/me", auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const user = await User.findById(req.user._id).select("-password")
+                          .populate("folowing",["name","picture"])
+                          .populate("folowers",["name","picture"])
+
   debug(req.user);
   res.json(
     _.pick(user, [
@@ -29,22 +55,25 @@ router.get("/me", auth, async (req, res) => {
       "region",
       "address",
       "picture",
-      "cover"
+      "cover",
+      "folowers",
+      "folowing"
     ])
   );
 });
+
 
 // @route   POST api/v1/user
 // @desc    register user
 // @access  Public
 router.post("/", async (req, res) => {
-  debug(req.body);
+  console.log(req.body);
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const { email, password } = req.body;
 
-  // Check if email is uesed
+  // Check if email is used
   let user = await User.findOne({ email });
   if (user) return res.status(400).json({ message: "User already exist" });
 
@@ -74,11 +103,14 @@ router.post("/", async (req, res) => {
       "region",
       "address",
       "picture",
+      "cover",
+      "folowers",
+      "folowing"
     ]),
   });
 });
 
-// @route   GET api/v1/user/update
+// @route   PATCH api/v1/user/update
 // @desc    update profile
 // @access  private
 router.patch(
@@ -101,7 +133,7 @@ router.patch(
   }
 );
 
-// @route   GET api/v1/user/updatePicture
+// @route   PATCH api/v1/user/updatePicture
 // @desc    update profile picture
 // @access  private
 
@@ -141,7 +173,7 @@ router.patch(
   }
 );
 
-// @route   GET api/v1/user/removePicture
+// @route   PATCH api/v1/user/removePicture
 // @desc    remove profile picture
 // @access  private
 
@@ -168,7 +200,7 @@ router.patch(
 
 
 
-// @route   GET api/v1/user/addCover
+// @route   PATCH api/v1/user/addCover
 // @desc    add cover picture
 // @access  private
 
@@ -197,7 +229,7 @@ router.patch(
   }
 );
 
-// @route   GET api/v1/user/updateCover
+// @route   PATCH api/v1/user/updateCover
 // @desc    update cover picture
 // @access  private
 
@@ -238,7 +270,7 @@ router.patch(
 
 
 
-// @route   GET api/v1/user/removePicture
+// @route   PATCH api/v1/user/removePicture
 // @desc    remove cover picture
 // @access  private
 
@@ -262,6 +294,57 @@ router.patch(
     });
   }
 );
+
+// @route   PATCH api/v1/user/folow
+// @desc    folow other user
+// @access  private
+
+router.patch(
+  "/folow",
+  auth,
+  async (req, res) => {
+  
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { folowing: req.body.id }},  
+ 
+    );
+    const updated_User = await User.findByIdAndUpdate(
+      req.body.id,
+     { $push: { folowers: req.user._id }},  
+
+    );
+    res.json({
+      message: "folow done successfuly",
+      success: true,
+    });
+  }
+);
+// @route   PATCH api/v1/user/unfolow
+// @desc    unfolow a user
+// @access  private
+
+router.patch(
+  "/unfolow",
+  auth,
+  async (req, res) => {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $pull: { folowing: req.body.id }},  
+   
+    );
+    const updated_User = await User.findByIdAndUpdate(
+      req.body.id,
+     { $pull: { folowers: req.user._id }},  
+
+    );
+    res.json({
+      message: "unfolow done successfuly",
+      success: true,
+    });
+  }
+);
+
 
 
 const validateUser = (user) => {
