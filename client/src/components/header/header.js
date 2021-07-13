@@ -30,8 +30,9 @@ function Header(){
         <>
                        <div className='search-b'>
                            <h1 className="navbar-brand mb-0 h1">ORENDA</h1>
-                            <SearchBox/>
-                        </div>
+                           
+                       </div>
+                        <SearchBox/>
                         <div className="topnav">
                         <NavLink className="link-to-active"  to="/">Cards</NavLink>
                        

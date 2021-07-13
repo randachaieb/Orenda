@@ -58,7 +58,7 @@ export default function Cards(props){
 
     const [limit , setLimit]=useState(6);
     const items = card.slice(0,limit ) ;
-    
+        
 
     console.log(search)
     return (
@@ -70,10 +70,11 @@ export default function Cards(props){
         { loading?
         card.length>0?
         card.map((c, index) =>(
-           !c.place ? c.place=''  :  !c.offer ? c.offer='': null,
+           !c.place   ?( c.place=''  ): null,
+            !c.offer.includes("")  ?( c.offer.push("") ): null,
             c.region.includes(props.sregion) && c.place.includes(props.sPlace) && c.offer.includes(props.sOffer) ?
-           
-                <div >
+            <div >
+              {console.log('offer ',c.offer)}
             <Card
                 id={c._id}
                 place={c.place}

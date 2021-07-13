@@ -11,6 +11,21 @@
     margin-top: -5%;
 }
 
+.set-categories{
+    margin-top: 10px;
+}
+
+.ml{
+    margin-left: 5px;
+    cursor: pointer;
+}
+.catg{
+    color: tomato;
+    border: 1px solid tomato;
+    margin-right: 5px;
+    padding: 0 0 0 0.5rem;
+}
+
 .category {
     width: 300px;
     margin: 15px

@@ -31,7 +31,7 @@ export default function Card(props) {
              'x-auth-token': localStorage.getItem('token'),
         }
         console.log( localStorage.getItem('token'))
-        axios.delete('http://localhost:5000/api/v1/card/card_delete',
+        axios.delete('http://localhost:5000/api/v1/card/delete',
              {
         data: {"id": idC }, 
         headers: {
@@ -104,24 +104,36 @@ export default function Card(props) {
                 className="card-img-top"
                 alt="..."
             ></img>
+            <div className='user-name'>
+                <div className='content-user'>
+                     <img src={"http://localhost:5000" + props.user.picture}
+                    className='avatar-user'
+                    alt="Avatar"></img>
+                <span className='name'>{props.user.name}</span> 
+               </div>
+             </div>
             <div className="card-body">
-               
+              <h5 className="card-title">{props.name}</h5>
                 <div className="title-region">
                     {/* <h5>{props.category}</h5> */ }
- <h5 className="card-title">{props.name}</h5>
-                   
+ 
+                {props.place?
+                <span className='text-muted'>{props.place}</span> :
+                props.offer.length>0 || props.offer!=''?
+                <span className='text-muted'>{props.offer}</span> :null
+                }
                     <p className="text-muted">
                         <i class="mr bi-geo-alt-fill"></i>
                         {props.region}
                     </p>
                 </div>
-                <span className='user-name '>{ props.user.name}</span>
+                
                 <p className="card-text">{props.description.replace(/^(.{70}[^\s]*).*/, "$1")}</p>
-                  {props.place?
-                <span className='cat'>{props.place}</span> :null
-                }
-                 {props.offer?
-                <span className='cat'>{props.offer}</span> :null
+                {props.offer.length > 0 &&props.place?
+                    props.offer.map(offer =>
+                        offer != ''?
+                        <span className='cat'>{offer}</span> : null)
+                 :  null
                 }
                 
             </div>
@@ -140,6 +152,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
     const [name, setName] = useState(nameCard);
     const [region, setRegion] = useState(regionCard);
     const [categoriesO, setCategoriesO] = useState(offerCard);
+     const [categories, setCategories] = useState([]);
     const [categoriesP, setCategoriesP] = useState(placeCard);
     const [description, setDescription] = useState(descriptionCard);
     const [picture, setPicture] = useState();
@@ -155,8 +168,15 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
             const params = new FormData();
             if(categoriesP)
             { params.append("place", categoriesP); }
-            if(categoriesO)
-        {params.append("offer",categoriesO);}
+             if(categoriesO)
+        {
+                 for (let cat of categoriesO)
+                     if (cat != '')
+                     {
+                    params.append("offer[]", cat);
+                }
+            
+        }
         params.append("name", name);
         params.append("region", region);
             params.append("description", description);
@@ -189,6 +209,12 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
          } ).catch(err => err.message);
      
     }
+
+     const deleteCategory = (e, index) => {
+        e.preventDefault()
+        setCategories(categoriesO.splice(index,1))
+        console.log(categoriesO)
+   }
    
 
     return (
@@ -232,7 +258,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
                         <select
                             id="browsers3"
                             aria-label="Default select example"
-                            onChange={(e) => setCategoriesO(e.target.value)}
+                            onChange={(e)=>setCategoriesO([...categoriesO,e.target.value]) }
                             value={categoriesO}
                         >
                             <option>Offers By Category</option>
@@ -251,6 +277,16 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
                             <option value="Monastir">Monastir</option>
                         </select>
                     </div>
+                     <div className='set-categories'>
+                                    {categoriesO ? 
+                            categoriesO.map((cat, index) =>
+                                            cat!=''?
+                                            <span className='catg' >{cat } <i class="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
+                                            :null)
+                                        : null}
+                                     
+                                
+                                </div>
                     <label>Description</label>
                     <input
                         type="text"

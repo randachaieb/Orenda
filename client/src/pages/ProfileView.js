@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 import CoverPopup from "../components/Slider/uploadCover";
+import UpdateProfile from "../components/update-user/updateProfile";
 
 function ProfileView({ data, newObject }) {
     const authContext = useContext(AuthContext);
@@ -26,12 +27,16 @@ function ProfileView({ data, newObject }) {
 
     const [show, setShow] = useState(false);
     const [showUp, setShowUp] = useState(false);
+    const [showPro, setShowPro] = useState(false);
     const [upcover, setCover] = useState();
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
     const handleShowUp = () => setShowUp(true);
     const handleCloseUp = () => setShowUp(false);
+
+    const handleShowProfile = () => setShowPro(true);
+    const handleCloseProfile = () => setShowPro(false);
 
     const [card, setCard] = useState([]);
 
@@ -136,6 +141,7 @@ function ProfileView({ data, newObject }) {
            
 
             {/* Profile Image */}
+            
             <img className="profile_img" src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
             {/* Profile Name */}
             <h1 class="profile-user-name">{authContext.user.name}</h1>
@@ -166,7 +172,17 @@ function ProfileView({ data, newObject }) {
                         ) : (
                             <p> you don't have bio </p>
                         )}
+                        {authContext.user.address ? (
+                            <p>Address : {authContext.user.address}</p>
+                        ) : null}
+                         {authContext.user.region ? (
+                            <p>Region : {authContext.user.region}</p>
+                        ) :null}
+                        
                     </div>
+                    <div className='edit-profile'>
+                         <button type='submit' onClick={handleShowProfile} className='btn-edit'><i class="bi bi-pencil-square mr-2"></i>Edit Profile</button>
+                   </div>
                 </div>
             </div>
 
@@ -181,6 +197,15 @@ function ProfileView({ data, newObject }) {
 
             {showUp ? (
                 <CoverPopup handleCloseUp={handleCloseUp} />
+            ) : null}
+
+            {showPro ? (
+                <UpdateProfile handleCloseProfile={handleCloseProfile}
+                    Pname={authContext.user.name}
+                    Pbio={authContext.user.bio}
+                    Paddress={authContext.user.address}
+                    Pregion={authContext.user.region}
+                />
             ) : null}
 
             <ProfileCard card={card} />

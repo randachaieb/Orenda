@@ -12,7 +12,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
     const [name, setName] = useState("");
     const [region, setRegion] = useState("");
     const [categories, setCategories] = useState([]);
-    const [categoriesO, setCategoriesO] = useState("");
+    const [categoriesO, setCategoriesO] = useState([]);
     const [categoriesP, setCategoriesP] = useState("");
     const [description, setDescription] = useState("");
     const [picture, setPicture] = useState();
@@ -30,7 +30,8 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
         }
         if(categoriesO)
         {
-            params.append("offer", categoriesO);
+            for(let cat of categoriesO)
+            params.append("offer[]", cat);
         }
         params.append("name", name);
         params.append("region", region);
@@ -60,7 +61,11 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
          } ).catch(err => err.message);
      
     }
-   
+    const deleteCategory = (e, index) => {
+        e.preventDefault()
+        setCategories(categoriesO.splice(index,1))
+        console.log(categoriesO)
+   }
         
             return(
                     <>
@@ -78,13 +83,14 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                                     <option value="Coworking places">Coworking places</option>
                                     <option value="Clubs">Clubs</option>
                                 </select>
-                                <select  id="browsers3" aria-label="Default select example"  onChange={(e)=>setCategoriesO(e.target.value) }>
+                                <select  id="browsers3" aria-label="Default select example"  onChange={(e)=>setCategoriesO([...categoriesO,e.target.value]) }>
                                 <option>Offers By Category</option>
                                     <option value="Scholarships">Scholarships</option>
                                     <option value="Job offers">Job offers</option>
                                     <option value="Competitions">Competitions</option>
                                     <option value="Events">Events</option>
                                 </select>
+                                
                                 <select  onChange={(e)=>setRegion( e.target.value) }>
                                     <option>Region</option>
                                     <option value="Tunis">Tunis</option>
@@ -94,9 +100,18 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                                     
                                 </select>
                             </div>
+                             <div className='set-categories'>
+                                    {categoriesO ? 
+                                        categoriesO.map((cat, index) =>
+                                            <span className='catg' >{cat } <i class="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
+                                            )
+                                        : null}
+                                     
+                                
+                                </div>
                             <label>Description</label>
                             <input type="text" placeholder="enter description" className="input"  onChange={(e)=>setDescription( e.target.value) }/>
-                           
+                          
                             <label>Website</label>
                             <input type="text" placeholder="enter Web Site Url" className="input" onChange={(e)=>setSite( e.target.value) }/>
                             <button className="button"  onClick={(e)=>handleSubmit(e)}>Add</button>

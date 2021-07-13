@@ -143,7 +143,7 @@ const validate_update = (req) => {
     description: Joi.string(),
     region: Joi.string().min(3).max(50),
     place:Joi.string().allow(null),
-    offer:Joi.string().allow(null),
+    offer:Joi.array().items(Joi.string().allow(null)),
     profile:Joi.string().allow(null),
     website: Joi.string(),
    };

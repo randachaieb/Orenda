@@ -11,6 +11,15 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
+.btn-edit{
+  padding: 0 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  background-color: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
 .container .photo_couverture{
   width: 70%;
   height: 260px;
@@ -31,6 +40,13 @@ body {
 .icon:hover{
   opacity: 1;
 }
+
+.edit-profile{
+  position: absolute;
+  bottom: 5px;
+  right: 0px;
+  
+}
  
 
 
@@ -38,6 +54,7 @@ body {
 .profile{
   width: 70%;
   display: flex;
+  position: relative;
   justify-content: space-around;
   margin-bottom: 10px;
   border-bottom:1px solid #dbdbdb;
