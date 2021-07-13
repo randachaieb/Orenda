@@ -132,10 +132,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
         const params = new FormData();
 
         params.append("text", txt);
-        if (link)
-        {
-            params.append("link", link);
-        }
+     
 
 
         const token = localStorage.getItem('token');
@@ -184,9 +181,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
                             onChange={e=> setTxt(e.target.value)}
                         />
                     </div>
-                    <div className="field">
-                        <input type="file" placeholder="image" name="img" accept="image/png, image/jpeg " onChange={(e) => setLink(e.target.files[0])} />
-                    </div>
+                   
                     <button className="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
                 </div>
             </div>
