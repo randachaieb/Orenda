@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
@@ -6,10 +6,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import image from "./images.jpg";
 import axios from 'axios'
 import "./cards.css";
+import { AuthContext } from "../../context/authContext";
 export default function Card(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-
+    const authContext=useContext(AuthContext);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -48,9 +49,11 @@ export default function Card(props) {
          } ).catch(err => err.message);
         
     }
+    console.log('id user',authContext.user._id )
 
     return (
         <div className="card" style={{ width: "18rem;", margin: "25px" }}>
+            {authContext.user._id ===props.user._id?
             <div className="cards-dots">
                 <IconButton
                     aria-label="more"
@@ -58,7 +61,7 @@ export default function Card(props) {
                     aria-haspopup="true"
                     onClick={handleClick}
                 >
-                    <MoreHorizIcon fontSize="large" style={{ color: "#333332" }} />
+                    <MoreHorizIcon fontSize="large" style={{ color: "#ad03fc" }} />
                 </IconButton>
 
                 <Menu
@@ -85,7 +88,7 @@ export default function Card(props) {
                         </div>
                     </MenuItem>
                 </Menu>
-            </div>
+            </div> : null}
             {show ? <PopupForm handleClose={handleClose}
                 idCard={props.id}
                 nameCard={props.name}
