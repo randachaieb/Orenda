@@ -15,26 +15,29 @@ const {
 } = require("../../middleware/uploadHandler");
 
 // @route   GET api/v1/user/
-// @desc    git user list
+// @desc    user profile
 // @access  private
-router.get("/", auth,async (req, res) => {
-  const all_users = await User.find();
+router.get("/:username", auth, async (req, res) => {
+  const user = await User.find({username:req.params.username})
+                          .populate("folowing",["name","picture"])
+                          .populate("folowers",["name","picture"])
+
   debug(req.user);
   res.json(
-    all_users
+    _.pick(user, [
+      "_id",
+      "name",
+      "username",
+      "email",
+      "bio",
+      "region",
+      "address",
+      "picture",
+      "cover",
+      "folowers",
+      "folowing"
+    ])
   );
-});
-
-// @route   DELETE api/v1/user/remove
-// @desc    remove a user
-// @access  private
-router.delete("/remove", auth, async (req, res) => {
-  const user = await User.findByIdAndDelete(req.body.id)
-  if (user === null)
-  return res.status(400).json({ message: "user not exists" });
-  res.json({
-    message: "user deleted",
-  });
 });
 
 // @route   GET api/v1/user/me
@@ -50,6 +53,7 @@ router.get("/me", auth, async (req, res) => {
     _.pick(user, [
       "_id",
       "name",
+      "username",
       "email",
       "bio",
       "region",
@@ -87,6 +91,10 @@ router.post("/", async (req, res) => {
   user = new User({
     ...req.body,
     password: hash,
+    username: req.body.name
+    .split(" ")
+    .concat(Math.floor(Math.random() * 100))
+    .join("."),
   });
 
   user = await user.save();
@@ -98,6 +106,7 @@ router.post("/", async (req, res) => {
     user: _.pick(user, [
       "_id",
       "name",
+      "username",
       "email",
       "bio",
       "region",

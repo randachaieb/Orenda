@@ -13,7 +13,11 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-const{moveFile,deleteFile, fileType}=require("../../utilities/fileManager");
+const{
+  moveFile,
+  deleteFile,
+  fileType
+}=require("../../utilities/fileManager");
 
 
 // @route   GET api/v1/post
@@ -21,7 +25,10 @@ const{moveFile,deleteFile, fileType}=require("../../utilities/fileManager");
 // @access  private
 router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_posts = await Post.find({ user_id: _id , deleted:'false'}).populate("User");
+  const all_posts = await Post.find({
+    user_id: _id ,
+    deleted:'false'
+  }).populate("User");
   res.json(all_posts);
 });
 
@@ -29,7 +36,8 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add post
 // @access  private
 router.post("/", auth, uploadPost.single("link"), async (req, res) => {
-if(!req.body.text && !req.file) return res.json({ message: "empty post" });
+  if(!req.body.text && !req.file)
+    return res.json({ message: "empty post" });
   let newPost = {
     ...req.body,
     user_id: req.user._id,
@@ -47,9 +55,11 @@ if(!req.body.text && !req.file) return res.json({ message: "empty post" });
   if (req.file) {
     const fileName = req.file.filename;
     const post_type=fileType(req.file);
-    newPost={...newPost,
+    newPost={
+      ...newPost,
       type:post_type,
-      link: `${fileUploadPaths.POST_FILE_URL}/${fileName}`,}
+      link: `${fileUploadPaths.POST_FILE_URL}/${fileName}`,
+    };
     moveFile(
       join(fileUploadPaths.FILE_UPLOAD_PATH, fileName),
       join(fileUploadPaths.POST_FILE_UPLOAD_PATH, fileName)
@@ -78,9 +88,7 @@ router.patch(
     const { error } = validate_update(update_values);
     if (error) {
       if(req.file)
-      deleteFile(
-          join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename)
-        );
+        deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
       return res.status(400).json(error.details[0].message);
     }
 
