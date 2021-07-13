@@ -19,7 +19,7 @@ export  function AuthProvider(props){
 
         if(token){
             setAuth({ token });
-            axios.get('/api/v1/user/me', {
+            axios.get('http://localhost:5000/api/v1/user/me', {
           headers:{
             'Content-Type':'multipart/form-data;',
             'x-auth-token': localStorage.getItem('token')

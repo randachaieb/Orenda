@@ -16,20 +16,27 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
     const [categoriesP, setCategoriesP] = useState("");
     const [description, setDescription] = useState("");
     const [picture, setPicture] = useState();
+    const [site, setSite] = useState();
     
     const handleSubmit = (e) => {
         
         e.preventDefault();
-         const cat = [categoriesO, categoriesP];
-            console.log(cat)
+      
         //console.log(name, region, description, categoriesP, categoriesO, picture)
         const params = new FormData();
-        params.append("categories[]", cat[0]);
-        params.append("categories[]", cat[1]);
+        if (categoriesP)
+        {
+           params.append("place", categoriesP); 
+        }
+        if(categoriesO)
+        {
+            params.append("offer", categoriesO);
+        }
         params.append("name", name);
         params.append("region", region);
         params.append("description", description);
         params.append("picture", picture);
+        params.append("website", site);
         const token = localStorage.getItem('token');
         console.log(token)
         for (var value of params.values()) {
@@ -37,7 +44,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
 }
         
 
-        axios.post('/api/v1/card',params, {
+        axios.post('http://localhost:5000/api/v1/card',params, {
           headers:{
                 'Content-Type': 'multipart/form-data;',
                 
@@ -91,7 +98,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                             <input type="text" placeholder="enter description" className="input"  onChange={(e)=>setDescription( e.target.value) }/>
                            
                             <label>Website</label>
-                            <input type="text" placeholder="enter Web Site Url" className="input"/>
+                            <input type="text" placeholder="enter Web Site Url" className="input" onChange={(e)=>setSite( e.target.value) }/>
                             <button className="button"  onClick={(e)=>handleSubmit(e)}>Add</button>
                             </div>
                         </div>

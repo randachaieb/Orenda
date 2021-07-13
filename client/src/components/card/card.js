@@ -30,7 +30,7 @@ export default function Card(props) {
              'x-auth-token': localStorage.getItem('token'),
         }
         console.log( localStorage.getItem('token'))
-        axios.delete('/api/v1/card/card_delete',
+        axios.delete('http://localhost:5000/api/v1/card/card_delete',
              {
         data: {"id": idC }, 
         headers: {
@@ -90,9 +90,11 @@ export default function Card(props) {
                 idCard={props.id}
                 nameCard={props.name}
                 regionCard={props.region}
-                categoryCard={props.category}
+                placeCard={props.place}
+                offerCard={props.offer}
                 descriptionCard={props.description}
                 piCard={props.picture}
+                siteCard={props.website}
                 /> : null}
             <img
                 src={"http://localhost:5000" + props.picture}
@@ -110,11 +112,13 @@ export default function Card(props) {
                         {props.region}
                     </p>
                 </div>
-               
+                <span className='user-name '>{ props.user.name}</span>
                 <p className="card-text">{props.description.replace(/^(.{70}[^\s]*).*/, "$1")}</p>
-                 <span className='cat'>{props.category[0]}</span>
-                 {props.category[1]?
-                <span className='cat'>{props.category[1]}</span> :null
+                  {props.place?
+                <span className='cat'>{props.place}</span> :null
+                }
+                 {props.offer?
+                <span className='cat'>{props.offer}</span> :null
                 }
                 
             </div>
@@ -127,26 +131,29 @@ export default function Card(props) {
 }
 
 // popup window
-const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard, regionCard, categoryCard, descriptionCard, piCard }) => {
+const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionCard, placeCard,offerCard, descriptionCard, piCard }) => {
     //New Empty Object To get Post Value
 
     const [name, setName] = useState(nameCard);
     const [region, setRegion] = useState(regionCard);
-    const [categoriesO, setCategoriesO] = useState(categoryCard[0]);
-    const [categoriesP, setCategoriesP] = useState(categoryCard[1]);
+    const [categoriesO, setCategoriesO] = useState(offerCard);
+    const [categoriesP, setCategoriesP] = useState(placeCard);
     const [description, setDescription] = useState(descriptionCard);
     const [picture, setPicture] = useState();
+    const [site, setSite] = useState(siteCard);
 
- console.log(nameCard, regionCard, descriptionCard,categoryCard,piCard, idCard)
+ 
         const handleSubmit = (e, idCard) => {
         
             e.preventDefault();
             const cat = [categoriesO, categoriesP];
             console.log(cat)
        
-        const params = new FormData();
-        params.append("categories[]",cat[0]);
-        params.append("categories[]",cat[1]);
+            const params = new FormData();
+            if(categoriesP)
+            { params.append("place", categoriesP); }
+            if(categoriesO)
+        {params.append("offer",categoriesO);}
         params.append("name", name);
         params.append("region", region);
             params.append("description", description);
@@ -154,6 +161,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard, regionCard, cate
             {
                 params.append("picture", picture);
             }
+            params.append("website", site);
         
         const token = localStorage.getItem('token');
         console.log(token)
@@ -162,7 +170,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard, regionCard, cate
 }
         
 
-        axios.patch(`/api/v1/card/update/${idCard}`,params, {
+        axios.patch(`http://localhost:5000/api/v1/card/update/${idCard}`,params, {
           headers:{
                 'Content-Type': 'multipart/form-data;',
                 
@@ -254,6 +262,8 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard, regionCard, cate
                         type="text"
                         placeholder="enter Web Site Url"
                         className="input"
+                        value={site}
+                        onChange={(e) => setSite(e.target.value)}
                     />
                     <button className="button" onClick={e=>handleSubmit(e, idCard)}>Edit</button>
                 </div>

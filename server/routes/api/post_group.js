@@ -9,20 +9,7 @@ const auth = require("../../middleware/auth");
 const { json } = require("express");
 const debug = require("debug")("app:routes");
 
-const isPostExist =(added_posts , user_posts )=>{
-  let exist=true;
-  const user_posts_id= user_posts.map(({ _id }) => _id);
-  const user_posts_array=JSON.stringify(user_posts_id);
-  added_posts.map((item, index)=>{
-    if(!(user_posts_array.includes(item))) {
-      exist=false;
-       
-    }  
-  });
-  
-  return exist;
 
-}
 
 
 
@@ -47,9 +34,6 @@ router.post("/", auth, async (req, res) => {
     const newGroup={...req.body,user:req.user._id}
     const { error } = validateGroup(newGroup);
   if (error) return res.status(400).json(error.details[0].message);
-  const user_posts = await Post.find({ user_id: req.user._id ,deleted:false},{ _id: 1});
-  const exist =isPostExist(req.body.posts,user_posts);
-  if(!exist) return res.json({ message:"some posts doesn't exists"});
   const savedGroup = await new Post_group(newGroup).save();
 
   return res.json({ group: savedGroup });
@@ -62,16 +46,28 @@ router.post("/", auth, async (req, res) => {
 router.patch("/addPosts/:id", auth, async (req, res) => {
   const { id } = req.params;
   const new_posts=req.body.posts;
+  const group = await Post_group.findOneAndUpdate(
+    { _id: id }, 
+    { $addToSet: { posts: { $each: new_posts } }},  
+);
+if(!group) return res.json({ message:"group not found"});
+return res.json({ message:"group updated"});
+
+});
+
+// @route   POST api/v1/post_group
+// @desc    Add single post to a group
+// @access  private
+router.patch("/addPost/:id", auth, async (req, res) => {
+  const { id } = req.params;
+  const new_post=req.body.post;
   const group_posts = await Post_group.findById(id);
-  const user_posts = await Post.find({ user_id: req.user._id ,deleted:false},{ _id: 1});
-  const exist =isPostExist(req.body.posts,user_posts);
-  if(!exist) return res.json({ message:"some posts doesn't exists"});
-  let isFounded = new_posts.some( post => group_posts.posts.includes(post) );
-  if(isFounded) return res.json({ message:"some posts are already exists in the group"});
+  let isExist = group_posts.posts.includes(new_post) ;
+  if(isExist) return res.json({ message:"post is already exists in the group"});
 
   const group = await Post_group.findOneAndUpdate(
     { _id: id }, 
-    { $push: { posts: { $each: new_posts } }},  
+    { $push: { posts: new_post }},  
 );
 if(!group) return res.json({ message:"group not found"});
 return res.json({ message:"group updated"});
@@ -121,16 +117,16 @@ router.delete("/delete", auth, async (req, res) => {
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const posts = await Post_group.findById(id)
+  const group = await Post_group.findById(id)
                                 .populate( 
                                 { path:'posts',
                                   match: {
                                   deleted: false,
                                   }
                                 }); 
-  if (!posts)
+  if (!group)
   return res.status(400).json({ message: "no group found" });
-  res.json({ posts });
+  res.json({ group });
 
 });
 

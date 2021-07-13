@@ -12,6 +12,7 @@ import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
+import CoverPopup from "../components/Slider/uploadCover";
 
 function ProfileView({ data, newObject }) {
     const authContext = useContext(AuthContext);
@@ -24,8 +25,13 @@ function ProfileView({ data, newObject }) {
     }
 
     const [show, setShow] = useState(false);
+    const [showUp, setShowUp] = useState(false);
+    const [upcover, setCover] = useState();
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+
+    const handleShowUp = () => setShowUp(true);
+    const handleCloseUp = () => setShowUp(false);
 
     const [card, setCard] = useState([]);
 
@@ -61,6 +67,10 @@ function ProfileView({ data, newObject }) {
         setAnchorEl(null);
     };
 
+
+     
+
+
     return (
         <div className="container">
             {/* Photo Couverture */}
@@ -71,7 +81,7 @@ function ProfileView({ data, newObject }) {
                     aria-haspopup="true"
                     onClick={handleClick}
                 >
-                    <MoreHorizIcon fontSize="large" style={{ color: "#fff" }} />
+                    <MoreHorizIcon fontSize="large" style={{ color: "#4287f5" }} />
                 </IconButton>
 
                 <Menu
@@ -99,12 +109,9 @@ function ProfileView({ data, newObject }) {
                                         fontSize: "16px",
                                         cursor: "pointer",
                                     }}
+                                    onClick={handleShowUp}
                                 >
-                                    <input
-                                        className="input-cover"
-                                        type="file"
-                                        accept="image/png, image/jpeg "
-                                    />
+                                   
                                     Upload
                                 </label>
                             </MenuItem>
@@ -114,12 +121,19 @@ function ProfileView({ data, newObject }) {
                     </MenuItem>
                 </Menu>
             </div>
-
-            <img
+            {authContext.user.cover ?
+                <img
+                className="photo_couverture"
+                src={'http://localhost:5000'+authContext.user.cover}
+                alt="couverture_image"
+                /> :
+                <img
                 className="photo_couverture"
                 src="https://www.anthedesign.fr/w2015/wp-content/uploads/2016/12/couleur-du-web-2017.jpg"
                 alt="couverture_image"
             />
+              }
+           
 
             {/* Profile Image */}
             <img className="profile_img" src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
@@ -163,6 +177,10 @@ function ProfileView({ data, newObject }) {
 
             {show ? (
                 <Popup handleClose={handleClose} SubmitPost={SubmitPost} />
+            ) : null}
+
+            {showUp ? (
+                <CoverPopup handleCloseUp={handleCloseUp} />
             ) : null}
 
             <ProfileCard card={card} />

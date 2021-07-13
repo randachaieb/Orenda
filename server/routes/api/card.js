@@ -14,13 +14,20 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
+// @route   GET api/v1/card
+// @desc    Get all cards
+// @access  private
+router.get("/all", auth, async (req, res) => {
+  const all_cards = await Card.find().populate("user",["name","picture"]);
+  res.json(all_cards);
+});
 
 // @route   GET api/v1/card
 // @desc    Get user card
 // @access  private
 router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_cards = await Card.find({ user: _id }).populate("User");
+  const all_cards = await Card.find({ user: _id }).populate("user");
   res.json(all_cards);
 });
 
@@ -34,6 +41,9 @@ router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
+    if(!req.body.place && !req.body.offer)
+    return res.status(400).json({ message: "a place/offer is required " });
+
     const { error } = validateCard({ ...req.body, user: req.user._id });
     if (error) {
       deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
@@ -65,6 +75,9 @@ router.patch(
   uploadImage.single("picture"),
   async (req, res) => {
     const { id } = req.params;
+    if(!req.body.place && !req.body.offer)
+      return res.status(400).json({ message: "a place/offer is required " });
+
     const { error } = validate_update(req.body);
     if (error) {
       if(req.file) deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
@@ -94,21 +107,12 @@ router.patch(
   }
 );
 
-// @route   DELETE api/v1/card
-// @desc    delete a card
-// @access  private
-router.delete("/delete", auth, async (req, res) => {
-  const { card_list } = req.body;
-  const l = await Card.deleteMany({ _id: { $in: card_list } });
-  debug(l);
-  if (l.deletedCount === 0) return res.json({ success: false });
-  return res.json({ message: "card deleted", success: true });
-});
+
 
 // @route   DELETE api/v1/card
 // @desc    delete a single card
 // @access  private
-router.delete("/card_delete", auth, async (req, res) => {
+router.delete("/delete", auth, async (req, res) => {
   const { id } = req.body;
   const card = await Card.findByIdAndDelete(id);
 
@@ -136,10 +140,13 @@ router.get("/:id", async (req, res) => {
 const validate_update = (req) => {
   const schema = {
     name: Joi.string().min(5).max(50),
-    description: Joi.string().min(50),
+    description: Joi.string(),
     region: Joi.string().min(3).max(50),
-    categories: Joi.array().items(Joi.string().required()),
-  };
+    place:Joi.string().allow(null),
+    offer:Joi.string().allow(null),
+    profile:Joi.string().allow(null),
+    website: Joi.string(),
+   };
   return Joi.validate(req, schema);
 };
 

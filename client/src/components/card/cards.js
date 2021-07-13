@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Card from './card'
 import './cards.css'
-import data from '../../Data/data'
+
 import axios from 'axios'
+import Loader from '../loader/loader'
 
 
 export default function Cards(props){
@@ -29,7 +30,7 @@ export default function Cards(props){
 
 
     useEffect( async ()=>{
-          axios.get('/api/v1/card', {
+          axios.get('http://localhost:5000/api/v1/card/all', {
           headers:{
             'Content-Type':'multipart/form-data;',
             'x-auth-token': localStorage.getItem('token')
@@ -69,24 +70,34 @@ export default function Cards(props){
         { loading?
         card.length>0?
         card.map((c, index) =>(
+           !c.place ? c.place=''  :  !c.offer ? c.offer='': null,
+            c.region.includes(props.sregion) && c.place.includes(props.sPlace) && c.offer.includes(props.sOffer) ?
            
-          c.region.includes(props.sregion)  && c.categories[0].includes(props.sOffer)  && c.categories[1].includes(props.sPlace) ?
                 <div >
             <Card
                 id={c._id}
-                category={c.categories}
+                place={c.place}
+                offer={c.offer}
+                website={c.website}
                 region={c.region}
                 picture={c.picture}
                 name={c.name}
                 description={c.description}
+                user={c.user}
                 
               /> </div> : null
            
-        )) : <h1>Cards not found</h1> : <h1>Loading ...</h1>}
+        )) : <h1>Cards not found</h1> :
+              <div className='cards-display'>
+                <Loader/>
+                    </div>
+        }
        
           </div>
+          
          
         </div>
+         
          
           </div>
 
