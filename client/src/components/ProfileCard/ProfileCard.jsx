@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./ProfileCard.css";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios"
+import { AuthContext } from "../../context/authContext";
 
 function ProfileCard({ card }) {
     return (
@@ -21,7 +22,7 @@ export default ProfileCard;
 const Card = ({ card }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-
+    const authContext = useContext(AuthContext);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -67,7 +68,8 @@ const Card = ({ card }) => {
                 </div>
             ) : (
                 <div className="cardItems">
-                    <div className="post-card">
+                        {authContext.user._id === card.user_id ?
+                <div className="post-card">
                         <IconButton
                             aria-label="more"
                             aria-controls="long-menu"
@@ -106,7 +108,9 @@ const Card = ({ card }) => {
                                 </div>
                             </MenuItem>
                         </Menu>
-                    </div>
+                    </div>:null   
+                }
+                        
 
                     <img
                         className="img"

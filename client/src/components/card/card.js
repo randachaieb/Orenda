@@ -7,6 +7,7 @@ import image from "./images.jpg";
 import axios from 'axios'
 import "./cards.css";
 import { AuthContext } from "../../context/authContext";
+import { useHistory } from "react-router-dom";
 export default function Card(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -21,7 +22,7 @@ export default function Card(props) {
     const handleShow = () => setShow(true);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-
+    const history = useHistory();
     const deleteCard = (e, idC) => {
         e.preventDefault()
         console.log(idC) 
@@ -49,7 +50,16 @@ export default function Card(props) {
          } ).catch(err => err.message);
         
     }
-    console.log('id user',authContext.user._id )
+    console.log('id user', authContext.user._id)
+    
+    const goToProfile = (e, id) => {
+        if (id === authContext.user._id)
+        {
+            history.push(`/profileview`)
+        }
+        else
+        {history.push(`/${id}`)}
+    }
 
     return (
         <div className="card" style={{  margin: "25px" }}>
@@ -104,7 +114,7 @@ export default function Card(props) {
                 className="card-img-top"
                 alt="..."
             ></img>
-            <div className='user-name'>
+            <div className='user-name' onClick={e=>goToProfile(e,props.user._id)}>
                 <div className='content-user'>
                      <img src={"http://localhost:5000" + props.user.picture}
                     className='avatar-user'

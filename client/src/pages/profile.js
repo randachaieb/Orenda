@@ -57,6 +57,7 @@ function Profile({ data, newObject }) {
                 console.log(res.data);
                 
                 setUser(res.data)
+                setCard(res.data.posts)
             })
             .catch((err) => err.message)
         
@@ -88,21 +89,29 @@ function Profile({ data, newObject }) {
            
             {user ?
         
-               <div>
-           
-                <img
+               <>
+                    {
+                        user.profile.cover ?
+                              <img
+                className="photo_couverture"
+                src={"http://localhost:5000"+ user.profile.cover}
+                alt="couverture_image"
+                            /> :
+                              <img
                 className="photo_couverture"
                 src="https://www.anthedesign.fr/w2015/wp-content/uploads/2016/12/couleur-du-web-2017.jpg"
                 alt="couverture_image"
             />
+                   }
+               
               
            
 
             {/* Profile Image */}
             
-            <img className="profile_img" src={'http://localhost:5000'+user.picture} alt="profile_img" />
+            <img className="profile_img" src={'http://localhost:5000'+user.profile.picture} alt="profile_img" />
             {/* Profile Name */}
-            <h1 className="profile-user-name">{user.name}</h1>
+            <h1 className="profile-user-name">{user.profile.name}</h1>
 
             <div className="profile">
                 <div className="Profile_desc">
@@ -125,16 +134,16 @@ function Profile({ data, newObject }) {
                     </div>
                     {/* Bio  */}
                     <div className="profile-bio">
-                        {user.bio ? (
+                        {user.profile.bio ? (
                             <p>{user.bio}</p>
                         ) : (
                             null
                         )}
-                        {authContext.user.address ? (
-                            <p>Address : {user.address}</p>
+                        {user.profile.address ? (
+                            <p>Address : {user.profile.address}</p>
                         ) : null}
-                         {user.region ? (
-                            <p>Region : {user.region}</p>
+                         {user.profile.region ? (
+                            <p>Region : {user.profile.region}</p>
                         ) :null}
                         
                     </div>
@@ -146,7 +155,7 @@ function Profile({ data, newObject }) {
             
 
                     <ProfileCard card={card} />
-                    </div>: null  
+                    </>: null  
         }
      
         </div>
