@@ -1,5 +1,6 @@
 const express = require("express");
 const { User, validate } = require("../../models/User");
+const { Post} = require("../../models/post");
 const bcrypt = require("bcryptjs");
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
@@ -20,10 +21,15 @@ const {
 router.get("/profile/:username", auth, async (req, res) => {
   const user = await User.findOne({'username':req.params.username}).select("-password")
                           .populate("folowing",["name","picture"])
-                          .populate("folowers",["name","picture"])
+                          .populate("folowers",["name","picture"]);
+  const posts= await Post.find({'user_id':user._id,
+                                  deleted:'false'
+                              });
+
 
   debug(req.user);
-  res.json(
+  res.json({
+    profile:
     _.pick(user, [
       "_id",
       "name",
@@ -36,8 +42,9 @@ router.get("/profile/:username", auth, async (req, res) => {
       "cover",
       "folowers",
       "folowing"
-    ])
-  );
+    ]),
+    posts:posts
+  });
 });
 
 // @route   GET api/v1/user/me
@@ -46,7 +53,7 @@ router.get("/profile/:username", auth, async (req, res) => {
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password")
                           .populate("folowing",["name","picture"])
-                          .populate("folowers",["name","picture"])
+                          .populate("folowers",["name","picture"]);
 
   debug(req.user);
   res.json(
