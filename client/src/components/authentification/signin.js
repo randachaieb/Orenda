@@ -57,7 +57,7 @@ const Signin = ()=>{
             <input  className='form-ctrl mrg-input' placeholder='Password' variant='filled' mb={6} type='password' onChange={e=>setPass(e.target.value)}/>
             {
                   error!=''?
-                  <div class="alert alert-danger" role="alert">
+                  <div className="alert alert-danger" role="alert">
          {error}
         </div> : null
                 }

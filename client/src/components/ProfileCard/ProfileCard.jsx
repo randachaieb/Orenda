@@ -166,7 +166,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
                 <div className="form-container">
                     <button
                         type="button"
-                        class="close btn-close"
+                        className="close btn-close"
                         onClick={handleClose}
                     />
                     <label className="title-label">

@@ -14,6 +14,7 @@ import { useHistory } from "react-router";
 import axios from "axios";
 import CoverPopup from "../components/Slider/uploadCover";
 import UpdateProfile from "../components/update-user/updateProfile";
+import { useParams } from "react-router-dom";
 
 function ProfileView({ data, newObject }) {
     const authContext = useContext(AuthContext);
@@ -39,6 +40,8 @@ function ProfileView({ data, newObject }) {
     const handleCloseProfile = () => setShowPro(false);
 
     const [card, setCard] = useState([]);
+    const [user, setuser] = useState();
+    const { username } = useParams();
 
     useEffect(async () => {
         axios
@@ -55,6 +58,8 @@ function ProfileView({ data, newObject }) {
                 setCard(data);
             })
             .catch((err) => err.message);
+        
+     
     }, []);
 
     const SubmitPost = (newpost) => {
@@ -144,7 +149,7 @@ function ProfileView({ data, newObject }) {
             
             <img className="profile_img" src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
             {/* Profile Name */}
-            <h1 class="profile-user-name">{authContext.user.name}</h1>
+            <h1 className="profile-user-name">{authContext.user.name}</h1>
 
             <div className="profile">
                 <div className="Profile_desc">
@@ -152,15 +157,15 @@ function ProfileView({ data, newObject }) {
                         {/* Profile Stat */}
                         <ul>
                             <li>
-                                <span class="profile-stat-count">{ card.length}</span>{" "}
+                                <span className="profile-stat-count">{ card.length}</span>{" "}
                                 publications
                             </li>
                             <li>
-                                <span class="profile-stat-count">188</span>{" "}
+                                <span className="profile-stat-count">188</span>{" "}
                                 abonnés
                             </li>
                             <li>
-                                <span class="profile-stat-count">206</span>{" "}
+                                <span className="profile-stat-count">206</span>{" "}
                                 abonnements
                             </li>
                         </ul>
@@ -181,7 +186,7 @@ function ProfileView({ data, newObject }) {
                         
                     </div>
                     <div className='edit-profile'>
-                         <button type='submit' onClick={handleShowProfile} className='btn-edit'><i class="bi bi-pencil-square mr-2"></i>Edit Profile</button>
+                         <button type='submit' onClick={handleShowProfile} className='btn-edit'><i className="bi bi-pencil-square mr-2"></i>Edit Profile</button>
                    </div>
                 </div>
             </div>

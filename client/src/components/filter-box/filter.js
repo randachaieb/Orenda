@@ -71,7 +71,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                     <>
                         <div className="form-pop"> 
                             <div   className="content">
-                            <button type="button" class="close btn-close" onClick={handleClose}/>
+                            <button type="button" className="close btn-close" onClick={handleClose}/>
                             <input type="file" placeholder="enter img"  onChange={(e)=>setPicture( e.target.files[0]) } />
                             <label>Title</label>
                             <input type="text" placeholder="enter title" className="input" onChange={(e)=>setName(e.target.value) }/>
@@ -103,7 +103,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                              <div className='set-categories'>
                                     {categoriesO ? 
                                         categoriesO.map((cat, index) =>
-                                            <span className='catg' >{cat } <i class="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
+                                            <span className='catg' >{cat } <i className="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
                                             )
                                         : null}
                                      

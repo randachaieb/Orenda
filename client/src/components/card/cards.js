@@ -75,7 +75,8 @@ export default function Cards(props){
             c.region.includes(props.sregion) && c.place.includes(props.sPlace) && c.offer.includes(props.sOffer) ?
             <div >
               {console.log('offer ',c.offer)}
-            <Card
+              <Card
+                key={index}
                 id={c._id}
                 place={c.place}
                 offer={c.offer}

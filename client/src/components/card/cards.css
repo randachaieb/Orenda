@@ -26,7 +26,7 @@
     background-color: rgb(253, 252, 252);
     margin: 15px;
     width: 320px;
-    height: 450px;
+    height: 470px;
     display: grid;
     grid-template-rows: max-content 200px 1fr;
 }
@@ -35,11 +35,20 @@
     color: rgb(134, 128, 128);
 }
 
+.cat-offer{
+    width: 100%;
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: left;
+    flex-wrap: wrap;
+    margin-top: -10px;
+}
+
 .user-name{
     background-color: #fff;
     color: black;
-    border: 2px solid #444;
-    padding: 0 0.2rem;
+    border: 2px solid rgb(179, 177, 177);
+    padding: 0 0.7rem;
     border-radius: 35px;
     height: 40px;
     cursor: pointer;
@@ -47,7 +56,7 @@
     font-weight: 300;
     position: absolute;
     right: 2%;
-    top: 40%;
+    top: 42%;
     
 }
 
@@ -105,7 +114,8 @@
 .cat {
     border: 1px solid rgb(3, 50, 138);
     border-radius: 15px;
-    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
     padding: 0 0.5rem;
     cursor: pointer;
     color: rgb(3, 50, 138);

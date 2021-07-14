@@ -11,11 +11,9 @@ const userSchema = new mongoose.Schema({
   },
   bio: {
     type: String,
-    // required: true,
   },
   region: {
     type: String,
-    // required: true,
     minlength: 5,
     maxlength: 50,
   },
@@ -49,9 +47,6 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 1024,
   },
-  slides: {
-    type: [String]
-  },
   isAdmin: {
     type: Boolean,
     default: false,
@@ -60,6 +55,13 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  username: {
+    type: String,
+    require: true,
+    unique: true,
+  },
+  folowers: [this],
+  folowing: [this],
 });
 
 userSchema.methods.generateAuthToken = function () {

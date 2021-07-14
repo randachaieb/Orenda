@@ -65,7 +65,7 @@ function UpdateProfile({ handleCloseProfile, Pname, Pbio, Paddress,Pregion }) {
                 {/* S ==== Slide */}
                 <div className="form-pop">
                     <div className="content">
-                          <button type="button" class="close btn-close" onClick={handleCloseProfile}/>
+                          <button type="button" className="close btn-close" onClick={handleCloseProfile}/>
                        Picture : <input type="file" placeholder="enter name" className="input"
                         onChange={e=> setPicture(e.target.files[0])}
                         />

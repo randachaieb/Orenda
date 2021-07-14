@@ -14,13 +14,12 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-// @route   GET api/v1/card
-// @desc    Get all cards
-// @access  private
-router.get("/all", auth, async (req, res) => {
-  const all_cards = await Card.find().populate("user",["name","picture"]);
-  res.json(all_cards);
-});
+const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
+  return await Card.find(query)
+    .populate({ path: "user", select: "name picture username" })
+    .limit(perPage)
+    .skip(perPage * page);
+};
 
 // @route   GET api/v1/card
 // @desc    Get user card
@@ -129,6 +128,35 @@ router.delete("/delete", auth, async (req, res) => {
 });
 
 // @route   GET api/v1/card
+// @desc    Search for cards
+// @access  public
+router.get("/search", async (req, res) => {
+  const { error } = validate_search_schema(req.query);
+  if (error) return res.status(400).json(error.details[0].message);
+  const { q } = req.query;
+  const searchParams = [...q.split(" "), q];
+  searchParams.forEach((i, index, arr) => (arr[index] = new RegExp(i)));
+  debug(searchParams, new RegExp("[" + [...q.split(" "), q] + "]"));
+  const searchResualt = await Card.find({
+    $or: [
+      { name: new RegExp("[" + [...q.split(" "), q] + "]") },
+      { keywords: { $in: searchParams } },
+    ],
+  });
+
+  res.json(searchResualt);
+});
+
+// @route   GET api/v1/card
+// @desc    Get user card
+// @access  private
+router.get("/all", async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const all_cards = await getCardsPages({}, page);
+  res.json(all_cards);
+});
+
+// @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
 router.get("/:id", async (req, res) => {
@@ -146,6 +174,7 @@ const validate_update = (req) => {
     offer:Joi.array().items(Joi.string().allow(null)),
     profile:Joi.string().allow(null),
     website: Joi.string(),
+    keywords: Joi.array().items(Joi.string().required()),
    };
   return Joi.validate(req, schema);
 };

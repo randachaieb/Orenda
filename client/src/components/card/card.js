@@ -52,7 +52,7 @@ export default function Card(props) {
     console.log('id user',authContext.user._id )
 
     return (
-        <div className="card" style={{ width: "18rem;", margin: "25px" }}>
+        <div className="card" style={{  margin: "25px" }}>
             {authContext.user._id ===props.user._id?
             <div className="cards-dots">
                 <IconButton
@@ -108,7 +108,7 @@ export default function Card(props) {
                 <div className='content-user'>
                      <img src={"http://localhost:5000" + props.user.picture}
                     className='avatar-user'
-                    alt="Avatar"></img>
+                    ></img>
                 <span className='name'>{props.user.name}</span> 
                </div>
              </div>
@@ -123,22 +123,24 @@ export default function Card(props) {
                 <span className='text-muted'>{props.offer}</span> :null
                 }
                     <p className="text-muted">
-                        <i class="mr bi-geo-alt-fill"></i>
+                        <i className="mr bi-geo-alt-fill"></i>
                         {props.region}
                     </p>
                 </div>
                 
-                <p className="card-text">{props.description.replace(/^(.{70}[^\s]*).*/, "$1")}</p>
-                {props.offer.length > 0 &&props.place?
+                <p className="card-text">{props.description.replace(/^(.{50}[^\s]*).*/, "$1")}</p>
+                <div className="cat-offer">
+                     {props.offer.length > 0 &&props.place?
                     props.offer.map(offer =>
                         offer != ''?
                         <span className='cat'>{offer}</span> : null)
                  :  null
                 }
+               </div>
                 
             </div>
             <div className="bottom">
-                <a className="links" target="_blank" rel="noopener noreferrer" href={props.website}> <i class="bi bi-display"></i> view website</a>
+                <a className="links" target="_blank" rel="noopener noreferrer" href={props.website}> <i className="bi bi-display"></i> view website</a>
             </div>
             
         </div>
@@ -223,7 +225,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
                 <div className="content">
                     <button
                         type="button"
-                        class="close btn-close"
+                        className="close btn-close"
                         onClick={handleClose}
                     />
                     <input
@@ -281,7 +283,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
                                     {categoriesO ? 
                             categoriesO.map((cat, index) =>
                                             cat!=''?
-                                            <span className='catg' >{cat } <i class="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
+                                            <span className='catg' >{cat } <i className="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
                                             :null)
                                         : null}
                                      

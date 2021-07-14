@@ -45,7 +45,7 @@ function CoverPopup({ handleCloseUp }) {
                 {/* S ==== Slide */}
                     <div className="form-S-popup"  > 
                         <div className="form-S-container">
-                        <button type="button" class="close btn-close" onClick={handleCloseUp}/>
+                        <button type="button" className="close btn-close" onClick={handleCloseUp}/>
                             <div className="S-field">
                                 <input type="file" placeholder="image" name="img" accept="image/png, image/jpeg " onChange={e=> setCover(e.target.files[0])} />
                             </div>

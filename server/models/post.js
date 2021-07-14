@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const postSchema = new mongoose.Schema({
-type: {
+  type: {
     type: String,
     enum: ['text', 'image', 'video'] 
   },

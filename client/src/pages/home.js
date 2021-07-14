@@ -21,7 +21,8 @@ function Home() {
             <div className="SliderShow">
                 <SliderShow />
             </div>
-            <div className="container box">
+            <div className='container-card'>
+                            <div className="container box">
                 <div className=" category-search">
             
 
@@ -65,7 +66,11 @@ function Home() {
 
            </div>
             </div>
-            <Cards sregion={byRegion} sPlace={byPlaces}  sOffer={byOffer}  />
+<Cards sregion={byRegion} sPlace={byPlaces}  sOffer={byOffer}  />
+            </div>
+
+
+            
         </div>
     );
 }
