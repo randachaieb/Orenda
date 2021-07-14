@@ -149,8 +149,10 @@ export default function Card(props) {
                </div>
                 
             </div>
-            <div className="bottom">
-                <a className="links" target="_blank" rel="noopener noreferrer" href={props.website}> <i className="bi bi-display"></i> view website</a>
+            <div className='footer-c'>
+                <div className="bottom">
+                <a className="links" target="_blank" rel="noopener noreferrer" href={props.website}> <i class="mr-2 bi-eye-fill"></i> view website</a>
+            </div>
             </div>
             
         </div>

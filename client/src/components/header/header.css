@@ -84,6 +84,16 @@
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, .1);
 }
 
+.avatar-user2{
+    
+    margin-top: 15px;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    border: 1px solid #aaa;
+    margin-right: 6px;
+}
+
 @media only screen and (max-width: 920px) {
     .container-nav {
         flex-direction: column;

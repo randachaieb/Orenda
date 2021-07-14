@@ -1,13 +1,15 @@
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,700,900');
 :root {
   --main-bg: #fdfdfd;
   --card-bg: #fff;
-  --primary: rgb(3, 50, 138);
+  --primary: #0265c2;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: Lato, sans-serif;
+  font: 'Poppins';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
@@ -15,4 +17,8 @@ body {
 
 code {
   font-family: Lato, sans-serif;
+}
+
+*{
+  font-family: 'Poppins';
 }

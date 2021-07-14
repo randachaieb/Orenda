@@ -38,7 +38,7 @@ function Header(){
                        
                         <NavLink className="link-to-active" to="/" >Home</NavLink>
                        <NavLink className='link-to-active'  to="/ProfileView" >{authContext.user.name}</NavLink>
-                       <NavLink className="link-to-active"  to="/"  onClick={()=>logout()}>Logout</NavLink>
+                       <img src={'http://localhost:5000'+ authContext.user.picture} className="avatar-user2"  to="/"  onClick={()=>logout()}/>
                    </div>
         </>           
                ) : (
