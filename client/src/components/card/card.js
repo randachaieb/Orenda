@@ -62,7 +62,7 @@ export default function Card(props) {
     }
 
     return (
-        <div className="card" style={{  margin: "25px" }}>
+        <div className="card" style={{  margin: "20px" }}>
             {authContext.user._id ===props.user._id?
             <div className="cards-dots">
                 <IconButton
@@ -71,7 +71,7 @@ export default function Card(props) {
                     aria-haspopup="true"
                     onClick={handleClick}
                 >
-                    <MoreHorizIcon fontSize="large" style={{ color: "#ad03fc" }} />
+                    <MoreHorizIcon fontSize="large" style={{ color: "#444" }} />
                 </IconButton>
 
                 <Menu
@@ -137,8 +137,11 @@ export default function Card(props) {
                         {props.region}
                     </p>
                 </div>
-                
-                <p className="card-text">{props.description.replace(/^(.{50}[^\s]*).*/, "$1")}</p>
+                {props.offer.length <= 3 ?
+                    <p className="card-text">{props.description.replace(/^(.{80}[^\s]*).*/, "$1")}</p> :
+              <p className="card-text">{props.description.replace(/^(.{50}[^\s]*).*/, "$1")}</p>       
+            }
+               
                 <div className="cat-offer">
                      {props.offer.length > 0 &&props.place?
                     props.offer.map(offer =>

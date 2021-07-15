@@ -6,6 +6,7 @@ import FilterBox from "../components/filter-box/filter";
 import SliderShow from "../components/Slider/Slider";
 import { useEffect, useState } from "react";
 import PopupForm from "../components/filter-box/filter";
+import Sidebar from "../components/sidebar/sidebar";
 
 function Home() {
     const [show, setShow] = useState(false);
@@ -19,11 +20,16 @@ function Home() {
     return (
         <div>
             <div className="SliderShow">
-                <SliderShow />
-            </div>
+          <div className='sld'>
+            <SliderShow />
+                </div>
+        </div>
+        <div className='content-home'>
+                       <Sidebar/>
             <div className='container-card'>
                             <div className="container box">
                 <div className=" category-search">
+            
             
 
         <div className='display'>
@@ -60,7 +66,7 @@ function Home() {
       </datalist>
    </div>
                     </div>
-                    <button className="add_btn" onClick={handleShow} > Add Card </button>
+                    <button className=" btn-pry" onClick={handleShow} > Add Card </button>
     
             { show ? <PopupForm  handleClose={handleClose} /> : null }
 
@@ -69,6 +75,7 @@ function Home() {
 <Cards sregion={byRegion} sPlace={byPlaces}  sOffer={byOffer}  />
             </div>
 
+         </div>
 
             
         </div>

@@ -28,10 +28,7 @@
     height: 100%;
 }
 
-input::placeholder {
-    color: rgb(194, 194, 194);
-    font-size: 20px;
-}
+
 
 /* Set a style for the submit/login button */
 
