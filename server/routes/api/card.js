@@ -137,6 +137,7 @@ router.get("/search", async (req, res) => {
   const searchParams = [...q.split(" "), q];
   searchParams.forEach((i, index, arr) => (arr[index] = new RegExp(i)));
   debug(searchParams, new RegExp("[" + [...q.split(" "), q] + "]"));
+  
   const searchResualt = await Card.find({
     $or: [
       { name: new RegExp("[" + [...q.split(" "), q] + "]") },
@@ -161,7 +162,7 @@ router.get("/all", async (req, res) => {
 // @route   GET api/v1/card
 // @desc    Filter cards
 // @access  public
-router.get("/filter/", async (req, res) => {
+router.get("/filter", async (req, res) => {
   var query=null;
   const { place,offer,region } = req.query;
   if(place) query={...query,place:place};
@@ -184,9 +185,19 @@ else{
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id); //.populate("user");
+  const card = await Card.findById(id).populate({
+    path: "user",
+    select: "name picture username",
+  });
   res.json({ card });
 });
+
+const validate_search_schema = (query) => {
+  const schema = {
+    q: Joi.string().max(50).required(),
+  };
+  return Joi.validate(query, schema);
+};
 
 const validate_update = (req) => {
   const schema = {
