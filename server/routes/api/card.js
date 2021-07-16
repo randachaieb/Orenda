@@ -164,20 +164,18 @@ router.get("/all", async (req, res) => {
 // @access  public
 router.get("/filter", async (req, res) => {
   var query=null;
+  var filterResult;
   const { place,offer,region } = req.query;
   if(place) query={...query,place:place};
   if(offer) query={...query,offer:offer};
   if(region) query={...query,region:region};
-if(query){
-  const filterResult = await Card.find(query);
-  res.json(filterResult);
+if(query)
+  filterResult = await Card.find(query);
+else
+   filterResult = await Card.find();
 
-}
-else{
-  const filterResult = await Card.find();
-  res.json(filterResult);
-}
-  
+res.json(filterResult);
+
 });
 
 // @route   GET api/v1/card
