@@ -156,6 +156,29 @@ router.get("/all", async (req, res) => {
   res.json(all_cards);
 });
 
+
+
+// @route   GET api/v1/card
+// @desc    Filter cards
+// @access  public
+router.get("/filter/", async (req, res) => {
+  var query=null;
+  const { place,offer,region } = req.query;
+  if(place) query={...query,place:place};
+  if(offer) query={...query,offer:offer};
+  if(region) query={...query,region:region};
+if(query){
+  const filterResult = await Card.find(query);
+  res.json(filterResult);
+
+}
+else{
+  const filterResult = await Card.find();
+  res.json(filterResult);
+}
+  
+});
+
 // @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
