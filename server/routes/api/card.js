@@ -62,7 +62,7 @@ router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
     const savedCard = await newCard.save();
 
     return res.json({ card: savedCard });
-  }
+   }
 });
 
 // @route   PATCH api/v1/card
@@ -136,11 +136,9 @@ router.get("/search", async (req, res) => {
   const { q } = req.query;
   const searchParams = [...q.split(" "), q];
   searchParams.forEach((i, index, arr) => (arr[index] = new RegExp(i)));
-  debug(searchParams, new RegExp("[" + [...q.split(" "), q] + "]"));
-  
   const searchResualt = await Card.find({
     $or: [
-      { name: new RegExp("[" + [...q.split(" "), q] + "]") },
+      { name: { $in: searchParams }},
       { keywords: { $in: searchParams } },
     ],
   });
@@ -167,12 +165,15 @@ router.get("/filter", async (req, res) => {
   var filterResult;
   const { place,offer,region } = req.query;
   if(place) query={...query,place:place};
-  if(offer) query={...query,offer:offer};
   if(region) query={...query,region:region};
-if(query)
-  filterResult = await Card.find(query);
-else
-   filterResult = await Card.find();
+
+  if(query){
+    offer? filterResult = await Card.find({...query,offer:{ $in: offer }})
+          :filterResult = await Card.find(query);
+  }else{
+    offer? filterResult = await Card.find({offer:{ $in: offer }})
+          :filterResult = await Card.find();
+}
 
 res.json(filterResult);
 
@@ -203,7 +204,7 @@ const validate_update = (req) => {
     description: Joi.string(),
     region: Joi.string().min(3).max(50),
     place:Joi.string().allow(null),
-    offer:Joi.string().allow(null),
+    offer:Joi.array().items(Joi.string()).allow(null),
     profile:Joi.string().allow(null),
     website: Joi.string(),
     keywords: Joi.array().items(Joi.string().required()),

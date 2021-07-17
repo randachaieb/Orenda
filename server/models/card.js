@@ -22,7 +22,7 @@ const cardSchema = new mongoose.Schema({
     type: String,
   },
   offer: {
-    type: String,
+    type:[String],
   },
   profile: {
     type: String,
@@ -53,7 +53,7 @@ const validateCard = (card) => {
     description: Joi.string().required(),
     region: Joi.string().min(3).max(50).required(),
     place:Joi.string().allow(null),
-    offer:Joi.string().allow(null),
+    offer:Joi.array().items(Joi.string()).allow(null),
     profile:Joi.string().allow(null),
     website: Joi.string().required(),
     keywords: Joi.array()
