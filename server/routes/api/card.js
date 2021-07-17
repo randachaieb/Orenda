@@ -165,6 +165,34 @@ router.get("/:id", async (req, res) => {
   res.json({ card });
 });
 
+
+// @route   GET api/v1/card
+// @desc    Filter cards
+// @access  public
+router.get("/filter", async (req, res) => {
+  var query;
+  var filterResult;
+  const { place, offer, region } = req.query;
+ 
+  if(place) query={...query,place:place};
+  if(offer) query={...query,offer:offer};
+  if(region) query={...query,region:region};
+if(query)
+  filterResult = await Card.find(query);
+else  
+   filterResult = await Card.find();
+
+res.json(filterResult);
+
+});
+
+const validate_search_schema = (query) => {
+  const schema = {
+    q: Joi.string().max(50).required(),
+  };
+  return Joi.validate(query, schema);
+};
+
 const validate_update = (req) => {
   const schema = {
     name: Joi.string().min(5).max(50),

@@ -7,22 +7,48 @@ import SliderShow from "../components/Slider/Slider";
 import { useEffect, useState } from "react";
 import PopupForm from "../components/filter-box/filter";
 import Sidebar from "../components/sidebar/sidebar";
+import { useHistory } from "react-router-dom";
+import AliceCarousel from 'react-alice-carousel';
 
 function Home() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    
+    const history = useHistory()
       const [byRegion, setRegion] = useState("");
     const [byPlaces, setPlaces] = useState("");
     const [byOffer, setOffer] = useState("");
-    const handleShow = () => setShow(true);
+  const handleShow = () => setShow(true);
+  const [images, setImages] = useState();
+  
 
+    useEffect(() => {
+    setImages(
+      Array.from(Array(10).keys()).map((id) => ({
+        id,
+        url: `https://picsum.photos/1000?random=${id}`
+      }))
+    );
+    }, []);
+  
+  let slides = [
+    <img  src="https://picsum.photos/800/300/?random=1" alt="1" />,
+    <img  src="https://picsum.photos/800/301/?random=2" alt="2" />  ,
+    <img  src="https://picsum.photos/800/302/?random=3" alt="3" />  ,
+    <img  src="https://picsum.photos/800/303/?random=4" alt="4" />  ,
+    <img src="https://picsum.photos/800/304/?random=5" alt="5" />   ];
+
+  
+ 
+  
     return (
         <div>
             <div className="SliderShow">
           <div className='sld'>
-            <SliderShow />
-                </div>
+              <SliderShow/>
+         </div>
+
+        
+                
         </div>
         <div className='content-home'>
                        <Sidebar/>
@@ -72,9 +98,10 @@ function Home() {
 
            </div>
             </div>
-<Cards sregion={byRegion} sPlace={byPlaces}  sOffer={byOffer}  />
+            <Cards sregion={byRegion} sPlace={byPlaces} sOffer={byOffer} />
+             
             </div>
-
+     
          </div>
 
             

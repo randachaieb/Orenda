@@ -49,10 +49,10 @@ function Header(){
                            <SearchBox/>
                         </div>
                         <div className="topnav">
-                        <Link className={`link-to-active ${active === "nav1"? 'clicked': ''}`}  to="/" id='nav1' onClick={e=>addActiveClass(e)}>Cards</Link>
+                        <NavLink exact className='link-to-active' activeClassName='clicked'  to="/" id='nav1' onClick={e=>addActiveClass(e)}>Cards</NavLink>
                        
-                        <Link className={`link-to-active ${active === "nav2"? 'clicked': ''}`} to="/" id='nav2' onClick={e=>addActiveClass(e)}>Home</Link>
-                       <Link className={`link-to-active ${active === "nav3"? 'clicked': ''}`}  to="/ProfileView" id='nav3' onClick={e=>addActiveClass(e)}>Profile</Link>
+                        <NavLink exact className='link-to-active' activeClassName='clicked' to="/acceuil" id='nav2' onClick={e=>addActiveClass(e)}>Home</NavLink>
+                       <NavLink exact className='link-to-active' activeClassName='clicked'  to="/ProfileView" id='nav3' onClick={e=>addActiveClass(e)}>Profile</NavLink>
                        <img src={'http://localhost:5000'+ authContext.user.picture} className="avatar-user2"  to="/"  onClick={()=>logout()}/>
                    </div>
         </>           

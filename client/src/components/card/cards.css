@@ -1,6 +1,8 @@
-.items {
+.items-c {
     min-height: 100vh;
-    background: #fcfcfc;
+    background: #f7f7f7;
+     display: flex;
+    justify-content: center;
 }
 
 .title-region {
@@ -13,16 +15,59 @@
     margin-top: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    
     height: 100%;
     flex-wrap: wrap;
+}
+
+.btn-pag{
+    border-radius: 35px;
+    border: 1px solid #777;
+    text-align: center;
+    color: #555;
+    font-weight: 400;
+    margin-right: 20px;
+    background-color: #fcfcfc;
+    padding: 0.5rem 0.3rem;
+    padding-left: 12px;
+}
+
+.btn-pag-next{
+     border-radius: 35px;
+    border: 1px solid var(--primary);
+    text-align: center;
+    color: #fff;
+    font-weight: 400;
+    margin-right: 20px;
+    background-color: var(--primary);
+    padding: 0.5rem 0.3rem;
+    padding-left: 12px;
+}
+
+.btn-pag-next:hover{
+   
+    background-color: #025db3;
+  
+}
+
+.btn-pag:hover{
+    border: 1px solid #555;
+    background-color: #555;
+    color: white;
+}
+
+.pagination{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 0;
 }
 
 .card {
     border-radius: 12px;
     position: relative;
     border: none;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     background-color: #fff;
     margin: 15px;
     width: 320px;
@@ -49,17 +94,17 @@
     background-color: #fff;
     color: black;
     box-shadow: 0 1px 2px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.15);
-    padding: 0 0.7rem;
-    border-radius: 35px;
+    padding: 0 0.9rem;
+    border-radius: 60px 40px 60px 40px;
     height: 40px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 300;
 
     position: absolute;
-    right: 4%;
+    right: 5%;
     /*left: 18%;*/
-    top: 37%;
+    top: 38%;
     
 }
 
@@ -101,7 +146,7 @@
     position: absolute;
     bottom: 0px;
     width: 100%;
-    background-color: #fcfcfc;
+    background-color: #f7f7f7;
     display: flex;
     justify-content: space-between;
     align-items: center;

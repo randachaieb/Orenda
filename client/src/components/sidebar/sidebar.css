@@ -1,10 +1,13 @@
 .sidebar{
-    width: 400px;
-    min-height: 100vh;
+    width: 450px;
+    height: 780px;
     background-color: white;
-    
-    
-    
+    border-radius: 8px;
+     margin: 15px 15px 15px 30px;
+         box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+     position: -webkit-sticky;
+position: sticky;
+top: 85px;
 }
 
 
@@ -19,18 +22,99 @@ flex-direction: column;
 
 }
 
+.stky ul li div li{
+    font-size: 16px;
+    font-weight: 500;
+  
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-bottom: 0px;
+    line-height: 30px;
+    
+    color: rgb(119, 121, 140);
+    cursor: pointer;
+    transition: all 0.15s ease-in-out 0s;
+    padding: 5px 10px;
+    
+    border-radius: 6px;
+    outline: 0px;
+}
+
+.stky ul li div li:first-child{
+  margin-top: -10px;
+}
+
+.justify{
+    display: flex;
+    justify-content: space-between;
+    
+    flex-direction: row;
+    font-weight: 400;
+}
+
 .stky-li{
     list-style: none;
-    margin: 0 0 0 30px;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 0 1rem;
+   
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
     text-align: left;
     width: 102%;
     line-height: 50px;
     padding-left: 2rem;
-    color: #555;
+    color: #444;
+
     
 }
+
+.justify span{
+    line-height: 80px;
+}
+
+
+.side-top{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+}
+
+.title-category{
+    font-size: 18px;
+    font-weight: 500;
+    text-align: left;
+    
+    color: var(--primary);
+    width: 100%;
+    line-height: 80px;
+    padding-left: 35px;
+}
+.length-category{
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+    
+    color: var(--primary) ;
+    
+  
+    
+}
+
+.category-list{
+    border-left: 5px solid var(--primary);
+    color: var(--primary);
+    background-color: #fefefe;
+    
+}
+
+
 
 .bi-caret-right-fill{
     height: 1px;
@@ -40,73 +124,77 @@ flex-direction: column;
 
 
 
-.stky ul li:not(:first-child):hover{
-     padding-left: 2rem;
-    
-    color: var(--primary);
-    font-weight: 500;
- 
-    border-top-left-radius: 40px;
-    border-bottom-left-radius: 40px;
-  
-    
+
+
+.show{
+    display: block;
+    text-decoration: none;
+    font-weight: 300;
+    font-size: 16px;
+
+   
+}
+
+.show:first-child{
+   margin-top: -10px;
+
    
 }
 
 
-
-
-
-.stky ul li:first-child{
-   list-style: none;
-    
-    font-size: 18px;
-    font-weight: 600;
-    text-align: left;
-    width: 100%;
-    margin-left: -15px;
-    margin-bottom: 20px;
-    
-    padding-left: 2rem;
-    color: #333;
-    
-   
+.no-show{
+    display: none;
 }
+
+
 
 .stky{
-    position: -webkit-sticky;
-position: sticky;
-top: 100px;
+   
 display: flex;
 flex-direction: column;
-padding: 0.5rem 1rem;
-margin-top: 100px;
 
+
+overflow: hidden;
 
     
 }
 
+.stky:hover{
+    overflow-y: auto;
+height: calc(100vh - 12rem)
+
+}
+
+.stky::-webkit-scrollbar {
+    width: 2px;
+    
+}
+
+.stky::-webkit-scrollbar-track {
+    background-color: rgb(236, 236, 236);
+}
+
+.stky::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+}
+
+
 .stky ul{
-        font-size: 25px;
-    font-weight: 400;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    margin-bottom: 25px;
-    color: rgb(13, 17, 54);
-    cursor: pointer;
-    transition: all 0.15s ease-in-out 0s;
-    padding: 5px 0px;
+ padding: 0;
+
+   margin: 0;
     outline: 0px;
+   
+     
 }
 
 
 .clickd {
      padding-left: 2rem;
-     line-height:65px;
+    
     color: var(--primary);
-    font-weight: 500;
-    background-color: #fcfcfc;
+    font-weight: 600;
+    
     border-top-left-radius: 40px;
     border-bottom-left-radius: 40px;
   

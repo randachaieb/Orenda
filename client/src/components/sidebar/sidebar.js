@@ -1,46 +1,89 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import ListItem from '@material-ui/core/ListItem';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
+import {NavLink} from 'react-router-dom'
 import "./sidebar.css";
+import { Categories } from "./categories-query";
 
 
 const Sidebar = () => {
     const [active, setActive]=useState('s1')
+    const [dropdown, setDropdown] = useState(false)
+    const [categories, setCategories]=useState([])
 
-       const addActiveClass = (e) => {
-        const click = e.target.id
+
+    useEffect (() => {
+        setCategories(Categories)
+    },[])
+
+       const addActiveClass = (e,index) => {
+           const click = e.target.id
+           setID(index)
         console.log(click);
         if(!active===click)
-        { setActive('') }
+        {
+            setActive('')
+           
+        }
         else
         {
             setActive(click)
+            
         }
         console.log(active);
     }
 
+    const [open, setOpen] = React.useState(true);
+    const [id, setID] = React.useState('');
+
+    const handleClick = (e, index) => {
+        setID(index)
+        setOpen(!open);
+    }
+  
+
  
     return (
         <div className='sidebar'>
+
+            <div className='side-top'>
+                <span className='title-category'><i class="bi bi-tags-fill"></i> ALL CATEGORIES</span>
+                <span className='length-category'>
+                   ({categories.length})
+               </span>
+          </div>
+
             <div className='stky'>
-                <ul><li>Places by category</li>
-                    <li className={`stky-li ${active === "s1"? 'clickd': ''}`}  to="/" id='s1' onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Training centers</li>
-                    <li className={`stky-li ${active === "s2"? 'clickd': ''}`}  to="/" id='s2' onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Schools</li>
-                    <li className={`stky-li ${active === "s3"? 'clickd': ''}`}  to="/" id='s3'onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Coworking places</li>
-                    <li className={`stky-li ${active === "s4"? 'clickd': ''}`}  to="/" id='s4'onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Clubs</li>
-                </ul>
-                <ul><li>Offers by category</li>
-                    <li className={`stky-li ${active === "s5"? 'clickd': ''}`}  to="/" id='s5' onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Schoolarships</li>
-                    <li className={`stky-li ${active === "s6"? 'clickd': ''}`}  to="/" id='s6' onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Job offers</li>
-                    <li className={`stky-li ${active === "s7"? 'clickd': ''}`}  to="/" id='s7' onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Competitions</li>
-                    <li className={`stky-li ${active === "s8"? 'clickd': ''}`}  to="/" id='s8'onClick={e=>addActiveClass(e)}><i class="bi bi-play-fill"></i>
-Events</li>
+              
+                <ul>
+                    {categories.map((cat, index) =>
+                        <li id={index} className={`stky-li ${id===index? 'category-list': ''}`} onClick={e=>addActiveClass(e, index) && cat.sublabel}>
+
+                            <div className='justify'>
+                                
+                                <span  className='' >  {cat.label}</span>
+                              { open && cat.sublabel && id===index ? <span>
+                                    <i class="bi bi-chevron-down" onClick={e => handleClick(e, index)}></i>
+                                </span> :
+                                cat.sublabel? <span>
+                                        <i class="bi bi-chevron-right" onClick={e => handleClick(e, index)}></i>
+                                </span> :null
+                                }
+                            </div>
+
+                            {
+                                cat.sublabel && open && id===index?
+                                    <ul key={index}>
+                                        {open && cat.sublabel.map((c, index) =>
+                                            <li className='show' key={index}>{c.label }</li>
+                                        )}
+                                     </ul> :null
+                            }
+                        </li>
+                    
+                  )}
                 </ul>
                 
             </div>

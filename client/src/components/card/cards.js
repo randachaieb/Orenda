@@ -5,6 +5,7 @@ import './cards.css'
 
 import axios from 'axios'
 import Loader from '../loader/loader'
+import { useParams } from 'react-router-dom'
 
 
 export default function Cards(props){
@@ -26,11 +27,30 @@ export default function Cards(props){
        
         history.push(`/details/${id}`)
 
-    }
+  }
+  
+  const [page, setPage] = useState(0);
+  const putSearch = (e) => {
+     e.preventDefault()
+    setPage(page+1)
+     window.scrollTo(0, 500)
+   
+  }
 
 
-    useEffect( async ()=>{
-          axios.get('http://localhost:5000/api/v1/card/all', {
+  const putSearchP = (e) => {
+    e.preventDefault()
+    setPage(page - 1)
+     window.scrollTo(0, 500)
+   
+  }
+
+ 
+ 
+
+  useEffect(async () => {
+     
+          axios.get(`http://localhost:5000/api/v1/card/all?page=${page}`, {
           headers:{
             'Content-Type':'multipart/form-data;',
             'x-auth-token': localStorage.getItem('token')
@@ -46,10 +66,9 @@ export default function Cards(props){
 
 
          } ).catch(err => err.message)
-      setSearch(localStorage.getItem('searchRegion'))
-          let byPlaces=localStorage.getItem('searchPlaces')
+    
         
-    },[])
+    },[page])
 
    
          
@@ -63,7 +82,7 @@ export default function Cards(props){
     console.log(search)
     return (
         <div className=''>
-        <div className='items'>
+        <div className='items-c'>
       
           <div className='cards-display'>
             
@@ -99,7 +118,16 @@ export default function Cards(props){
           
          
         </div>
-         
+        <div className='pagination'>
+            {
+          page != 0 ?
+             <button className='btn-pag mr-5' onClick={e=>putSearchP(e)}><i class="bi bi-chevron-left"></i></button> :null
+        }
+       
+        {
+          card.length==20?
+          <button className='btn-pag-next' onClick={e => putSearch(e)}><i class="bi bi-chevron-right"></i></button> :null}
+      </div>
          
           </div>
 

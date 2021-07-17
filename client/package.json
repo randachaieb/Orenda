@@ -2,17 +2,16 @@
   "name": "front-opp",
   "version": "0.1.0",
   "private": true,
-  
   "secure": false,
-    
-  
   "dependencies": {
+    "3d-react-carousal": "^4.0.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.5.0",
     "react": "^17.0.2",
+    "react-alice-carousel": "^2.5.1",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-loading-skeleton": "^2.2.0",
