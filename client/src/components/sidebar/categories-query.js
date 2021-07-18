@@ -6,7 +6,11 @@ export const CategoriesOffer = [
     {
         id:'1',
         label: 'Scholarships',
-       
+        sublabel: [
+             {label: 'Training center 1'},
+           { label: 'Training center 2'},
+           { label: 'Training center 2'},
+        ]
            
         
     },
@@ -33,7 +37,11 @@ export const CategoriesOffer = [
     {
          id:'4',
         label: 'Events',
-      
+       sublabel: [
+             {label: 'Training center 1'},
+           { label: 'Training center 2'},
+           { label: 'Training center 2'},
+        ]
            
         
     },
@@ -45,7 +53,11 @@ export const CategoriesPlaces = [
       {
      id:'11',
     label: 'Training centers',
-       
+        sublabel: [
+             {label: 'Training center 1'},
+           { label: 'Training center 2'},
+           { label: 'Training center 2'},
+        ]
         
     },
    

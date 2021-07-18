@@ -1,6 +1,28 @@
 import React from 'react'
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import './carousel.css'
 function Carsouel() {
+
+  const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1
+  }
+};
 
     const next = (e) => {
         
@@ -10,40 +32,66 @@ function Carsouel() {
         
     }
 
-    return (
-        <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
+    return (<div className='slide'>
+      <Carousel
+       swipeable={false}
+  draggable={false}
+  showDots={true}
+  responsive={responsive}
+  ssr={true} // means to render carousel on server-side.
+  infinite={true}
+ 
 
-  <div className="carousel-inner">
-    <div className="carousel-item active" data-bs-interval="10000">
-      <img  src="https://picsum.photos/800/300/?random=1" className="d-block w-100" alt="1" />,
-    </div>
-    <div className="carousel-item ">
-       <img  src="https://picsum.photos/800/300/?random=2" className="d-block w-100" alt="2" />,
-    </div>
-    <div className="carousel-item ">
-      <img  src="https://picsum.photos/800/300/?random=3" className="d-block w-100" alt="3" />,
-    </div>
-  </div>
-  <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    
-                <div className='iconN'>
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                </div>
-                    <span className="visually-hidden">Previous</span>
-                    
-  </button>
-  <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <div className='iconN'>
-                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
-   </div>
+  containerClass="carousel-container"
 
-    <span className="visually-hidden" >Next</span>
-            </button>
-            
-            <div className='add'>
+      >
+        <div className='car'>
+            <img src="https://picsum.photos/800/300/?random=1" className="cimg d-block w-100" alt="1" />
+            <div className='slide-body'>
+              <span>Posted by </span>
+              <span>FULL NAME</span>
+      
+          </div>
+        </div>
+        <div className='car'>
+            <img src="https://picsum.photos/800/300/?random=2" className="cimg d-block w-100" alt="1" />
+            <div className='slide-body'>
+              <span>Posted by </span>
+              <span>FULL NAME</span>
+      
+          </div>
+        </div>
+        <div className='car'>
+            <img src="https://picsum.photos/800/300/?random=3" className="cimg d-block w-100" alt="1" />
+            <div className='slide-body'>
+              <span>Posted by </span>
+              <span>FULL NAME</span>
+      
+          </div>
+        </div>
+        <div className='car'>
+            <img src="https://picsum.photos/800/300/?random=4" className="cimg d-block w-100" alt="1" />
+            <div className='slide-body'>
+              <span>Posted by </span>
+              <span>FULL NAME</span>
+      
+          </div>
+        </div>
+        <div className='car'>
+            <img src="https://picsum.photos/800/300/?random=5" className="cimg d-block w-100" alt="1" />
+            <div className='slide-body'>
+              <span>Posted by </span>
+              <span>FULL NAME</span>
+      
+          </div>
+        </div>
+      
+       
+      </Carousel>
+        <div className='add'>
                 <button type='submit' className='add-btn'><i class="bi bi-plus-circle-fill"></i> Slide</button>  
           </div>
-</div>
+    </div>
     )
 }
 export default Carsouel;
