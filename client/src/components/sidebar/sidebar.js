@@ -5,17 +5,19 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import {NavLink} from 'react-router-dom'
 import "./sidebar.css";
-import { Categories } from "./categories-query";
+import { CategoriesOffer, CategoriesPlaces } from "./categories-query";
 
 
 const Sidebar = () => {
     const [active, setActive]=useState('s1')
     const [dropdown, setDropdown] = useState(false)
-    const [categories, setCategories]=useState([])
+    const [categories, setCategories] = useState([])
+    const [categoriesO, setCategoriesO]=useState([])
 
 
     useEffect (() => {
-        setCategories(Categories)
+        setCategories(CategoriesPlaces)
+        setCategoriesO(CategoriesOffer)
     },[])
 
        const addActiveClass = (e,index) => {
@@ -51,13 +53,13 @@ const Sidebar = () => {
             <div className='side-top'>
                 <span className='title-category'><i class="bi bi-tags-fill"></i> ALL CATEGORIES</span>
                 <span className='length-category'>
-                   ({categories.length})
+                
                </span>
           </div>
 
             <div className='stky'>
-              
-                <ul>
+                <span  className='title-c'>Places by category</span>
+                <ul className='first'>
                     {categories.map((cat, index) =>
                         <li id={index} className={`stky-li ${id===index? 'category-list': ''}`} onClick={e=>addActiveClass(e, index) && cat.sublabel}>
 
@@ -76,6 +78,38 @@ const Sidebar = () => {
                             {
                                 cat.sublabel && open && id===index?
                                     <ul key={index}>
+                                        {open && cat.sublabel.map((c, index) =>
+                                            <li className='show' key={index}>{c.label }</li>
+                                        )}
+                                     </ul> :null
+                            }
+                        </li>
+                    
+                  )}
+                </ul>
+                
+                            
+          
+               <span className='title-c'>Offers by category</span>
+                <ul className='second'>
+                    {categoriesO.map((cat, i) =>
+                        <li id={cat.id} className={`stky-li ${id===cat.id? 'category-list': ''}`} onClick={e=>addActiveClass(e, cat.id) && cat.sublabel}>
+
+                            <div className='justify'>
+                                
+                                <span  className='' >  {cat.label}</span>
+                              { open && cat.sublabel && id===cat.id ? <span>
+                                    <i class="bi bi-chevron-down" onClick={e => handleClick(e, cat.id)}></i>
+                                </span> :
+                                cat.sublabel? <span>
+                                        <i class="bi bi-chevron-right" onClick={e => handleClick(e, cat.id)}></i>
+                                </span> :null
+                                }
+                            </div>
+
+                            {
+                                cat.sublabel && open && id===cat.id?
+                                    <ul key={cat.id}>
                                         {open && cat.sublabel.map((c, index) =>
                                             <li className='show' key={index}>{c.label }</li>
                                         )}

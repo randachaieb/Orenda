@@ -9,6 +9,7 @@ import PopupForm from "../components/filter-box/filter";
 import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
 import AliceCarousel from 'react-alice-carousel';
+import Carsouel from "../components/carsouel/carsouel";
 
 function Home() {
     const [show, setShow] = useState(false);
@@ -41,15 +42,9 @@ function Home() {
  
   
     return (
-        <div>
-            <div className="SliderShow">
-          <div className='sld'>
-              <SliderShow/>
-         </div>
-
-        
-                
-        </div>
+      <div>
+         
+            <Carsouel/>
         <div className='content-home'>
                        <Sidebar/>
             <div className='container-card'>

@@ -33,7 +33,7 @@ export default function Cards(props){
   const putSearch = (e) => {
      e.preventDefault()
     setPage(page+1)
-     window.scrollTo(0, 500)
+     window.scrollTo(0, 600)
    
   }
 
@@ -41,7 +41,7 @@ export default function Cards(props){
   const putSearchP = (e) => {
     e.preventDefault()
     setPage(page - 1)
-     window.scrollTo(0, 500)
+     window.scrollTo(0, 600)
    
   }
 

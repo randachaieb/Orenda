@@ -1,0 +1,50 @@
+.iconN{
+    background-color: #111;
+    opacity: 0.8;
+    height: 80px;
+    width: 80px;
+   padding: 1.5rem 1rem;
+    border-radius: 50%;
+   
+    
+}
+
+.slide{
+    position: relative;
+    background-color: #f7f7f7;
+}
+
+.add{
+    position: absolute;
+    bottom: 60px;
+   display: flex;
+   width: 100%;
+   justify-content: center;
+}
+
+.add-btn{
+    padding: 1rem 7rem;
+    border-radius: 30px;
+    border: 2px solid #222;
+      background-color: #222;
+    color: #f1f1f1;
+    opacity: 0.7;
+    font-weight: 600;
+}
+
+.add-btn:hover{
+    border: 2px solid #000;
+    background-color: #000;
+    color: #f1f1f1;
+    opacity: 0.7;
+}
+
+.carousel-indicators [data-bs-target] {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    margin: 7px;
+}
+
+
+
