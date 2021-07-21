@@ -34,7 +34,7 @@ router.get("/", auth, async (req, res) => {
 // @route   POST api/v1/card
 // @desc    Add card
 // @access  private
-router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
+router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
