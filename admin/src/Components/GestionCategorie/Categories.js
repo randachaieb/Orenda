@@ -152,7 +152,7 @@ class Categories extends React.Component {
         <div>
             <Space size="middle">
       <Button type="default" onClick={this.showModal}>
-      Add Category
+      Add Category of place
       </Button>
       <Button type="default" onClick={this.showModalSubCategory}>
       Add Sub-Category

@@ -153,7 +153,7 @@ class Offers extends React.Component {
         <div>
            <Space size="middle">
       <Button type="default" onClick={this.showModal}>
-      Add Offers
+      Add Category of Offers
       </Button>
       <Button type="default" onClick={this.showModalSubCategory}>
       Add Sub-Category

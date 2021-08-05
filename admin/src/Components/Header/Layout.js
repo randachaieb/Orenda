@@ -39,7 +39,7 @@ class LayoutAdmin extends Component {
                         <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
                             <Menu.Item key="1">
                             <ReconciliationOutlined />
-                                <span>Categories</span>
+                                <span>Places</span>
                                 <Link to="/Categories" />
                             </Menu.Item>
                             <Menu.Item key="2">
