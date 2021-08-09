@@ -20,7 +20,7 @@ const cardSchema = new mongoose.Schema({
     maxlength: 50,
   },
   // for places, scholorship, hackathon..
-  categories: {
+  PlaceCategory: {
     type: [String],
     required: true,
   },

@@ -9,12 +9,12 @@ const path = require("path");
 const auth = require("../routes/api/auth");
 const card = require("../routes/api/card");
 const user = require("../routes/api/user");
+const categories = require("../routes/api/categories");
 const post = require("../routes/api/post");
 const post_group = require("../routes/api/post_group");
 
-
 module.exports = (app) => {
-  app.use("/static",express.static(path.join(__dirname, "..", "public")));
+  app.use("/static", express.static(path.join(__dirname, "..", "public")));
   app.use(cors());
   app.use(error);
   app.use(express.json());
@@ -26,6 +26,5 @@ module.exports = (app) => {
   app.use("/api/v1/auth", auth);
   app.use("/api/v1/post", post);
   app.use("/api/v1/post_group", post_group);
-
-
+  app.use("/api/v1/categories", categories);
 };
