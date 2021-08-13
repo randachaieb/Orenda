@@ -1,21 +1,38 @@
 import React, { useContext, useState } from "react";
 import "./ProfileCard.css";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios"
 import { AuthContext } from "../../context/authContext";
-
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import CommentIcon from '@material-ui/icons/Comment';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 function ProfileCard({ card }) {
     return (
-        <div className="gallerie">
+        <main>
+                    <div className="container">
+            
+                    <div className="gallery">
             {card.map((card, index) => {
-                return <Card key={index} card={card} />;
+                return (
+                   
+                <Card key={index} card={card} />
+               
+                );
             })}
-        </div>
+        </div></div></main>
+                
     );
 }
+
 
 export default ProfileCard;
 
@@ -58,69 +75,33 @@ const Card = ({ card }) => {
 
 
     return (
-        <div>
-            {show ? <Repost handleClose={handleClose} id={card._id} text={card.text} picture={card.link} /> : null}
-            {card.link === "" ? (
-                <div className="cardItems">
-                    <div className="only-description" style={{ color: "red" }}>
-                        {card.text}
-                    </div>
-                </div>
-            ) : (
-                <div className="cardItems">
-                        {authContext.user._id === card.user_id ?
-                <div className="post-card">
-                        <IconButton
-                            aria-label="more"
-                            aria-controls="long-menu"
-                            aria-haspopup="true"
-                            onClick={handleClick}
-                        >
-                            <MoreHorizIcon
-                                fontSize="large"
-                                style={{ color: "#fff" }}
-                            />
-                        </IconButton>
+     
+        
+            <div className="gallery-item" tabindex="3">
+        
+        <img    src={"http://localhost:5000" + card.link} className="gallery-image" alt=""/>
+               
+                <div className="gallery-item-info">
+              
+                    <ul>
+                        <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><FavoriteIcon/> 56</li>
+                        <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><CommentIcon/> 2</li>
+                
+                  
+                    </ul>
+                    <ul>
+                    <li className="gallery-item-likes"  onClick={handleShow}><EditIcon/> </li>
+                        <li className="gallery-item-comments" onClick={e=>deletePost(e, card._id)}><DeleteIcon/> </li>
 
-                        <Menu
-                            id="long-menu"
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={open}
-                            onClose={close}
-                            PaperProps={{
-                                style: {
-                                    marginLeft: "1%",
-                                    marginTop: "4.6%",
-                                    maxHeight: 48 * 4.5,
-                                    width: "20ch",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                },
-                            }}
-                        >
-                            <MenuItem onClick={close}>
-                                <div className="Menu_Item">
-                                    <MenuItem onClick={handleShow}>
-                                        edit
-                                    </MenuItem>
-                                    <MenuItem onClick={e=>deletePost(e, card._id)}>Delete</MenuItem>
-                                </div>
-                            </MenuItem>
-                        </Menu>
-                    </div>:null   
-                }
-                        
-
-                    <img
-                        className="img"
-                        src={"http://localhost:5000" + card.link}
-                        Alt="post"
-                    />
-                    <div className="description">{card.text}</div>
+                    </ul>
+        
                 </div>
-            )}
-        </div>
+               
+        
+            </div>
+        
+            
+        
     );
 };
 
@@ -166,19 +147,19 @@ const Repost = ({ handleClose,id, text, picture }) => {
 
     return (
         <>
-            <div className="form-popup">
-                <div className="form-container">
+            <div classNameName="form-popup">
+                <div classNameName="form-container">
                     <button
                         type="button"
-                        className="close btn-close"
+                        classNameName="close btn-close"
                         onClick={handleClose}
                     />
-                    <label className="title-label">
+                    <label classNameName="title-label">
                         <b> Edit Post</b>
                     </label>
-                    <div className="desc-field">
+                    <div classNameName="desc-field">
                         <textarea
-                            className="field-description"
+                            classNameName="field-description"
                             name="description"
                             placeholder=" Write Here .. "
                             value={txt}
@@ -186,7 +167,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
                         />
                     </div>
                    
-                    <button className="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
+                    <button classNameName="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
                 </div>
             </div>
         </>

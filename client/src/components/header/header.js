@@ -46,12 +46,12 @@ function Header(){
                            
                        </div>
                        <div className='search-nav'>
-                           <SearchBox/>
+                           <SearchBox />
                         </div>
                         <div className="topnav">
                         <NavLink exact className='link-to-active' activeClassName='clicked'  to="/" id='nav1' onClick={e=>addActiveClass(e)}>Cards</NavLink>
                        
-                        <NavLink exact className='link-to-active' activeClassName='clicked' to="/acceuil" id='nav2' onClick={e=>addActiveClass(e)}>Home</NavLink>
+                        <NavLink exact className='link-to-active' activeClassName='clicked' to="/Acceuil" id='nav2' onClick={e=>addActiveClass(e)}>Home</NavLink>
                        <NavLink exact className='link-to-active' activeClassName='clicked'  to="/ProfileView" id='nav3' onClick={e=>addActiveClass(e)}>Profile</NavLink>
                        <img src={'http://localhost:5000'+ authContext.user.picture} className="avatar-user2"  to="/"  onClick={()=>logout()}/>
                    </div>

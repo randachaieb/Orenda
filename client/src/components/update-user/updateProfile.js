@@ -2,13 +2,11 @@ import React, { useState } from 'react'
 
 import axios from 'axios'
 
-function UpdateProfile({ handleCloseProfile, Pname, Pbio, Paddress,Pregion }) {
+function UpdateProfile({ handleCloseProfile, Pname, Pbio}) {
     
     const [upcover, setCover] = useState()
     const [name, setName] = useState(Pname)
     const [bio, setBio] = useState(Pbio)
-    const [address, setAddress] = useState(Paddress)
-    const [region, setRegion]= useState(Pregion)
     const [picture, setPicture]= useState()
     const handleSubmit = (e) => {
         
@@ -40,8 +38,6 @@ function UpdateProfile({ handleCloseProfile, Pname, Pbio, Paddress,Pregion }) {
         axios.patch(`http://localhost:5000/api/v1/user/update`, {
                name: name,
                bio: bio,
-               address: address,
-               region: region
     }, {
           headers:{
                 'Content-Type': 'application/json',
@@ -77,14 +73,6 @@ function UpdateProfile({ handleCloseProfile, Pname, Pbio, Paddress,Pregion }) {
                             <label>Bio</label>
                         <input type="text" placeholder="add bio" className="input" value={bio}
                         onChange={e=> setBio(e.target.value)}
-                        />
-                   <label>Address</label>
-                        <input type="text" placeholder="add address" className="input" value={address}
-                        onChange={e=> setAddress(e.target.value)}
-                        />
-                        <label>Region</label>
-                        <input type="text" placeholder="add Region" className="input" value={region}
-                        onChange={e=> setRegion(e.target.value)}
                         />
                     <button className="button" onClick={e=>handleSubmit(e)}>Edit</button>
                </div>

@@ -139,12 +139,6 @@ function Profile({ data, newObject }) {
                         ) : (
                             null
                         )}
-                        {user.profile.address ? (
-                            <p>Address : {user.profile.address}</p>
-                        ) : null}
-                         {user.profile.region ? (
-                            <p>Region : {user.profile.region}</p>
-                        ) :null}
                         
                     </div>
                    
