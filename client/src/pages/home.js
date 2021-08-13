@@ -1,10 +1,14 @@
-
+import banner from "../assets/banner.png";
+import SearchBox from "../components/search-box/search-box";
 import Cards from "../components/card/cards";
 import "./home.css";
+import FilterBox from "../components/filter-box/filter";
+import SliderShow from "../components/Slider/Slider";
 import { useEffect, useState } from "react";
 import PopupForm from "../components/filter-box/filter";
 import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
+import AliceCarousel from 'react-alice-carousel';
 import Carsouel from "../components/carsouel/carsouel";
 
 function Home() {
@@ -44,13 +48,13 @@ function Home() {
         <div className='content-home'>
                        <Sidebar/>
             <div className='container-card'>
-                            <div className="container box">
+            <br/>  <br/>  <br/>  <br/>  <br/> 
+            <div className="container box">
                 <div className=" category-search">
             
             
-
+               
         <div className='display'>
-
         <div className='category'>
     <input className='form-select' list="browsers2" name="byPlaces" id="browser" placeholder='Places By Category' onChange={e=> setPlaces(e.target.value)}></input>   
    <datalist  id="browsers2" aria-label="Default select example">
@@ -89,6 +93,7 @@ function Home() {
 
            </div>
             </div>
+            
             <Cards sregion={byRegion} sPlace={byPlaces} sOffer={byOffer} />
              
             </div>

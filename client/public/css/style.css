@@ -581,7 +581,6 @@ ul.owl-carousel {
 .owl-next {
     color: transparent;
 }
-
 .owl-prev::before,
 .owl-next::before {
     background: #489fe2;
