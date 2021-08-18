@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { withRouter } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { Table, Tag, Space , Modal, Button,Input,Select } from 'antd';
-
+import axios from 'axios'
 
 const columns = [
   {
@@ -15,20 +15,20 @@ const columns = [
   {
     title: 'sub-category',
     key: 'subcategory',
-    dataIndex: 'subcategory',
+    dataIndex: 'subCategory',
     render: subcategory => (
       <span>
-        {subcategory.map(tag => {
+    {subcategory?subcategory.map(tag => {
           let color = tag.length > 5 ? 'geekblue' : 'green';
           if (tag === 'loser') {
             color = 'volcano';
           }
           return (
             <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+              {tag.name}
             </Tag>
           );
-        })}
+        }):'None'}
       </span>
     ),
   },
@@ -53,32 +53,13 @@ class Offers extends React.Component {
         bottom: 'bottomCenter',
         isModalVisible:false,
         isModalVisibleSubCategory:false,
-        data : [
-          {
-            key: '1',
-            name: 'Scholarships',
-            subcategory: ['lala', 'bla'],
-          },
-          {
-            key: '2',
-            name: 'Job Offers',
-            subcategory: ['azerty'],
-          },
-          {
-            key: '3',
-            name: 'Competitions	',
-            subcategory: ['aa', 'bb'],
-          },
-          {
-            key: '4',
-            name: 'Events',
-            subcategory: ['iii'],
-          },
-        ],
+        data : [],
         item: null
       };
       this.handleOk = this.handleOk.bind(this);
       this.handleOkSubCategory = this.handleOkSubCategory.bind(this);
+      this.formSubmit = this.formSubmit.bind(this);
+      this.formSubmitSub = this.formSubmitSub.bind(this);
     }
      showModal = () => {
         this.setState({isModalVisible:true})
@@ -91,6 +72,9 @@ class Offers extends React.Component {
           key: this.state.data.length+1,
           name: this.state.item,
           subcategory: [],
+          category:'choose', 
+          itemsub:null
+
         }
         
         const updatedItems = [...this.state.data, newItem]
@@ -142,11 +126,54 @@ class Offers extends React.Component {
 			item: event.target.value
 		})
 	}
+  formSubmit(event) {
+    event.preventDefault();
+    const formData = {
+      name: this.state.item
+    }
+
+    axios.post('http://localhost:5000/api/v1/categories/OfferCategory',formData)
+        .then(res => {
+            console.log(res.data)
+      
+        });
+    this.setState({isModalVisible:false})
+}
   handleChangenamesub = event => {
 		this.setState({
 			itemsub: event.target.value
 		})
 	}
+  formSubmitSub(event) {
+    event.preventDefault();
+    const formData = {
+      name: this.state.itemsub
+    }
+  
+    axios.post('http://localhost:5000/api/v1/categories/offers/'+this.state.category+'/subCategory',formData)
+        .then(res => {
+            console.log(res.data)
+      
+        });
+    this.setState({isModalVisibleSubCategory:false})
+  }
+  componentDidMount() {
+    // need to make the initial call to getData() to populate
+    // data right away
+    this.getData();
+    // Now we need to make it run at a specified interval
+    setInterval(this.getData, 1000); // runs every 1 second.
+  }
+  getData = () => {
+  axios.get('http://localhost:5000/api/v1/categories/offerCategories')
+      .then(response => {
+          if (response.data.length > 0) {
+              this.setState({
+                data:response.data
+              })
+          }
+      })
+  }
   render() {
     return (
 
@@ -159,20 +186,31 @@ class Offers extends React.Component {
       Add Sub-Category
       </Button>
       </Space>  <br/><br/>
-      <Modal title="Add Category" visible={this.state.isModalVisible}  onOk={this.handleOk} onCancel={this.handleCancel}>
-    
+      <Modal title="Add Category" visible={this.state.isModalVisible}  footer={[
+                        <Button key="cancel" onClick={this.handleCancel}>
+                            Cancel
+                        </Button>,
+                        <Button key="schedule" type="submit" onClick={this.formSubmit}>Add</Button>
+                      ]} onCancel={this.handleCancel}>
+     <form onSubmit={this.formSubmit}>
       <Input 
       placeholder=" category Name" 
       item={this.state.item}
 			onChange={this.handleChange}/>
-      
+      </form>
       </Modal>
      
       
-      <Modal title="Add Sub-Category" visible={this.state.isModalVisibleSubCategory} onOk={this.handleOkSubCategory} onCancel={this.handleCancelSubCategory}>
-      <Select defaultValue="Events" style={{ width: "100%" }} >
+      <Modal title="Add Sub-Category" visible={this.state.isModalVisibleSubCategory} footer={[
+                        <Button key="cancel" onClick={this.handleCancelSubCategory}>
+                            Cancel
+                        </Button>,
+                        <Button key="schedule" type="submit" onClick={this.formSubmitSub}>Add</Button>
+                      ]}  onCancel={this.handleCancelSubCategory}>
+      <form onSubmit={this.formSubmitSub}>
+      <Select  style={{ width: "100%" }} onChange={e =>  this.setState({category: e})} value={this.state.category}>
       {this.state.data.map((data) => (
-                                 <Option value={data.name} 	>{data.name}</Option>
+                                 <Option key={data._id}  value={data._id} 	>{data.name}</Option>
                                     ))}
      
     </Select><br/><br/>
@@ -180,6 +218,7 @@ class Offers extends React.Component {
       itemsub={this.state.itemsub}
 			onChange={this.handleChangenamesub}
       placeholder=" Sub-category Name" />
+      </form>
       </Modal>
         <Table
           columns={columns}

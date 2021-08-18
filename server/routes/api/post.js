@@ -13,11 +13,7 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 
-const{
-  moveFile,
-  deleteFile,
-  fileType
-}=require("../../utilities/fileManager");
+const{moveFile,deleteFile, fileType}=require("../../utilities/fileManager");
 
 
 // @route   GET api/v1/post
@@ -25,10 +21,7 @@ const{
 // @access  private
 router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_posts = await Post.find({
-    user_id: _id ,
-    deleted:'false'
-  }).populate("User");
+  const all_posts = await Post.find({ user_id: _id , deleted:'false'}).populate("User");
   res.json(all_posts);
 });
 
@@ -36,28 +29,26 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add post
 // @access  private
 router.post("/", auth, uploadPost.single("link"), async (req, res) => {
-  if(!req.body.text && !req.file)
-    return res.json({ message: "empty post" });
+  console.log(req.file);
+  console.log(req.body);
   let newPost = {
     ...req.body,
     user_id: req.user._id,
-    type:'text',
+    type: "text",
   };
-    const { error } = validatePost(newPost);
+  const { error } = validatePost(newPost);
   if (error) {
-    if(req.file)
-    deleteFile(
-        join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename)
-      );
+    if (req.file)
+      deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
     return res.status(400).json(error.details[0].message);
   }
- 
+
   if (req.file) {
     const fileName = req.file.filename;
-    const post_type=fileType(req.file);
-    newPost={
+    const post_type = fileType(req.file);
+    newPost = {
       ...newPost,
-      type:post_type,
+      type: post_type,
       link: `${fileUploadPaths.POST_FILE_URL}/${fileName}`,
     };
     moveFile(
@@ -69,7 +60,6 @@ router.post("/", auth, uploadPost.single("link"), async (req, res) => {
   const savedPost = await new Post(newPost).save();
 
   return res.json({ post: savedPost });
-
 });
 
 // @route   PATCH api/v1/post
@@ -83,40 +73,33 @@ router.patch(
     const { id } = req.params;
     const post = await Post.findById(id);
     if (post.deleted) return res.json({ message: "post not found" });
-    if(!req.body.text && !req.file) return res.json({ message: "empty post" });
-    let update_values = {...req.body};
+
+    let update_values = { ...req.body };
     const { error } = validate_update(update_values);
     if (error) {
-      if(req.file)
-        deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
+      if (req.file)
+        deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
       return res.status(400).json(error.details[0].message);
     }
 
     if (req.file) {
-      const  post_type=fileType(req.file);
+      let post_filename = basename(post.link);
+      let post_type = fileType(req.file);
       const updated_filename = req.file.filename;
-      if(post.link){
-        const post_filename = basename(post.link);
-        if (updated_filename !== post_filename)
-          deleteFile(
-            join(fileUploadPaths.POST_FILE_UPLOAD_PATH, post_filename)
-          );
-      }
-      let path = `${fileUploadPaths.POST_FILE_URL}/${updated_filename}`; 
-      update_values = { ...update_values,type:post_type, link: path };
+      if (updated_filename !== post_filename)
+        deleteFile(join(fileUploadPaths.POST_FILE_UPLOAD_PATH, post_filename));
+      let path = `${fileUploadPaths.POST_FILE_URL}/${updated_filename}`;
+      update_values = { ...update_values, type: post_type, link: path };
       moveFile(
         join(fileUploadPaths.FILE_UPLOAD_PATH, updated_filename),
         join(fileUploadPaths.POST_FILE_UPLOAD_PATH, updated_filename)
       );
     }
-   debug(update_values);
+    debug(update_values);
     const updatedPost = await Post.findByIdAndUpdate(id, update_values);
     res.json({ message: "post updated", success: true });
-   
-
   }
 );
-
 
 // @route   DELETE api/v1/post
 // @desc    delete a single post
@@ -125,11 +108,9 @@ router.delete("/delete", auth, async (req, res) => {
   const { id } = req.body;
   const post = await Post.findById(id);
 
-  if (!post)
-    return res.status(400).json({ message: "post not found" });
+  if (!post) return res.status(400).json({ message: "post not found" });
   else {
-  
-    const newPost = await Post.findByIdAndUpdate(id,{deleted:true});
+    const newPost = await Post.findByIdAndUpdate(id, { deleted: true });
 
     res.json({
       message: "post deleted",
@@ -142,18 +123,18 @@ router.delete("/delete", auth, async (req, res) => {
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const post = await Post.findById(id); 
-  if (!post)
-  return res.status(400).json({ message: "post not found" });
-else {
-  if(post.deleted) return res.status(400).json({ message: "post not found" });
-  res.json({ post });
-}
+  const post = await Post.findById(id);
+  if (!post) return res.status(400).json({ message: "post not found" });
+  else {
+    if (post.deleted)
+      return res.status(400).json({ message: "post not found" });
+    res.json({ post });
+  }
 });
 
 const validate_update = (req) => {
   const schema = {
-    text: Joi.string().allow('').allow(null),   
+    text: Joi.string().min(5).max(50).required(),
   };
   return Joi.validate(req, schema);
 };

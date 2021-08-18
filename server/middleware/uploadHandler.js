@@ -8,11 +8,8 @@ const fileUploadPaths = {
   CART_IMAGE_URL: "/static/card_images",
   POST_FILE_URL: "/static/post_files",
 
-  USER_IMAGE_UPLOAD_PATH: path.join(__dirname, "..", "public", "user_profile","picture"),
-  USER_IMAGE_URL: "/static/user_profile/picture",
-
-  COVER_IMAGE_UPLOAD_PATH: path.join(__dirname, "..", "public", "user_profile","cover"),
-  COVER_IMAGE_URL: "/static/user_profile/cover",
+  USER_IMAGE_UPLOAD_PATH: path.join(__dirname, "..", "public", "user_profile"),
+  USER_IMAGE_URL: "/static/user_profile",
 };
 
 const imageFilter = (req, file, cb) => {
@@ -30,8 +27,6 @@ const postFilter = (req, file, cb) => {
     cb(null, false);
   }
 }; 
-
-console.log(fileUploadPaths);
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {

@@ -1,16 +1,12 @@
-import banner from "../assets/banner.png";
-import SearchBox from "../components/search-box/search-box";
+import React, { useEffect, useState } from "react";
 import Cards from "../components/card/cards";
 import "./home.css";
-import FilterBox from "../components/filter-box/filter";
-import SliderShow from "../components/Slider/Slider";
-import { useEffect, useState } from "react";
 import PopupForm from "../components/filter-box/filter";
 import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
 import AliceCarousel from 'react-alice-carousel';
 import Carsouel from "../components/carsouel/carsouel";
-
+import axios from 'axios'
 function Home() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -18,11 +14,29 @@ function Home() {
       const [byRegion, setRegion] = useState("");
     const [byPlaces, setPlaces] = useState("");
     const [byOffer, setOffer] = useState("");
+    
+    const [Categories, setCategories] = React.useState([]);
+    const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
   const handleShow = () => setShow(true);
   const [images, setImages] = useState();
-  
 
-    useEffect(() => {
+
+    useEffect(async () => {
+       // Met à jour le titre du document via l’API du navigateur
+    axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
+    .then(response => {
+      console.log(response.data)
+       
+           setCategories(response.data)
+           
+        
+    })
+    axios.get('http://localhost:5000/api/v1/categories/offerCategories')
+    .then(response => {
+        if (response.data.length > 0) {
+            setCategoriesOffer( response.data)
+        }
+    })
     setImages(
       Array.from(Array(10).keys()).map((id) => ({
         id,
@@ -58,11 +72,10 @@ function Home() {
         <div className='category'>
     <input className='form-select' list="browsers2" name="byPlaces" id="browser" placeholder='Places By Category' onChange={e=> setPlaces(e.target.value)}></input>   
    <datalist  id="browsers2" aria-label="Default select example">
-  
-  <option value="Training centers">Training centers</option>
-  <option value="Schools">Schools</option>
-  <option value="Coworking places">Coworking places</option>
-  <option value="Clubs">Clubs</option>
+   {Categories.map((data) => (
+                                 <option key={data._id}  value={data.name} 	>{data.name}</option>
+                                    ))}
+     
 </datalist>
    </div>
    <div className='category'>
@@ -70,10 +83,9 @@ function Home() {
         <input className='form-select' list="browsers3" name="byOffer" id="browser" placeholder='Offers By Category'  onChange={e=> setOffer(e.target.value)}></input>   
          <datalist  id="browsers3" aria-label="Default select example">
         
-        <option value="Scholarships">Scholarships</option>
-        <option value="Job offers">Job offers</option>
-        <option value="Competitions">Competitions</option>
-        <option value="Events">Events</option>
+         {CategoriesOffer.map((data) => (
+                                 <option key={data._id}  value={data.name} 	>{data.name}</option>
+                                    ))}
       </datalist>
          </div>
     <div className='category'>
