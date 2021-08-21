@@ -13,14 +13,26 @@ const {
   uploadImage,
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
+const { Post } = require("../../models/post");
+
+router.get("/users", async (req, res) => {
+  const user = await User.find().select("-password");
+
+  res.json(user);
+});
 
 // @route   GET api/v1/user/me
 // @desc    user info
 // @access  private
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
-  res.json(
-    _.pick(user, [
+  const all_posts = await Post.find({
+    user_id: req.user._id,
+    deleted: "false",
+  }).populate("User");
+
+  res.json({
+    user: _.pick(user, [
       "_id",
       "name",
       "username",
@@ -29,8 +41,9 @@ router.get("/me", auth, async (req, res) => {
       "region",
       "address",
       "picture",
-    ])
-  );
+    ]),
+    posts: all_posts,
+  });
 });
 
 // @route   POST api/v1/user
@@ -77,6 +90,26 @@ router.post("/", async (req, res) => {
   });
 });
 
+// @route   GET api/v1/card
+// @desc    Search for cards
+// @access  public
+router.get("/search", async (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ message: "no query" });
+  const searchParams = [...q.split(" "), q];
+  let reg = "";
+  searchParams.forEach((i, index) => {
+    reg += "\\b" + i + "\\b";
+    reg += index === searchParams.length - 1 ? "" : "|";
+  });
+  debug(reg, new RegExp(reg));
+  const searchResualt = await User.find({
+    name: new RegExp(reg),
+  });
+
+  res.json(searchResualt);
+});
+
 // @route   GET api/v1/user/update
 // @desc    update profile
 // @access  private
@@ -119,6 +152,31 @@ router.patch(
     });
   }
 );
+
+// @route   GET api/v1/user/me
+// @desc    get user profile
+// @access  private
+router.get("/:_id", async (req, res) => {
+  const user = await User.findById(req.params._id).select("-password");
+  const all_posts = await Post.find({
+    user_id: req.params._id,
+    deleted: "false",
+  }).populate("User");
+
+  res.json({
+    user: _.pick(user, [
+      "_id",
+      "name",
+      "username",
+      "email",
+      "bio",
+      "region",
+      "address",
+      "picture",
+    ]),
+    posts: all_posts,
+  });
+});
 
 const validateUser = (user) => {
   const schema = {
