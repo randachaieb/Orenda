@@ -52,9 +52,24 @@ router.post("/places/:category_id/subCategory", admin, async (req, res) => {
 // @route   GET api/v1/categories
 // @desc    Get all places category
 // @access  public
-router.get("/OfferCategories", async (req, res) => {
-  const OfferCategories = await OffersCategory.find().populate("subCategory");
-  res.json(OfferCategories);
+router.get("/PlaceCategories", async (req, res) => {
+  const placesCategory = await PlacesCategory.find().populate("subCategory");
+  if (placesCategory.length === 0)
+    return res.status(404).json({ message: "no such category" });
+
+  res.json(placesCategory);
+});
+// @route   GET api/v1/categories
+// @desc    Get all places category
+// @access  public
+router.get("/PlaceCategories/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const placesCategory = await PlacesCategory.findById(_id).populate(
+    "subCategory"
+  );
+  if (!placesCategory)
+    return res.status(404).json({ message: "no such category" });
+  res.json(placesCategory);
 });
 
 /*-----------------------------------------*/
@@ -98,13 +113,29 @@ router.post("/offers/:category_id/subCategory", admin, async (req, res) => {
 // @access  public
 router.get("/offerCategories", async (req, res) => {
   const offerCategories = await OffersCategory.find().populate("subCategory");
+  if (offerCategories.length === 0)
+    return res.status(404).json({ message: "no such category" });
+
+  res.json(offerCategories);
+});
+// @route   GET api/v1/categories
+// @desc    Get all offers category
+// @access  public
+router.get("/offerCategories/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const offerCategories = await OffersCategory.findById(_id).populate(
+    "subCategory"
+  );
+  if (!offerCategories)
+    return res.status(404).json({ message: "no such category" });
+
   res.json(offerCategories);
 });
 
-router.get("/", auth, async (req, res) => {
-  let user = await User.findById(req.user._id);
-  user.isAdmin = true;
-  user = await user.save();
-  res.json(user);
-});
+// router.get("/", auth, async (req, res) => {
+//   let user = await User.findById(req.user._id);
+//   user.isAdmin = true;
+//   user = await user.save();
+//   res.json(user);
+// });
 module.exports = router;
