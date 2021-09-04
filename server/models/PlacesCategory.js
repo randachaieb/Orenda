@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const { intersectionBy, toInteger } = require("lodash");
 
 const PlacesCategorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     unique: true,
+  },  
+  count: {
+    type: Number
   },
   subCategory: [
     {
@@ -18,6 +22,7 @@ const PlacesCategorySchema = new mongoose.Schema({
 const validatePlace = (place) => {
   const schema = {
     name: Joi.string().min(3).max(50).required(),
+    count: Joi.required(),
     subCategory: Joi.array().items(Joi.string().required()),
   };
   return Joi.validate(place, schema);

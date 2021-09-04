@@ -1,45 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "./ProfileCard.css";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios"
-import { AuthContext } from "../../context/authContext";
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import CommentIcon from '@material-ui/icons/Comment';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+
 function ProfileCard({ card }) {
     return (
-        <main>
-                    <div className="container">
-            
-                    <div className="gallery">
+        <div className="gallerie">
             {card.map((card, index) => {
-                return (
-                   
-                <Card key={index} card={card} />
-               
-                );
+                return <Card key={index} card={card} />;
             })}
-        </div></div></main>
-                
+        </div>
     );
 }
-
 
 export default ProfileCard;
 
 const Card = ({ card }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const authContext = useContext(AuthContext);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -56,7 +38,7 @@ const Card = ({ card }) => {
         console.log(idC)
 
         console.log(idC)
-        axios.delete('http://localhost:5000/api/v1/post/delete', {
+        axios.delete('/api/v1/post/delete', {
             data: { "id": idC }, // or data: jdId, depending on how you handle it in the back end
             headers: {
                 'Content-Type': 'Application/json',
@@ -75,33 +57,66 @@ const Card = ({ card }) => {
 
 
     return (
-     
-        
-            <div className="gallery-item" tabindex="3">
-        
-        <img    src={"http://localhost:5000" + card.link} className="gallery-image" alt=""/>
-               
-                <div className="gallery-item-info">
-              
-                    <ul>
-                        <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><FavoriteIcon/> 56</li>
-                        <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><CommentIcon/> 2</li>
-                
-                  
-                    </ul>
-                    <ul>
-                    <li className="gallery-item-likes"  onClick={handleShow}><EditIcon/> </li>
-                        <li className="gallery-item-comments" onClick={e=>deletePost(e, card._id)}><DeleteIcon/> </li>
-
-                    </ul>
-        
+        <div>
+            {show ? <Repost handleClose={handleClose} id={card._id} text={card.text} picture={card.link} /> : null}
+            {card.link === "" ? (
+                <div className="cardItems">
+                    <div className="only-description" style={{ color: "red" }}>
+                        {card.text}
+                    </div>
                 </div>
-               
-        
-            </div>
-        
-            
-        
+            ) : (
+                <div className="cardItems">
+                    <div className="post-card">
+                        <IconButton
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                        >
+                            <MoreHorizIcon
+                                fontSize="large"
+                                style={{ color: "#fff" }}
+                            />
+                        </IconButton>
+
+                        <Menu
+                            id="long-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={open}
+                            onClose={close}
+                            PaperProps={{
+                                style: {
+                                    marginLeft: "1%",
+                                    marginTop: "4.6%",
+                                    maxHeight: 48 * 4.5,
+                                    width: "20ch",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                },
+                            }}
+                        >
+                            <MenuItem onClick={close}>
+                                <div className="Menu_Item">
+                                    <MenuItem onClick={handleShow}>
+                                        edit
+                                    </MenuItem>
+                                    <MenuItem onClick={e=>deletePost(e, card._id)}>Delete</MenuItem>
+                                </div>
+                            </MenuItem>
+                        </Menu>
+                    </div>
+
+                    <img
+                        className="img"
+                        src={"http://localhost:5000" + card.link}
+                        Alt="post"
+                    />
+                    <div className="description">{card.text}</div>
+                </div>
+            )}
+        </div>
     );
 };
 
@@ -117,7 +132,10 @@ const Repost = ({ handleClose,id, text, picture }) => {
         const params = new FormData();
 
         params.append("text", txt);
-     
+        if (link)
+        {
+            params.append("link", link);
+        }
 
 
         const token = localStorage.getItem('token');
@@ -128,7 +146,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
         }
 
 
-        axios.patch(`http://localhost:5000/api/v1/post/update/${ id }`, params,{
+        axios.patch(`/api/v1/post/update/${ id }`, params,{
             headers: {
                 'Content-Type': 'multipart/form-data',
 
@@ -147,27 +165,29 @@ const Repost = ({ handleClose,id, text, picture }) => {
 
     return (
         <>
-            <div classNameName="form-popup">
-                <div classNameName="form-container">
+            <div className="form-popup">
+                <div className="form-container">
                     <button
                         type="button"
-                        classNameName="close btn-close"
+                        class="close btn-close"
                         onClick={handleClose}
                     />
-                    <label classNameName="title-label">
+                    <label className="title-label">
                         <b> Edit Post</b>
                     </label>
-                    <div classNameName="desc-field">
+                    <div className="desc-field">
                         <textarea
-                            classNameName="field-description"
+                            className="field-description"
                             name="description"
                             placeholder=" Write Here .. "
                             value={txt}
                             onChange={e=> setTxt(e.target.value)}
                         />
                     </div>
-                   
-                    <button classNameName="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
+                    <div className="field">
+                        <input type="file" placeholder="image" name="img" accept="image/png, image/jpeg " onChange={(e) => setLink(e.target.files[0])} />
+                    </div>
+                    <button className="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
                 </div>
             </div>
         </>

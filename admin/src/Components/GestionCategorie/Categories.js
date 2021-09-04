@@ -2,47 +2,15 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { withRouter } from "react-router-dom";
 import 'antd/dist/antd.css';
-import { Table, Tag, Space , Modal, Button,Input,Select } from 'antd';
+import {  Tag, Space , Modal, Button,Input,Select } from 'antd';
+import { EditOutlined, DeleteOutlined  } from '@ant-design/icons';
 import axios from 'axios'
-
-const columns = [
-  {
-    title: ' Category Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'sub-category',
-    key: 'subcategory',
-    dataIndex: 'subCategory',
-    render: subcategory => (
-      <span>
-     {subcategory?subcategory.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.name}
-            </Tag>
-          );
-        }):'None'}
-      </span>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <Space size="middle">
-        <a>Update</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const { Option } = Select;
 class Categories extends React.Component {
@@ -51,11 +19,16 @@ class Categories extends React.Component {
     this.state = {
         bottom: 'bottomCenter',
         isModalVisible:false,
+        isModalVisiblEdit:false,
+        isModalVisiblDelete:false,
         isModalVisibleSubCategory:false,
         data : [],
         name: null,
         category:'choose',
-        itemsub:null
+        itemsub:null,
+       page:0,
+       namee:null,
+        rowsPerPage:10
       };
       this.handleChange=this.handleChange.bind(this);
       this.handleChangeCategory=this.handleChangeCategory.bind(this);
@@ -92,7 +65,73 @@ class Categories extends React.Component {
       showModalSubCategory = () => {
         this.setState({isModalVisibleSubCategory:true})
       };
+      showModalDelete  = (event) => {
+        axios.get('http://localhost:5000/api/v1/categories/PlacesCategoriesid/' + event)
+            .then(response => {
+              console.log(response.data);
+                this.setState({
+                  id:event,
+                    name: response.data.place.name,
+                    isModalVisiblDelete:true
+                })
+                console.log(response.data+event);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+ 
+     
+    };
+    handleOkDelete  = (event) => {
+      axios.delete("http://localhost:5000/api/v1/categories/delete",
+      {
+ data: {"id": event }
+})
+      .then(res => {
+          console.log(res.data)
+          this.setState({
+            isModalVisiblDelete:false,
+          })
+      }
+      );
+      };
       
+     handleCancelDelete = () => {
+       this.setState({isModalVisiblDelete:false})
+      };
+      showModalEdit  = (event) => {
+        axios.get('http://localhost:5000/api/v1/categories/PlacesCategoriesid/' + event)
+        .then(response => {
+          console.log(response.data);
+            this.setState({
+              id:event,
+                namee: response.data.place.name,
+                isModalVisiblEdit:true
+            })
+            console.log(response.data+event);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    };
+    
+   handleOkEdit  = (event) => {
+    const formData = {
+      name: this.state.namee
+    }
+  
+    axios.patch('http://localhost:5000/api/v1/categories/updatePlace/'+event,formData)
+        .then(res => {
+            console.log(res.data)
+      
+        });
+    
+      this.setState({isModalVisiblEdit:false})
+    };
+    
+   handleCancelEdit = () => {
+     this.setState({isModalVisiblEdit:false})
+    };
      handleOkSubCategory  = () => {
        var t= 0
             const newList = this.state.data.map((item) => {
@@ -138,7 +177,8 @@ class Categories extends React.Component {
   formSubmit(event) {
     event.preventDefault();
     const formData = {
-      name: this.state.name
+      name: this.state.name,
+      count: 0
     }
 
     axios.post('http://localhost:5000/api/v1/categories/placeCategory',formData)
@@ -178,6 +218,24 @@ axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
         }
     })
 }
+ handleChangePage = (event, newPage) => {
+   this.setState({
+  page:newPage
+})
+  
+};
+
+ handleChangeRowsPerPage = (event) => {
+  this.setState({
+    rowsPerPage:+event.target.value,
+    page:0
+  })
+};
+handleChangenamee = event => {
+  this.setState({
+    namee: event.target.value
+  })
+}
   render() {
     return (
 
@@ -206,7 +264,11 @@ axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
       </form>
       </Modal>
   
-      
+      <Modal title="Edit place" visible={this.state.isModalVisiblEdit} onOk={(e) =>this.handleOkEdit(this.state.id)} onCancel={this.handleCancelEdit}>
+      <Input placeholder="Name" onChange={this.handleChangenamee} value={this.state.namee} /><br/><br/>
+
+      </Modal>
+     
       <Modal title="Add Sub-Category" visible={this.state.isModalVisibleSubCategory}  footer={[
                         <Button key="cancel" onClick={this.handleCancelSubCategory}>
                             Cancel
@@ -227,11 +289,60 @@ axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
         
          </form>
       </Modal>
-        <Table
-          columns={columns}
-          pagination={{ position: [this.state.bottom] }}
-          dataSource={this.state.data}
-        />
+      <Modal title="Delete place" visible={this.state.isModalVisiblDelete} onOk={(e) => this.handleOkDelete(this.state.id)} onCancel={this.handleCancelDelete}>
+          <p>
+            Are you sure that you want to delete {this.state.name}?
+          </p>
+     
+      </Modal>
+      <TableContainer >
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+            <TableCell>
+                  Category Name
+                </TableCell>
+                <TableCell>
+                Sub-category
+                </TableCell>
+                <TableCell>
+                Action
+                </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+          {this.state.data.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="left">  <span>
+             
+    {row.subCategory?row.subCategory.map(tag => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.name}
+            </Tag>
+          );
+        }):'None'}
+      </span></TableCell>
+              <TableCell align="left">
+              <Space size="middle">
+                                        <EditOutlined key="edit" onClick={(e) => this.showModalEdit(row._id)}/>
+                                        <DeleteOutlined  key="delete" onClick={(e) => this.showModalDelete(row._id)}/>
+                          
+      </Space>
+                </TableCell>
+            </TableRow>
+          ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+     
       </div>
     );
   }

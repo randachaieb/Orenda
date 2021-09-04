@@ -2,47 +2,17 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { withRouter } from "react-router-dom";
 import 'antd/dist/antd.css';
-import { Table, Tag, Space , Modal, Button,Input,Select } from 'antd';
+import { Tag, Space , Modal, Button,Input,Select } from 'antd';
+import { EditOutlined, DeleteOutlined  } from '@ant-design/icons';
 import axios from 'axios'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
-const columns = [
-  {
-    title: ' Category Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'sub-category',
-    key: 'subcategory',
-    dataIndex: 'subCategory',
-    render: subcategory => (
-      <span>
-    {subcategory?subcategory.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.name}
-            </Tag>
-          );
-        }):'None'}
-      </span>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <Space size="middle">
-        <a>Update</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
 
 const { Option } = Select;
 class Offers extends React.Component {
@@ -53,8 +23,11 @@ class Offers extends React.Component {
         bottom: 'bottomCenter',
         isModalVisible:false,
         isModalVisibleSubCategory:false,
+        isModalVisiblEdit:false,
+        isModalVisiblDelete:false,
         data : [],
-        item: null
+        item: null,
+        namee:null
       };
       this.handleOk = this.handleOk.bind(this);
       this.handleOkSubCategory = this.handleOkSubCategory.bind(this);
@@ -120,16 +93,87 @@ class Offers extends React.Component {
        this.setState({isModalVisibleSubCategory:false})
       };
     
+      showModalDelete  = (event) => {
+        axios.get('http://localhost:5000/api/v1/categories/offerCategoriesid/' + event)
+            .then(response => {
+              console.log(response.data);
+                this.setState({
+                  id:event,
+                    name: response.data.offer.name,
+                    isModalVisiblDelete:true
+                })
+                console.log(response.data+event);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+ 
+     
+    };
+    handleOkDelete  = (event) => {
+      axios.delete("http://localhost:5000/api/v1/categories/deleteOffer",
+      {
+ data: {"id": event }
+})
+      .then(res => {
+          console.log(res.data)
+          this.setState({
+            isModalVisiblDelete:false,
+          })
+      }
+      );
+      };
       
+     handleCancelDelete = () => {
+       this.setState({isModalVisiblDelete:false})
+      };
+      showModalEdit  = (event) => {
+        axios.get('http://localhost:5000/api/v1/categories/offerCategoriesid/' + event)
+        .then(response => {
+          console.log(response.data);
+            this.setState({
+              id:event,
+              namee: response.data.offer.name,
+                isModalVisiblEdit:true
+            })
+            console.log(response.data+event);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    };
+    
+   handleOkEdit  = (event) => {
+    const formData = {
+      name: this.state.namee
+    }
+  
+    axios.patch('http://localhost:5000/api/v1/categories/updateOffer/'+event,formData)
+        .then(res => {
+            console.log(res.data)
+      
+        });
+      this.setState({isModalVisiblEdit:false})
+    };
+    
+   handleCancelEdit = () => {
+     this.setState({isModalVisiblEdit:false})
+    }; 
 	handleChange = event => {
 		this.setState({
 			item: event.target.value
 		})
 	}
+  handleChangenamee = event => {
+		this.setState({
+			namee: event.target.value
+		})
+	}
   formSubmit(event) {
     event.preventDefault();
     const formData = {
-      name: this.state.item
+      name: this.state.item,
+      count: 0
     }
 
     axios.post('http://localhost:5000/api/v1/categories/OfferCategory',formData)
@@ -220,11 +264,63 @@ class Offers extends React.Component {
       placeholder=" Sub-category Name" />
       </form>
       </Modal>
-        <Table
-          columns={columns}
-          pagination={{ position: [this.state.bottom] }}
-          dataSource={this.state.data}
-        />
+      <Modal title="Edit Offer" visible={this.state.isModalVisiblEdit} onOk={(e) =>this.handleOkEdit(this.state.id)} onCancel={this.handleCancelEdit}>
+      <Input placeholder="Name" 	onChange={this.handleChangenamee} value={this.state.namee} /><br/><br/>
+
+      </Modal>
+      <Modal title="Delete Offer" visible={this.state.isModalVisiblDelete} onOk={(e) => this.handleOkDelete(this.state.id)} onCancel={this.handleCancelDelete}>
+          <p>
+            Are you sure that you want to delete {this.state.name}?
+          </p>
+     
+      </Modal>
+      <TableContainer >
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+            <TableCell>
+                  Category Name
+                </TableCell>
+                <TableCell>
+                Sub-category
+                </TableCell>
+                <TableCell>
+                Action
+                </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+          {this.state.data.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="left">  <span>
+             
+    {row.subCategory?row.subCategory.map(tag => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.name}
+            </Tag>
+          );
+        }):'None'}
+      </span></TableCell>
+              <TableCell align="left">
+              <Space size="middle">
+                                        <EditOutlined key="edit" onClick={(e) => this.showModalEdit(row._id)}/>
+                                        <DeleteOutlined  key="delete" onClick={(e) => this.showModalDelete(row._id)}/>
+                          
+      </Space>
+                </TableCell>
+            </TableRow>
+          ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       </div>
     );
   }

@@ -4,10 +4,23 @@ import "./home.css";
 import PopupForm from "../components/filter-box/filter";
 import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
-import AliceCarousel from 'react-alice-carousel';
+import { makeStyles } from "@material-ui/core/styles";
 import Carsouel from "../components/carsouel/carsouel";
+import Fab from "@material-ui/core/Fab";
 import axios from 'axios'
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1)
+    }
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1)
+  }
+}));
 function Home() {
+  const classes = useStyles();
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const history = useHistory()
@@ -17,6 +30,8 @@ function Home() {
     
     const [Categories, setCategories] = React.useState([]);
     const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
+    const [CategoriesOfferSub, setCategoriesOfferSub] = React.useState('');
+    const [CategoriesPlaceSub, setCategoriesPlaceSub] = React.useState('');
   const handleShow = () => setShow(true);
   const [images, setImages] = useState();
 
@@ -28,7 +43,6 @@ function Home() {
       console.log(response.data)
        
            setCategories(response.data)
-           
         
     })
     axios.get('http://localhost:5000/api/v1/categories/offerCategories')
@@ -44,7 +58,7 @@ function Home() {
       }))
     );
     }, []);
-  
+   
   let slides = [
     <img  src="https://picsum.photos/800/300/?random=1" alt="1" />,
     <img  src="https://picsum.photos/800/301/?random=2" alt="2" />  ,
@@ -53,14 +67,80 @@ function Home() {
     <img src="https://picsum.photos/800/304/?random=5" alt="5" />   ];
 
   
+    const changePlaces = (event) => {
+      if(event.target.value!=''){
+     
+          axios.get('http://localhost:5000/api/v1/categories/PlacesCategories/'+event.target.value)
+          .then(res => {
+            console.log(res.data.place )
+            if(res.data.place.length !=0){
+            
+              axios.patch('http://localhost:5000/api/v1/categories/update/'+res.data.place[0]._id)
+              .then(res => {
+                  console.log(res.data)
+            
+              });
+            }
+          });
+        }
+          setPlaces(event.target.value)
+  };
+    
+  const changeOffer = (event) => {
+    if(event.target.value!=''){
+   
+        axios.get('http://localhost:5000/api/v1/categories/offerCategories/'+event.target.value)
+        .then(res => {
+          console.log(res.data.offer )
+          if(res.data.offer.length !=0){
+          
+            axios.patch('http://localhost:5000/api/v1/categories/updateOffer/'+res.data.offer[0]._id)
+            .then(res => {
+                console.log(res.data)
+          
+            });
+          }
+        });
+      }
+      setOffer(event.target.value)
+};
+
+const SubOffers = (event) => {
+  if(event.target.value!=''){
  
-  
+      axios.get('http://localhost:5000/api/v1/categories/offerCategoriesSub/'+event.target.value)
+      .then(res => {
+        console.log(res.data[0].subCategory)
+        setCategoriesOfferSub(res.data[0].subCategory)
+      });
+    }
+
+    setOffer(event.target.value)
+ 
+};
+
+const SubPlaces = (event) => {
+  if(event.target.value!=''){
+ 
+      axios.get('http://localhost:5000/api/v1/categories/PlaceCategoriesSub/'+event.target.value)
+      .then(res => {
+        console.log(res.data)
+        setCategoriesPlaceSub(res.data[0].subCategory)
+      });
+    }
+
+
+      setPlaces(event.target.value)
+ 
+};
     return (
       <div>
          
             <Carsouel/>
+            
         <div className='content-home'>
                        <Sidebar/>
+                       
             <div className='container-card'>
             <br/>  <br/>  <br/>  <br/>  <br/> 
             <div className="container box">
@@ -70,17 +150,17 @@ function Home() {
                
         <div className='display'>
         <div className='category'>
-    <input className='form-select' list="browsers2" name="byPlaces" id="browser" placeholder='Places By Category' onChange={e=> setPlaces(e.target.value)}></input>   
-   <datalist  id="browsers2" aria-label="Default select example">
+    <input className='form-select' list="browsers2" name="byPlaces" id="browser" placeholder='Places By Category' onChange={changePlaces}></input>   
+   <datalist  id="browsers2" aria-label="Default select example" >
    {Categories.map((data) => (
-                                 <option key={data._id}  value={data.name} 	>{data.name}</option>
+                                 <option key={data.name}  value={data.name} 	>{data.name}</option>
                                     ))}
      
 </datalist>
    </div>
    <div className='category'>
         
-        <input className='form-select' list="browsers3" name="byOffer" id="browser" placeholder='Offers By Category'  onChange={e=> setOffer(e.target.value)}></input>   
+        <input className='form-select' list="browsers3" name="byOffer" id="browser" placeholder='Offers By Category' onChange={changeOffer} ></input>   
          <datalist  id="browsers3" aria-label="Default select example">
         
          {CategoriesOffer.map((data) => (
@@ -104,6 +184,77 @@ function Home() {
             { show ? <PopupForm  handleClose={handleClose} /> : null }
 
            </div>
+      <div class="container horizontal-scrollable" >
+        <div class="container ">
+          <div class="row">
+            <div className={classes.root}>
+              <b style={{ fontSize: "18px"}}> Places </b>
+              {Categories.map((data) => (
+               
+                <button type="button" class="button button3" style={{ 
+                textAlign: 'center',
+                padding: '8px',fontSize: "16px"}} value={data.name} onClick={SubPlaces}>{data.name}</button>
+              
+                                    ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      {
+        CategoriesPlaceSub?
+
+        <div class="container horizontal-scrollable" >
+        <div class="container ">
+          <div class="row">
+            <div className={classes.root}>
+              <b style={{ fontSize: "18px"}}> Sub Places </b>
+              {CategoriesPlaceSub.map((data) => (
+               
+                <button type="button" class="button button3" style={{ 
+                textAlign: 'center',
+                padding: '8px',fontSize: "16px"}} value={data._id} >{data.name}</button>
+                                    ))}
+            </div>
+          </div>
+        </div>
+      </div>:''
+
+      }
+      <div class="container horizontal-scrollable">
+        <div class="container ">
+          <div class="row">
+            <div className={classes.root}>
+              <b style={{ fontSize: "18px"}}> Offers </b>
+              {CategoriesOffer.map((data) => (
+               
+                <button type="button" class="button button3" style={{ 
+                textAlign: 'center',
+                padding: '8px',fontSize: "16px"}}  value={data.name} onClick={SubOffers}>{data.name}</button>
+                                    ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      {
+        CategoriesOfferSub?
+
+        <div class="container horizontal-scrollable" >
+        <div class="container ">
+          <div class="row">
+            <div className={classes.root}>
+              <b style={{ fontSize: "18px"}}> Sub Offers </b>
+              {CategoriesOfferSub.map((data) => (
+               
+                <button type="button" class="button button3" style={{ 
+                textAlign: 'center',
+                padding: '8px',fontSize: "16px"}} value={data._id} >{data.name}</button>
+                                    ))}
+            </div>
+          </div>
+        </div>
+      </div>:''
+
+      }
             </div>
             
             <Cards sregion={byRegion} sPlace={byPlaces} sOffer={byOffer} />
@@ -112,7 +263,7 @@ function Home() {
      
          </div>
 
-            
+     
         </div>
     );
 }

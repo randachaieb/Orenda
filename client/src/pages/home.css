@@ -1,8 +1,54 @@
+.horizontal-scrollable > .row {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .button {
+    display: block;
+    margin: 20px 0;
+    min-height: 50px;
+    padding: 13px 24px;
+    font-family: 'Lucida Grande', 'Helvetica', 
+  }
+ 
+  
+  .button3:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    border: 2px solid #8d8d8d;
+  background-position: center;
+    border-radius: 26px;
+    z-index: -1;
+    transition: border-color 0.2s;
+  }
+  .button3:after {
+    content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 70vmax;
+      height: 70vmax;
+      border-radius: 50%;
+      background-color: #646464;
+      opacity: 0.3;
+      transform-origin: center;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.4s ease-in-out;
+      z-index: -1;
+  }
+  .horizontal-scrollable > .row > .col-xs-4 {
+    display: inline-block;
+    float: none;
+  }
 .contenu {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .align-items {
@@ -72,7 +118,32 @@
     flex-direction: column;
     background-color: #f7f7f7;
 }
-
+.horizontal-scrollable > .row {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .horizontal-scrollable > .row > .col-xs-4 {
+    display: inline-block;
+    float: none;
+  }
+  /* Decorations */
+  
+  .col-xs-4 {
+    color: white;
+    font-size: 24px;
+    padding-bottom: 20px;
+    padding-top: 18px;
+  }
+  
+  .col-xs-4:nth-child(2n + 1) {
+    background: green;
+  }
+  
+  .col-xs-4:nth-child(2n + 2) {
+    background: black;
+  }
+  
 @media only screen and (max-width: 820px) {
     .heading {
         font-size: 22px;

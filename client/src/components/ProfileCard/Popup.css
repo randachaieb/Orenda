@@ -26,7 +26,10 @@
     border: none;
     font-size: 80px;
 }
-
+input::placeholder {
+    color: rgb(194, 194, 194);
+    font-size: 20px;
+}
 
 /* When the inputs get focus, do something */
 .form-container input[type="text-area"]:focus {
