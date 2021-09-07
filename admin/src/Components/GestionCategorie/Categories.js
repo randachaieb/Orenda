@@ -79,8 +79,6 @@ class Categories extends React.Component {
             .catch((error) => {
                 console.log(error);
             })
- 
-     
     };
     handleOkDelete  = (event) => {
       axios.delete("http://localhost:5000/api/v1/categories/delete",
@@ -95,7 +93,6 @@ class Categories extends React.Component {
       }
       );
       };
-      
      handleCancelDelete = () => {
        this.setState({isModalVisiblDelete:false})
       };
@@ -113,13 +110,11 @@ class Categories extends React.Component {
         .catch((error) => {
             console.log(error);
         })
-    };
-    
+    }; 
    handleOkEdit  = (event) => {
     const formData = {
       name: this.state.namee
     }
-  
     axios.patch('http://localhost:5000/api/v1/categories/updatePlace/'+event,formData)
         .then(res => {
             console.log(res.data)
@@ -128,25 +123,17 @@ class Categories extends React.Component {
     
       this.setState({isModalVisiblEdit:false})
     };
-    
    handleCancelEdit = () => {
      this.setState({isModalVisiblEdit:false})
     };
      handleOkSubCategory  = () => {
        var t= 0
             const newList = this.state.data.map((item) => {
-      
           const updatedItem = {
             key: t+1,
             name: this.state.name,
             subcategory: [this.state.itemsub],
-         
-   
-        
-          
         }
-       
-      
       });
       this.setState({
         data: newList
@@ -316,8 +303,7 @@ handleChangenamee = event => {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="left">  <span>
-             
+              <TableCell align="left">  <span> 
     {row.subCategory?row.subCategory.map(tag => {
           let color = tag.length > 5 ? 'geekblue' : 'green';
           if (tag === 'loser') {
@@ -334,7 +320,6 @@ handleChangenamee = event => {
               <Space size="middle">
                                         <EditOutlined key="edit" onClick={(e) => this.showModalEdit(row._id)}/>
                                         <DeleteOutlined  key="delete" onClick={(e) => this.showModalDelete(row._id)}/>
-                          
       </Space>
                 </TableCell>
             </TableRow>
@@ -347,6 +332,4 @@ handleChangenamee = event => {
     );
   }
 }
-
 export default withRouter(Categories);
-

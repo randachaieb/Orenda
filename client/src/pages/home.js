@@ -6,7 +6,8 @@ import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Carsouel from "../components/carsouel/carsouel";
-import Fab from "@material-ui/core/Fab";
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import axios from 'axios'
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 function Home() {
+  var myBoolean = false;
+  var myBooleanoffer = false;
   const classes = useStyles();
 
     const [show, setShow] = useState(false);
@@ -29,9 +32,16 @@ function Home() {
     const [byOffer, setOffer] = useState("");
     
     const [Categories, setCategories] = React.useState([]);
+    const [CategoriesFilter, setCategoriesFilter] = React.useState([]);
     const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
+    const [OfferFilter, setOfferFilter] = React.useState([]);
     const [CategoriesOfferSub, setCategoriesOfferSub] = React.useState('');
     const [CategoriesPlaceSub, setCategoriesPlaceSub] = React.useState('');
+    const [bgColor, setBgColor] = React.useState('');
+    const [bgColorPlaces, setBgColorPlaces] = React.useState('');
+    const [BgColorOffer, setBgColorOffer] = React.useState('');
+    const [BgColorOffers, setBgColorOffers] = React.useState('');
+    
   const handleShow = () => setShow(true);
   const [images, setImages] = useState();
 
@@ -43,12 +53,14 @@ function Home() {
       console.log(response.data)
        
            setCategories(response.data)
+           setCategoriesFilter(response.data)
         
     })
     axios.get('http://localhost:5000/api/v1/categories/offerCategories')
     .then(response => {
         if (response.data.length > 0) {
             setCategoriesOffer( response.data)
+            setOfferFilter(response.data)
         }
     })
     setImages(
@@ -83,9 +95,47 @@ function Home() {
             }
           });
         }
-          setPlaces(event.target.value)
+        setPlaces(event.target.value)
+        let value = event.target.value.toLowerCase();
+        let result = [];
+        console.log(value);
+        result = Categories.filter((data) => {
+        return data.name.toLowerCase().search(value) != -1;
+        });
+        setCategoriesFilter(result)
+       
+        console.log(result);
+        
   };
-    
+  const AllPlaces = (event) => {
+  
+    setPlaces('')
+    if(bgColor==''){
+      setBgColor('contained')
+      setBgColorPlaces("")
+    }
+    var elms = document.querySelectorAll("[id='btnplace']");
+
+    for(var i = 0; i < elms.length; i++) {
+        elms[i].style.backgroundColor='transparent';
+        elms[i].style.color = "black";
+    }
+    setCategoriesPlaceSub([])
+};
+const AllOffers = (event) => {
+  
+  setOffer('')
+  if(BgColorOffer==''){
+    setBgColorOffer('contained')
+    setBgColorOffers("")
+  }
+  var elms = document.querySelectorAll("[id='btnoffer']");
+  for(var i = 0; i < elms.length; i++) {
+    elms[i].style.backgroundColor='transparent';
+    elms[i].style.color = "black";
+}
+setCategoriesOfferSub([])
+};
   const changeOffer = (event) => {
     if(event.target.value!=''){
    
@@ -103,34 +153,89 @@ function Home() {
         });
       }
       setOffer(event.target.value)
+      let value = event.target.value.toLowerCase();
+      let result = [];
+      console.log(value);
+      result = CategoriesOffer.filter((data) => {
+      return data.name.toLowerCase().search(value) != -1;
+      });
+      setOfferFilter(result)
+      console.log(result);
 };
 
 const SubOffers = (event) => {
-  if(event.target.value!=''){
- 
-      axios.get('http://localhost:5000/api/v1/categories/offerCategoriesSub/'+event.target.value)
+    setOffer(event.currentTarget.value)
+
+    if (event.currentTarget.style.backgroundColor == "rgb(63, 81, 181)"){
+      setOffer('')
+      event.currentTarget.style.backgroundColor = "transparent"
+      event.currentTarget.style.backgroundColor = "transparent"
+      event.currentTarget.style.color = "black"
+     
+      myBooleanoffer=false;
+      setCategoriesOfferSub([])
+      console.log("falseee "+myBooleanoffer)
+    }
+    else{
+      var elms = document.querySelectorAll("[id='btnoffer']");
+
+      for(var i = 0; i < elms.length; i++) {
+          elms[i].style.backgroundColor='transparent';
+          elms[i].style.color = "black";
+      }
+      setBgColorOffer('')
+      event.currentTarget.style.backgroundColor = "#3f51b5"
+      event.currentTarget.style.backgroundColor = "#3f51b5"
+      event.currentTarget.style.color = "white"
+      myBooleanoffer = true;
+      console.log("true "+myBooleanoffer)
+      axios.get('http://localhost:5000/api/v1/categories/offerCategoriesSub/'+event.currentTarget.value)
       .then(res => {
         console.log(res.data[0].subCategory)
         setCategoriesOfferSub(res.data[0].subCategory)
       });
-    }
 
-    setOffer(event.target.value)
+    }
+   
  
 };
 
 const SubPlaces = (event) => {
-  if(event.target.value!=''){
- 
-      axios.get('http://localhost:5000/api/v1/categories/PlaceCategoriesSub/'+event.target.value)
+  setPlaces(event.currentTarget.value)
+    if (event.currentTarget.style.backgroundColor == "rgb(63, 81, 181)"){
+      setPlaces('')
+      event.currentTarget.style.backgroundColor = "transparent"
+      event.currentTarget.style.backgroundColor = "transparent"
+      event.currentTarget.style.color = "black"
+     
+      myBoolean=false;
+      setCategoriesPlaceSub([])
+      console.log("falseee "+myBoolean)
+    }
+    else{
+      var elms = document.querySelectorAll("[id='btnplace']");
+
+      for(var i = 0; i < elms.length; i++) {
+          elms[i].style.backgroundColor='transparent';
+          elms[i].style.color = "black";
+      }
+      setBgColor('')
+      event.currentTarget.style.backgroundColor = "#3f51b5"
+      event.currentTarget.style.backgroundColor = "#3f51b5"
+      event.currentTarget.style.color = "white"
+      myBoolean = true;
+      console.log("true "+myBoolean)
+      axios.get('http://localhost:5000/api/v1/categories/PlaceCategoriesSub/'+event.currentTarget.value)
       .then(res => {
         console.log(res.data)
         setCategoriesPlaceSub(res.data[0].subCategory)
+        
       });
+
     }
-
-
-      setPlaces(event.target.value)
+   
+   
+     
  
 };
     return (
@@ -188,14 +293,16 @@ const SubPlaces = (event) => {
         <div class="container ">
           <div class="row">
             <div className={classes.root}>
-              <b style={{ fontSize: "18px"}}> Places </b>
-              {Categories.map((data) => (
-               
-                <button type="button" class="button button3" style={{ 
-                textAlign: 'center',
-                padding: '8px',fontSize: "16px"}} value={data.name} onClick={SubPlaces}>{data.name}</button>
-              
+              <b style={{ fontSize: "16px"}}> Places </b>
+              <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
+              <Button  variant={bgColor} onClick={AllPlaces} >All</Button>
+              {CategoriesFilter.map((data) => (
+             <div>
+               <Button  key={data.name}  variant={bgColorPlaces} id='btnplace' value={data.name} onClick={SubPlaces} >{data.name}</Button>
+           
+                                      </div>
                                     ))}
+                                      </ButtonGroup>
             </div>
           </div>
         </div>
@@ -207,13 +314,13 @@ const SubPlaces = (event) => {
         <div class="container ">
           <div class="row">
             <div className={classes.root}>
-              <b style={{ fontSize: "18px"}}> Sub Places </b>
+              <b style={{ fontSize: "16px"}}> Sub Places </b>
+              <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
               {CategoriesPlaceSub.map((data) => (
                
-                <button type="button" class="button button3" style={{ 
-                textAlign: 'center',
-                padding: '8px',fontSize: "16px"}} value={data._id} >{data.name}</button>
+                <Button  value={data._id} >{data.name}</Button>
                                     ))}
+                                     </ButtonGroup>
             </div>
           </div>
         </div>
@@ -224,13 +331,18 @@ const SubPlaces = (event) => {
         <div class="container ">
           <div class="row">
             <div className={classes.root}>
-              <b style={{ fontSize: "18px"}}> Offers </b>
-              {CategoriesOffer.map((data) => (
+              <b style={{ fontSize: "16px"}}> Offers </b>
+              <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
+              <Button variant={BgColorOffer}  onClick={AllOffers} >All</Button>
+              {OfferFilter.map((data) => (
+             
+               <Button variant={BgColorOffers}   value={data.name} id='btnoffer' onClick={SubOffers} >{data.name}</Button>
+           
                
-                <button type="button" class="button button3" style={{ 
-                textAlign: 'center',
-                padding: '8px',fontSize: "16px"}}  value={data.name} onClick={SubOffers}>{data.name}</button>
+              
                                     ))}
+                                      </ButtonGroup>
+              
             </div>
           </div>
         </div>
@@ -242,13 +354,13 @@ const SubPlaces = (event) => {
         <div class="container ">
           <div class="row">
             <div className={classes.root}>
-              <b style={{ fontSize: "18px"}}> Sub Offers </b>
+              <b style={{ fontSize: "16px"}}> Sub Offers </b>
+              <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
               {CategoriesOfferSub.map((data) => (
                
-                <button type="button" class="button button3" style={{ 
-                textAlign: 'center',
-                padding: '8px',fontSize: "16px"}} value={data._id} >{data.name}</button>
+                <Button value={data._id} >{data.name}</Button>
                                     ))}
+                                       </ButtonGroup>
             </div>
           </div>
         </div>
