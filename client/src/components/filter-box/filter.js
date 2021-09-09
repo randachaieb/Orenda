@@ -11,13 +11,15 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
             
     const [name, setName] = useState("");
     const [region, setRegion] = useState("");
-    const [categories, setCategories] = useState([]);
     const [categoriesO, setCategoriesO] = useState([]);
     const [categoriesP, setCategoriesP] = useState("");
     const [description, setDescription] = useState("");
     const [picture, setPicture] = useState();
     const [site, setSite] = useState();
-    
+    const [Categories, setCategories] = React.useState([]);
+    const [CategoriesFilter, setCategoriesFilter] = React.useState([]);
+    const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
+    const [OfferFilter, setOfferFilter] = React.useState([]); 
     const handleSubmit = (e) => {
         
         e.preventDefault();
@@ -66,7 +68,25 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
         setCategories(categoriesO.splice(index,1))
         console.log(categoriesO)
    }
-        
+   useEffect(async () => {
+    // Met à jour le titre du document via l’API du navigateur
+ axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
+ .then(response => {
+   console.log(response.data)
+    
+        setCategories(response.data)
+        setCategoriesFilter(response.data)
+     
+ })
+ axios.get('http://localhost:5000/api/v1/categories/offerCategories')
+ .then(response => {
+     if (response.data.length > 0) {
+         setCategoriesOffer( response.data)
+         setOfferFilter(response.data)
+     }
+ })
+
+ }, []); 
             return(
                     <>
                         <div className="form-pop"> 
@@ -77,18 +97,16 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                             <input type="text" placeholder="enter title" className="input" onChange={(e)=>setName(e.target.value) }/>
                             <div className="select-box"> 
                                 <select  onChange={(e)=>setCategoriesP(e.target.value) }>
-                                    <option>Places By Category</option>
-                                    <option value="Training centers" >Training centers</option>
-                                    <option value="Schools">Schools</option>
-                                    <option value="Coworking places">Coworking places</option>
-                                    <option value="Clubs">Clubs</option>
+                                    <option disabled >Places By Category</option>
+                                    {CategoriesFilter.map((data) => (
+                                    <option  value={data.name}>{data.name}</option>
+                                    ))}
                                 </select>
                                 <select  id="browsers3" aria-label="Default select example"  onChange={(e)=>setCategoriesO([...categoriesO,e.target.value]) }>
-                                <option>Offers By Category</option>
-                                    <option value="Scholarships">Scholarships</option>
-                                    <option value="Job offers">Job offers</option>
-                                    <option value="Competitions">Competitions</option>
-                                    <option value="Events">Events</option>
+                                <option disabled>Offers By Category</option>
+                                {OfferFilter.map((data) => (
+                                    <option  value={data.name}>{data.name}</option>
+                                    ))}
                                 </select>
                                 
                                 <select  onChange={(e)=>setRegion( e.target.value) }>
