@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./ProfileCard.css";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios"
+import { AuthContext } from "../../context/authContext";
 
 function ProfileCard({ card }) {
     return (
@@ -21,7 +22,7 @@ export default ProfileCard;
 const Card = ({ card }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-
+    const authContext = useContext(AuthContext);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -38,7 +39,7 @@ const Card = ({ card }) => {
         console.log(idC)
 
         console.log(idC)
-        axios.delete('/api/v1/post/delete', {
+        axios.delete('http://localhost:5000/api/v1/post/delete', {
             data: { "id": idC }, // or data: jdId, depending on how you handle it in the back end
             headers: {
                 'Content-Type': 'Application/json',
@@ -67,7 +68,8 @@ const Card = ({ card }) => {
                 </div>
             ) : (
                 <div className="cardItems">
-                    <div className="post-card">
+                        {authContext.user._id === card.user_id ?
+                <div className="post-card">
                         <IconButton
                             aria-label="more"
                             aria-controls="long-menu"
@@ -106,7 +108,9 @@ const Card = ({ card }) => {
                                 </div>
                             </MenuItem>
                         </Menu>
-                    </div>
+                    </div>:null   
+                }
+                        
 
                     <img
                         className="img"
@@ -132,10 +136,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
         const params = new FormData();
 
         params.append("text", txt);
-        if (link)
-        {
-            params.append("link", link);
-        }
+     
 
 
         const token = localStorage.getItem('token');
@@ -146,7 +147,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
         }
 
 
-        axios.patch(`/api/v1/post/update/${ id }`, params,{
+        axios.patch(`http://localhost:5000/api/v1/post/update/${ id }`, params,{
             headers: {
                 'Content-Type': 'multipart/form-data',
 
@@ -169,7 +170,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
                 <div className="form-container">
                     <button
                         type="button"
-                        class="close btn-close"
+                        className="close btn-close"
                         onClick={handleClose}
                     />
                     <label className="title-label">
@@ -184,9 +185,7 @@ const Repost = ({ handleClose,id, text, picture }) => {
                             onChange={e=> setTxt(e.target.value)}
                         />
                     </div>
-                    <div className="field">
-                        <input type="file" placeholder="image" name="img" accept="image/png, image/jpeg " onChange={(e) => setLink(e.target.files[0])} />
-                    </div>
+                   
                     <button className="button" onClick={e=> handleSubmit(e,id)}>Edit</button>
                 </div>
             </div>
