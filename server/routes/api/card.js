@@ -152,7 +152,7 @@ router.get("/search", async (req, res) => {
 });
 
 // @route   GET api/v1/card
-// @desc    Get user card
+// @desc    Get users card
 // @access  private
 router.get("/all", async (req, res) => {
   const page = parseInt(req.query.page) || 0;
@@ -184,8 +184,10 @@ const validate_update = (req) => {
     name: Joi.string().min(5).max(50),
     description: Joi.string().min(50),
     region: Joi.string().min(3).max(50),
-    categories: Joi.array().items(Joi.string().required()),
-    keywords: Joi.array().items(Joi.string().required()),
+    PlaceCategory: Joi.string().min(5).max(255),
+    OfferCategory: Joi.string().min(5).max(255),
+    domain: Joi.string().min(5).max(255),
+    // keywords: Joi.array().items(Joi.string().required()),
     website: Joi.string(),
   };
   return Joi.validate(req, schema);

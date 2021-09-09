@@ -21,19 +21,21 @@ const cardSchema = new mongoose.Schema({
   },
   // for places, scholorship, hackathon..
   PlaceCategory: {
-    type: [String],
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PlacesCategory",
   },
-  keywords: {
-    type: [String],
-    require: true,
-    // validate: {
-    //   validator: (v) => {
-    //     return v.length <= 5;
-    //   },
-    //   message: (props) => `keywords must contain less than or equal to 5 items`,
-    // },
+  OfferCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "OffersCategory",
   },
+  domain: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Domain",
+  },
+  // keywords: {
+  //   type: [String],
+  //   require: true,
+  // },
   picture: {
     type: String,
     // required: true,
@@ -55,13 +57,15 @@ const validateCard = (card) => {
     name: Joi.string().min(5).max(50).required(),
     description: Joi.string().min(50).required(),
     region: Joi.string().min(3).max(50).required(),
-    categories: Joi.array().items(Joi.string().required()).required().min(1),
+    PlaceCategory: Joi.string().min(5).max(255),
+    OfferCategory: Joi.string().min(5).max(255),
+    domain: Joi.string().min(5).max(255).required(),
     user: Joi.string().min(5).max(255).required(),
-    keywords: Joi.array()
-      .items(Joi.string().required())
-      .max(5)
-      .min(1)
-      .required(),
+    // keywords: Joi.array()
+    //   .items(Joi.string().required())
+    //   .max(5)
+    //   .min(1)
+    //   .required(),
     website: Joi.string(),
   };
   return Joi.validate(card, schema);
