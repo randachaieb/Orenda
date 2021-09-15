@@ -139,7 +139,7 @@ router.delete("/subCategory/:_id", admin, async (req, res) => {
   const newSubcategory = await Domain.findByIdAndDelete(req.params._id);
   return res.json(newSubcategory);
 });
-router.get("/subCategory/all", async (req, res) => {
+router.get("/subCategory/all", admin, async (req, res) => {
   const newSubcategory = await Domain.find();
   return res.json(newSubcategory);
 });
