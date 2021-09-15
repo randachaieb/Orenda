@@ -132,6 +132,31 @@ router.get("/offerCategories/:_id", async (req, res) => {
   res.json(offerCategories);
 });
 
+// @route   DELETE api/v1/categories
+// @desc    Delete a sub category
+// @access  Admin
+router.delete("/subCategory/:_id", admin, async (req, res) => {
+  const newSubcategory = await Domain.findByIdAndDelete(req.params._id);
+  return res.json(newSubcategory);
+});
+router.get("/subCategory/all", admin, async (req, res) => {
+  const newSubcategory = await Domain.find();
+  return res.json(newSubcategory);
+});
+
+// @route   PUT api/v1/categories
+// @desc    Update a sub category
+// @access  Admin
+router.put("/subCategory/:_id", admin, async (req, res) => {
+  console.log(req.params._id, req.body.name);
+  const newSubcategory = await Domain.findByIdAndUpdate(
+    req.params._id,
+    { name: req.body.name },
+    { new: true }
+  );
+  return res.json(newSubcategory);
+});
+
 // router.get("/", auth, async (req, res) => {
 //   let user = await User.findById(req.user._id);
 //   user.isAdmin = true;
