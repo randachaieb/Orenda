@@ -21,7 +21,7 @@ const{moveFile,deleteFile, fileType}=require("../../utilities/fileManager");
 // @access  private
 router.get("/me", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_posts = await Post.find({ user_id: _id , deleted:'false'});
+  const all_posts = await Post.find({ user_id: _id, deleted:'false'});
   res.json(all_posts);
 });
 
