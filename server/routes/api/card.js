@@ -37,32 +37,28 @@ router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
   console.log(req.file);
   console.log(req.body);
 
-  if (!req.file) {
-    return res.status(400).json({ message: "No image uploaded" });
-  } else {
-    if(!req.body.place && !req.body.offer)
+ 
+    if(!req.body.PlaceCategory && !req.body.OfferCategory)
     return res.status(400).json({ message: "a place/offer is required " });
 
     const { error } = validateCard({ ...req.body, user: req.user._id });
-    if (error) {
-      deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH,req.file.filename));
-      return res.status(400).json(error.details[0].message);
-    }
-
-    const imageName = req.file.filename;
+    const myArr =  req.body.domain.split(',');
+    let domainn=[];
+   let i=0
+for(i=0;i<myArr.length;i++){
+  domainn.push(myArr[i]);
+}
+     console.log(domainn)
     const newCard = new Card({
       ...req.body,
-      picture: `${fileUploadPaths.CART_IMAGE_URL}/${imageName}`,
+      domain:domainn,
       user: req.user._id,
     });
-    moveFile(
-      join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
-      join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, imageName)
-    );
+ 
     const savedCard = await newCard.save();
 
     return res.json({ card: savedCard });
-  }
+  
 });
 
 // @route   PATCH api/v1/card
@@ -155,7 +151,14 @@ router.get("/all", async (req, res) => {
   const all_cards = await getCardsPages({}, page);
   res.json(all_cards);
 });
-
+// @route   GET api/v1/card
+// @desc    Get user card
+// @access  private
+router.get("/allcards", async (req, res) => {
+ 
+  const all_cards = await Card.find().sort();
+  res.json(all_cards);
+});
 // @route   GET api/v1/card
 // @desc    Get card by id
 // @access  public
@@ -198,11 +201,11 @@ const validate_update = (req) => {
     name: Joi.string().min(5).max(50),
     description: Joi.string(),
     region: Joi.string().min(3).max(50),
-    place:Joi.string().allow(null),
-    offer:Joi.array().items(Joi.string().allow(null)),
+    PlaceCategory: Joi.string().min(5).max(255),
+    OfferCategory: Joi.string().min(5).max(255),
+    domain: Joi.array(),
     profile:Joi.string().allow(null),
     website: Joi.string(),
-    keywords: Joi.array().items(Joi.string().required()),
    };
   return Joi.validate(req, schema);
 };

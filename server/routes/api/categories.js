@@ -239,4 +239,29 @@ router.get("/", auth, async (req, res) => {
   user = await user.save();
   res.json(user);
 });
+// @route   DELETE api/v1/categories
+// @desc    Delete a sub category
+// @access  Admin
+router.delete("/subCategory/:_id", admin, async (req, res) => {
+  const newSubcategory = await Domain.findByIdAndDelete(req.params._id);
+  return res.json(newSubcategory);
+});
+router.get("/subCategory/all", async (req, res) => {
+  const newSubcategory = await Domain.find();
+  return res.json(newSubcategory);
+});
+
+// @route   PUT api/v1/categories
+// @desc    Update a sub category
+// @access  Admin
+router.put("/subCategory/:_id", admin, async (req, res) => {
+  console.log(req.params._id, req.body.name);
+  const newSubcategory = await Domain.findByIdAndUpdate(
+    req.params._id,
+    { name: req.body.name },
+    { new: true }
+  );
+  return res.json(newSubcategory);
+});
+
 module.exports = router;

@@ -298,14 +298,21 @@ class Offers extends React.Component {
               <TableCell align="left">  <span>
              
     {row.subCategory?row.subCategory.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
+          let color = tag.length > 5 ? 'geekblue' : 'geekblue';
           if (tag === 'loser') {
             color = 'volcano';
           }
           return (
-            <Tag color={color} key={tag}>
+            <Tag color={color} key={tag} value={tag._id}>
               {tag.name}
+            
+            
+              <EditOutlined key="edit" onClick={(e) => this.showModalEdit(tag._id)}/>
+              <DeleteOutlined  key="delete" onClick={(e) => this.showModalDelete(tag._id)}/>
             </Tag>
+             
+            
+
           );
         }):'None'}
       </span></TableCell>

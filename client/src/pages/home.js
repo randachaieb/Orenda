@@ -284,9 +284,8 @@ const SubPlaces = (event) => {
       </datalist>
    </div>
                     </div>
-                    <button className=" btn-pry" onClick={handleShow} > Add Card </button>
-    
-            { show ? <PopupForm  handleClose={handleClose} /> : null }
+                   
+                    <PopupForm  handleClose={handleClose} />
 
            </div>
       <div class="container horizontal-scrollable" >

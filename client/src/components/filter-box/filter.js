@@ -1,141 +1,222 @@
 import './filter.css'
-import React  , {useEffect, useState} from 'react';
+import React from 'react';
+import 'antd/dist/antd.css';
+import { Card,Select } from 'antd';
+import {  Modal, Button,Input} from 'antd';
 import axios from 'axios'
+const { Option } = Select;
+const { TextArea } = Input;
 
+class PopupForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-
-
-// popup window
-const PopupForm =  ({ handleClose , SubmitPost} )  => {
-    //New Empty Object To get Post Value 
-            
-    const [name, setName] = useState("");
-    const [region, setRegion] = useState("");
-    const [categoriesO, setCategoriesO] = useState([]);
-    const [categoriesP, setCategoriesP] = useState("");
-    const [description, setDescription] = useState("");
-    const [picture, setPicture] = useState();
-    const [site, setSite] = useState();
-    const [Categories, setCategories] = React.useState([]);
-    const [CategoriesFilter, setCategoriesFilter] = React.useState([]);
-    const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
-    const [OfferFilter, setOfferFilter] = React.useState([]); 
-    const handleSubmit = (e) => {
-        
-        e.preventDefault();
-      
-        //console.log(name, region, description, categoriesP, categoriesO, picture)
-        const params = new FormData();
-        if (categoriesP)
-        {
-           params.append("place", categoriesP); 
-        }
-        if(categoriesO)
-        {
-            for(let cat of categoriesO)
-            params.append("offer[]", cat);
-        }
-        params.append("name", name);
-        params.append("region", region);
-        params.append("description", description);
-        params.append("picture", picture);
-        params.append("website", site);
-        const token = localStorage.getItem('token');
-        console.log(token)
-        for (var value of params.values()) {
-   console.log(value);
-}
-        
-
-        axios.post('http://localhost:5000/api/v1/card',params, {
-          headers:{
-                'Content-Type': 'multipart/form-data;',
-                
-                'x-auth-token': localStorage.getItem('token')
-          }
-        })
-
-        .then((res)=> {
-            console.log(res.data)
-            window.location.reload(false);
-
-
-         } ).catch(err => err.message);
-     
+    this.state = {
+      bottom: 'bottomCenter',
+      isModalVisible:false,
+      isModalVisiblEdit:false,
+      isModalVisiblDelete:false,
+      id:null,
+      data: [],
+      cards:[],
+      offers: [],
+      name:null,
+      place : null,
+      offer : null,
+      description:null,
+      website:null,
+      subcategoryOffers:null,
+      subcategory:null,
+      subcategoryPlaces:null,
+      namee:null,
+      reg:null,
+      subcateg:[],
+      subcategoffer:[] ,
+      picture:null
+      };
+      this.handleOk = this.handleOk.bind(this);
+      this.formSubmit = this.formSubmit.bind(this);
     }
-    const deleteCategory = (e, index) => {
-        e.preventDefault()
-        setCategories(categoriesO.splice(index,1))
-        console.log(categoriesO)
-   }
-   useEffect(async () => {
-    // Met à jour le titre du document via l’API du navigateur
- axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
- .then(response => {
-   console.log(response.data)
-    
-        setCategories(response.data)
-        setCategoriesFilter(response.data)
-     
- })
- axios.get('http://localhost:5000/api/v1/categories/offerCategories')
- .then(response => {
-     if (response.data.length > 0) {
-         setCategoriesOffer( response.data)
-         setOfferFilter(response.data)
-     }
- })
-
- }, []); 
-            return(
+ 
+     showModal = () => {
+      axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
+      .then(response => {
+          if (response.data.length > 0) {
+              this.setState({
+                data:response.data
+              })
+          }
+      })
+      axios.get('http://localhost:5000/api/v1/categories/offerCategories')
+      .then(response => {
+          if (response.data.length > 0) {
+              this.setState({
+                offers:response.data
+              })
+          }
+      })
+        this.setState({isModalVisible:true})
+      };
+      
+     handleOk  = () => {
+        this.setState({isModalVisible:false})
+      };
+      
+     handleCancel = () => {
+       this.setState({isModalVisible:false})
+      };
+      handlechangeOffer = (event) => {
+        axios.get('http://localhost:5000/api/v1/categories/offerCategoriesSub/'+event)
+        .then(res => {
+          console.log(res.data[0].subCategory)
+          this.setState({
+            subcategoryOffers:res.data[0].subCategory,
+            offer:res.data[0]._id
+          })
+       
+        });
+        
+      }
+      handlechangecategory = (event) => {
+        axios.get('http://localhost:5000/api/v1/categories/PlaceCategoriesSub/'+event)
+        .then(res => {
+          console.log(res.data)
+          this.setState({
+            subcategoryPlaces:res.data[0].subCategory,
+            place:res.data[0]._id
+          })
+          
+        });
+        this.setState({
+          subcategory:true
+        })
+      }
+  handleChangenamee = event => {
+    this.setState({
+      namee: event.target.value
+    })
+  }
+  handlechangeReg = event => {
+    this.setState({
+      reg: event
+    })
+  }
+  handlechangeDesc = event => {
+    this.setState({
+      description: event.target.value
+    })
+  }
+  handlechangeURL = event => {
+    this.setState({
+      website: event.target.value
+    })
+  }
+  handleChangepicture = event => {
+    this.setState({
+      picture: event.target.value
+    })
+  }
+  handlechangesub= event => {
+    this.setState({
+      subcateg: event
+    })
+    console.log(this.state.subcateg)
+  }
+  handlechangesuboffer= event => {
+    this.setState({
+      subcategoffer: event
+    })
+    console.log(this.state.subcategoffer)
+  }
+  formSubmit(event) {
+    event.preventDefault();
+    const params = new FormData();
+  
+        params.append("name", this.state.namee);
+        params.append("region", this.state.reg);
+        params.append("description", this.state.description);
+        params.append("website", this.state.website);
+        params.append("PlaceCategory", this.state.place);
+        params.append("OfferCategory", this.state.offer);
+        params.append("domain", [...this.state.subcateg, this.state.subcategoffer]);
+        params.append("picture", this.state.picture);
+    axios.post('http://localhost:5000/api/v1/card',params, {
+      headers:{
+            'Content-Type': 'multipart/form-data;',
+            
+            'x-auth-token': localStorage.getItem('token')
+      }
+    })
+    .then(res => {
+        console.log(res.data)
+  
+    });
+    this.setState({isModalVisible:false})
+  }
+  render() {
+    return (
                     <>
-                        <div className="form-pop"> 
-                            <div   className="content">
-                            <button type="button" className="close btn-close" onClick={handleClose}/>
-                            <input type="file" placeholder="enter img"  onChange={(e)=>setPicture( e.target.files[0]) } />
-                            <label>Title</label>
-                            <input type="text" placeholder="enter title" className="input" onChange={(e)=>setName(e.target.value) }/>
-                            <div className="select-box"> 
-                                <select  onChange={(e)=>setCategoriesP(e.target.value) }>
-                                    <option disabled >Places By Category</option>
-                                    {CategoriesFilter.map((data) => (
-                                    <option  value={data.name}>{data.name}</option>
+            <Button type="default" onClick={this.showModal}>
+      Add Card
+      </Button><br/><br/>
+      <Modal title="Add Card" visible={this.state.isModalVisible} footer={[
+                        <Button key="cancel" onClick={this.handleCancel}>
+                            Cancel
+                        </Button>,
+                        <Button key="schedule" type="submit" onClick={this.formSubmit}>Add</Button>
+                      ]}>
+      <Input placeholder="Title"  onChange={this.handleChangenamee}  required/><br/><br/>
+      <Input placeholder="Image" type='file' onChange={this.handleChangepicture}  required/><br/><br/>
+      <Select defaultValue="select category" style={{ width: "100%" }} onChange={this.handlechangecategory} required>
+      {this.state.data.map((data) => (
+                                 <Option key={data._id}  value={data.name} 	>{data.name}</Option>
                                     ))}
-                                </select>
-                                <select  id="browsers3" aria-label="Default select example"  onChange={(e)=>setCategoriesO([...categoriesO,e.target.value]) }>
-                                <option disabled>Offers By Category</option>
-                                {OfferFilter.map((data) => (
-                                    <option  value={data.name}>{data.name}</option>
+ 
+    </Select><br/><br/>
+    {  this.state.subcategoryPlaces?
+    <div>
+ <Select  mode="multiple"
+      style={{ width: '100%' }}
+      placeholder="Please select" style={{ width: "100%" }}   onChange={this.handlechangesub} required>
+ {this.state.subcategoryPlaces.map((data) => (
+                                 <Option key={data._id}  value={data._id} 	>{data.name}</Option>
                                     ))}
-                                </select>
-                                
-                                <select  onChange={(e)=>setRegion( e.target.value) }>
-                                    <option>Region</option>
-                                    <option value="Tunis">Tunis</option>
-                                    <option value="Sousse">Sousse</option>
-                                    <option value="Sfax">Sfax</option>
-                                    <option value="Monastir">Monastir</option>
-                                    
-                                </select>
-                            </div>
-                             <div className='set-categories'>
-                                    {categoriesO ? 
-                                        categoriesO.map((cat, index) =>
-                                            <span className='catg' >{cat } <i className="bi bi-x ml" onClick={e=>deleteCategory(e, index)}></i></span>
-                                            )
-                                        : null}
-                                     
-                                
-                                </div>
-                            <label>Description</label>
-                            <input type="text" placeholder="enter description" className="input"  onChange={(e)=>setDescription( e.target.value) }/>
-                          
-                            <label>Website</label>
-                            <input type="text" placeholder="enter Web Site Url" className="input" onChange={(e)=>setSite( e.target.value) }/>
-                            <button className="button"  onClick={(e)=>handleSubmit(e)}>Add</button>
-                            </div>
-                        </div>
+ </Select>
+ 
+   <br/><br/>
+   </div>
+ :''
+    }
+    <Select defaultValue="Select Offer" style={{ width: "100%" }} onChange={this.handlechangeOffer} required>
+    {this.state.offers.map((data) => (
+                                 <Option key={data._id}  value={data.name} 	>{data.name}</Option>
+                                    ))}
+    </Select><br/><br/>
+    {  this.state.subcategoryOffers?
+    <div>
+ <Select mode="multiple"
+      style={{ width: '100%' }}
+      placeholder="Please select"  style={{ width: "100%" }} onChange={this.handlechangesuboffer} required>
+ {this.state.subcategoryOffers.map((data) => (
+                                 <Option key={data._id}  value={data._id} 	>{data.name}</Option>
+                                    ))}
+ </Select>
+   <br/><br/>
+   </div>
+ :''
+    }
+    <Select defaultValue="Sousse" style={{ width: "100%" }}  onChange={this.handlechangeReg} required>
+    <Option value="Tunis">Tunis</Option>
+    <Option value="Sousse">Sousse</Option>
+     <Option value="Sfax">Sfax</Option>
+    <Option value="Monastir">Monastir</Option>
+    </Select><br/><br/>
+    <Input placeholder="Enter description"  onChange={this.handlechangeDesc} required /><br/><br/>
+    <TextArea placeholder="Enter Web Site Url"  onChange={this.handlechangeURL} item={this.state.website} required/><br/><br/>
+      </Modal>
                     </>
-                );
+);
 }
-export default PopupForm;
+}
+
+export default  PopupForm;

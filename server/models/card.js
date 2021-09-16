@@ -11,6 +11,7 @@ const cardSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
+    minlength: 5,
   },
   region: {
     type: String,
@@ -18,50 +19,54 @@ const cardSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 50,
   },
-  place: {
-    type: String,
+  // for places, scholorship, hackathon..
+  PlaceCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PlacesCategory",
   },
-  offer: {
-    type: [String],
+  OfferCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "OffersCategory",
   },
-  profile: {
-    type: String,
-  },
-  website: {
-    type: String,
-    required: true,
-  },
+  domain: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Domain",
+  }],
+  // keywords: {
+  //   type: [String],
+  //   require: true,
+  // },
   picture: {
     type: String,
-    required: true,
+    // required: true,
+    default: "/static/card_images/default.jpg",
     minlength: 5,
     maxlength: 1024,
-  },
-  keywords: {
-    type: [String],
-    required: false,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+  },
+  website: {
+    type: String,
   },
 });
 
 const validateCard = (card) => {
   const schema = {
     name: Joi.string().min(5).max(50).required(),
-    description: Joi.string().required(),
+    description: Joi.string().min(50).required(),
     region: Joi.string().min(3).max(50).required(),
-    place:Joi.string().allow(null),
-    offer:Joi.array().items(Joi.string().allow(null)),
-    profile:Joi.string().allow(null),
-    website: Joi.string().required(),
-    keywords: Joi.array()
-      .items(Joi.string().required())
-      .max(5)
-      .min(1)
-      .allow(null),
+    PlaceCategory: Joi.string().min(5).max(255),
+    OfferCategory: Joi.string().min(5).max(255),
+    domain: [Joi.string().min(5).max(255).required()],
     user: Joi.string().min(5).max(255).required(),
+    // keywords: Joi.array()
+    //   .items(Joi.string().required())
+    //   .max(5)
+    //   .min(1)
+    //   .required(),
+    website: Joi.string(),
   };
   return Joi.validate(card, schema);
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React,  { useEffect, useState } from "react";
 import "./ProfileView.css";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
@@ -8,9 +8,22 @@ export default function Acceuil() {
     const authContext = useContext(AuthContext);
   
     const { username } = useParams();
+    const [data, setData]= useState([])
     console.log(username)
     useEffect(async() => {
-      
+        axios.get('http://localhost:5000/api/v1/post', {
+            headers: {
+               
+                "x-auth-token": localStorage.getItem("token")
+            }
+        })
+        .then(response => {
+            if (response.data.length > 0) {
+                setData(response.data)
+               console.log(data) 
+            }
+        })
+        console.log(data) 
         axios
             .get(`http://localhost:5000/api/v1/user/profile/${username}`, {
                 headers: {
@@ -72,106 +85,115 @@ export default function Acceuil() {
                                         </div>
                                     </div>
                                     <div className="loadMore">
-                                    <div className="central-meta item">
-                                        <div className="user-post">
-                                            <div className="friend-info">
-                                                <figure>
-                                                <img  className='avatar' src="images/avatar2.jpg" alt=""/>
-                                                </figure>
-                                                <div className="friend-name">
-                                                    <ins><a href="time-line.html" title="">Janice</a></ins>
-                                                    <span>published: june,2 2018 19:PM</span>
-                                                </div>
-                                                <div className="post-meta">
-                                                    <div >
-                                                        
-                                                        <p>
-                                                            Description of the post and we can do hashtags like this  <a href="#" title="">#this is a hashtag !</a> 
-                                                            
-                                                        </p>
-                                                        <iframe src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg" height="500" style={{display: 'block', marginLeft: 'auto',marginRight: 'auto',width: '50%'}} webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                                                   
+                                   
+
+                                        {
+                                            data.map((d, index) =>(
+                                                <div className="central-meta item">
+                                                <div className="user-post">
+                                                <div className="friend-info">
+                                                    <figure>
+                                                    <img  className='avatar' src={'http://localhost:5000'+authContext.user.picture} alt=""/>
+                                                    </figure>
+                                                    <div className="friend-name">
+                                                        <ins><a href="time-line.html" title="">Randa</a></ins>
+                                                        <span>published: {d.Date_creation}</span>
                                                     </div>
-                                                    <div className="we-video-info">
-                                                        <ul>
-                                                        <li>
-                                                                <span className="comment" data-toggle="tooltip" title="Comments">
-                                                                   
-                                                                </span>
-                                                            </li>
-                                                            <li>
-                                                                <span className="comment" data-toggle="tooltip" title="Comments">
-                                                                   
-                                                                </span>
-                                                            </li>
-                                                        <li>
-                                                                <span className="like" data-toggle="tooltip" title="like">
-                                                                <i class="fa fa-heart"></i>
-                                                                    <ins>2.2k</ins>
-                                                                </span>
-                                                            </li>
-                                                            <li>
-                                                                <span className="comment" data-toggle="tooltip" title="Comments">
-                                                                    <i className="fa fa-comments-o"></i>
-                                                                    <ins>52</ins>
-                                                                </span>
-                                                            </li>
+                                                    <div className="post-meta">
+                                                        <div >
                                                             
-                                                            
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="coment-area">
-                                                <ul className="we-comet">
-                                                    <li>
-                                                        <div className="comet-avatar">
-                                                              {/* Profile Image */}
-                                                <img className='avatar'  src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
-                                          
-                                                        </div>
-                                                        <div className="we-comment">
-                                                            <div className="coment-head">
-                                                                <h5><a href="time-line.html" title="">Marwa</a></h5>
-                                                                <span>1 year ago</span>
-                                                            </div>
-                                                            <p>we are working for the dance and sing songs. this car is very awesome for the youngster. please vote this car and like our post</p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div className="comet-avatar">
-                                                            <img className='avatar' src="images/avatar.jpg" alt=""/>
-                                                        </div>
-                                                        <div className="we-comment">
-                                                            <div className="coment-head">
-                                                                <h5><a href="time-line.html" title="">Safa</a></h5>
-                                                                <span>1 week ago</span>
-                                                            </div>
-                                                            <p>we are working for the dance and sing songs. this video is very awesome for the youngster. please vote this video and like our channel
-                                                                <i className="em em-smiley"></i>
+                                                            <p>
+                                                            {d.text} 
+                                                                
                                                             </p>
+                                                            <iframe src={"http://localhost:5000" + d.link} height="500" style={{display: 'block', marginLeft: 'auto',marginRight: 'auto',width: '50%'}} webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                                       
                                                         </div>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" title="" className="showmore underline">more comments</a>
-                                                    </li>
-                                                    <li className="post-comment">
-                                                        <div className="comet-avatar">
-                                                                   {/* Profile Image */}
-                                                <img className='avatar2'  src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
-                                          
+                                                        <div className="we-video-info">
+                                                            <ul>
+                                                            <li>
+                                                                    <span className="comment" data-toggle="tooltip" title="Comments">
+                                                                       
+                                                                    </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span className="comment" data-toggle="tooltip" title="Comments">
+                                                                       
+                                                                    </span>
+                                                                </li>
+                                                            <li>
+                                                                    <span className="like" data-toggle="tooltip" title="like">
+                                                                    <i class="fa fa-heart"></i>
+                                                                        <ins>2.2k</ins>
+                                                                    </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span className="comment" data-toggle="tooltip" title="Comments">
+                                                                        <i className="fa fa-comments-o"></i>
+                                                                        <ins>52</ins>
+                                                                    </span>
+                                                                </li>
+                                                                
+                                                                
+                                                            </ul>
                                                         </div>
-                                                        <div className="post-comt-box">
-                                                            <form method="post">
-                                                                <textarea placeholder="Post your comment"></textarea>
-                                                                <button type="submit" style={{color:'white',backgroundColor:'#088dcd'}}>Comment</button>
-                                                            </form>	
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                    </div>
+                                                </div>
+                                                <div className="coment-area">
+                                                    <ul className="we-comet">
+                                                        <li>
+                                                            <div className="comet-avatar">
+                                                                  {/* Profile Image */}
+                                                    <img className='avatar'  src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
+                                              
+                                                            </div>
+                                                            <div className="we-comment">
+                                                                <div className="coment-head">
+                                                                    <h5><a href="time-line.html" title="">Marwa</a></h5>
+                                                                    <span>1 year ago</span>
+                                                                </div>
+                                                                <p>we are working for the dance and sing songs. this car is very awesome for the youngster. please vote this car and like our post</p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div className="comet-avatar">
+                                                                <img className='avatar' src="images/avatar.jpg" alt=""/>
+                                                            </div>
+                                                            <div className="we-comment">
+                                                                <div className="coment-head">
+                                                                    <h5><a href="time-line.html" title="">Safa</a></h5>
+                                                                    <span>1 week ago</span>
+                                                                </div>
+                                                                <p>we are working for the dance and sing songs. this video is very awesome for the youngster. please vote this video and like our channel
+                                                                    <i className="em em-smiley"></i>
+                                                                </p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" title="" className="showmore underline">more comments</a>
+                                                        </li>
+                                                        <li className="post-comment">
+                                                            <div className="comet-avatar">
+                                                                       {/* Profile Image */}
+                                                    <img className='avatar2'  src={'http://localhost:5000'+authContext.user.picture} alt="profile_img" />
+                                              
+                                                            </div>
+                                                            <div className="post-comt-box">
+                                                                <form method="post">
+                                                                    <textarea placeholder="Post your comment"></textarea>
+                                                                    <button type="submit" style={{color:'white',backgroundColor:'#088dcd'}}>Comment</button>
+                                                                </form>	
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                            </div>
+
+                                            )) 
+                                        }
+                                      
+                                 
                                     </div>
                                 </div>
                             </div>	

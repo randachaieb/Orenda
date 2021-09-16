@@ -76,7 +76,25 @@ router.post("/", async (req, res) => {
     ]),
   });
 });
+// @route   GET api/v1/card
+// @desc    Search for cards
+// @access  public
+router.get("/search", async (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ message: "no query" });
+  const searchParams = [...q.split(" "), q];
+  let reg = "";
+  searchParams.forEach((i, index) => {
+    reg += "\\b" + i + "\\b";
+    reg += index === searchParams.length - 1 ? "" : "|";
+  });
+  debug(reg, new RegExp(reg));
+  const searchResualt = await User.find({
+    name: new RegExp(reg),
+  });
 
+  res.json(searchResualt);
+});
 // @route   GET api/v1/user/update
 // @desc    update profile
 // @access  private

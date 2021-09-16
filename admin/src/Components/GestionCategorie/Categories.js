@@ -312,6 +312,10 @@ handleChangenamee = event => {
           return (
             <Tag color={color} key={tag}>
               {tag.name}
+
+              
+              <EditOutlined key="edit" onClick={(e) => this.showModalEdit(tag._id)}/>
+              <DeleteOutlined  key="delete" onClick={(e) => this.showModalDelete(tag._id)}/>
             </Tag>
           );
         }):'None'}
