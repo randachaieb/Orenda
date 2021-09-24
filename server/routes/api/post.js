@@ -21,7 +21,7 @@ const{moveFile,deleteFile, fileType}=require("../../utilities/fileManager");
 // @access  private
 router.get("/me", auth, async (req, res) => {
   const { _id } = req.user;
-  const all_posts = await Post.find({ user_id: _id , deleted:'false'}).populate({ path: "user", select: "name picture username"});
+  const all_posts = await Post.find({ user_id: _id, deleted:'false'});
   res.json(all_posts);
 });
 
@@ -32,7 +32,7 @@ router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
   const all_posts = await Post.find({ user_id: { $ne: _id } , deleted:'false'})
   .sort({Date_creation: -1})
-  .populate({ path: "user", select: "name picture username"});
+  .populate({ path: "user_id", select: "name picture username"});
   res.json(all_posts);
 });
 
