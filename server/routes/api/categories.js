@@ -156,6 +156,28 @@ router.put("/subCategory/:_id", admin, async (req, res) => {
   );
   return res.json(newSubcategory);
 });
+// @route   PUT api/v1/categories
+// @desc    increment views
+// @access  public
+router.post("/views", async (req, res) => {
+  const { _id, type } = req.body;
+  console.log(`type: ${type}, _id: ${_id}`);
+  if (type == "place") {
+    var value = await PlacesCategory.findByIdAndUpdate(_id, {
+      $inc: { views: 1 },
+    });
+    console.log(value);
+  } else if (type == "offer") {
+    var value = await OffersCategory.findByIdAndUpdate(_id, {
+      $inc: { views: 1 },
+    });
+    console.log(value);
+  } else if (type == "sub") {
+    var value = await Domain.findByIdAndUpdate(_id, { $inc: { views: 1 } });
+    console.log(value);
+  }
+  res.status(200).json({ success: value ? true : false });
+});
 
 // router.get("/", auth, async (req, res) => {
 //   let user = await User.findById(req.user._id);

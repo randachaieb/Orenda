@@ -7,6 +7,10 @@ const PlacesCategorySchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
   subCategory: [
     {
       type: mongoose.Schema.Types.ObjectId,

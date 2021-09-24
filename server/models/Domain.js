@@ -7,6 +7,10 @@ const DomainSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const validateDomain = (domain) => {
