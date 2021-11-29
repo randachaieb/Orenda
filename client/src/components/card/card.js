@@ -63,7 +63,7 @@ export default function Card(props) {
 
     return (
         <div className="card" style={{  margin: "20px" }}>
-            {authContext.user._id ===props.user._id?
+            {authContext.user._id ===props.id?
             <div className="cards-dots">
                 <IconButton
                     aria-label="more"
@@ -114,12 +114,12 @@ export default function Card(props) {
                 className="card-img-top"
                 alt="..."
             ></img>
-            <div className='user-name' onClick={e=>goToProfile(e,props.user._id)}>
+            <div className='user-name' onClick={e=>goToProfile(e,props.id)}>
                 <div className='content-user'>
-                     <img src={"http://localhost:5000" + props.user.picture}
+                     <img src={"http://localhost:5000" + props.picture}
                     className='avatar-user'
                     ></img>
-                <span className='name'>{props.user.name}</span> 
+                <span className='name'>{props.name}</span> 
                </div>
              </div>
             <div className="card-body">
