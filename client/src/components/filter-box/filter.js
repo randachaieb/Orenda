@@ -82,6 +82,7 @@ const PopupForm =  ({ handleClose , SubmitPost} )  => {
                                     <option value="Schools">Schools</option>
                                     <option value="Coworking places">Coworking places</option>
                                     <option value="Clubs">Clubs</option>
+                                    <option value="Incubator">Incubator</option>
                                 </select>
                                 <select  id="browsers3" aria-label="Default select example"  onChange={(e)=>setCategoriesO([...categoriesO,e.target.value]) }>
                                 <option>Offers By Category</option>

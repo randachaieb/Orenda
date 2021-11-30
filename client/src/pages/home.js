@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Cards from "../components/card/cards";
 import "./home.css";
 import PopupForm from "../components/filter-box/filter";
-import Sidebar from "../components/sidebar/sidebar";
+//import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Carsouel from "../components/carsouel/carsouel";
@@ -27,6 +27,11 @@ function Home() {
       const [byRegion, setRegion] = useState("");
     const [byPlaces, setPlaces] = useState("");
     const [byOffer, setOffer] = useState("");
+    const [bgColor, setBgColor] = React.useState('');
+    const [bgColorPlaces, setBgColorPlaces] = React.useState('');
+    const [BgColorOffer, setBgColorOffer] = React.useState('');
+    const [BgColorOffers, setBgColorOffers] = React.useState('');
+
     
     const [Categories, setCategories] = React.useState([]);
     const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
@@ -133,13 +138,44 @@ const SubPlaces = (event) => {
       setPlaces(event.target.value)
  
 };
+
+const AllPlaces = (event) => {
+
+  setPlaces('')
+  if (bgColor == '') {
+      setBgColor('contained')
+      setBgColorPlaces("")
+  }
+  var elms = document.querySelectorAll("[id='btnplace']");
+
+  for (var i = 0; i < elms.length; i++) {
+      elms[i].style.backgroundColor = 'transparent';
+      elms[i].style.color = "black";
+  }
+  setCategoriesPlaceSub([])
+};
+
+const AllOffers = (event) => {
+
+  setOffer('')
+  if (BgColorOffer == '') {
+      setBgColorOffer('contained')
+      setBgColorOffers("")
+  }
+  var elms = document.querySelectorAll("[id='btnoffer']");
+  for (var i = 0; i < elms.length; i++) {
+      elms[i].style.backgroundColor = 'transparent';
+      elms[i].style.color = "black";
+  }
+  setCategoriesOfferSub([])
+};
     return (
       <div>
          
             <Carsouel/>
             
         <div className='content-home'>
-                       <Sidebar/>
+                     {/* <Sidebar/> */}
                        
             <div className='container-card'>
             <br/>  <br/>  <br/>  <br/>  <br/> 
@@ -189,6 +225,9 @@ const SubPlaces = (event) => {
           <div class="row">
             <div className={classes.root}>
               <b style={{ fontSize: "18px"}}> Places </b>
+              <button  type="button" class="button button3" style={{ 
+                textAlign: 'center',
+                padding: '8px',fontSize: "16px"}} onClick={AllPlaces}>All</button>
               {Categories.map((data) => (
                
                 <button type="button" class="button button3" style={{ 
@@ -207,7 +246,7 @@ const SubPlaces = (event) => {
         <div class="container ">
           <div class="row">
             <div className={classes.root}>
-              <b style={{ fontSize: "18px"}}> Sub Places </b>
+              {/* to get it soon <b style={{ fontSize: "18px"}}> Sub Places </b> */}
               {CategoriesPlaceSub.map((data) => (
                
                 <button type="button" class="button button3" style={{ 
@@ -225,6 +264,9 @@ const SubPlaces = (event) => {
           <div class="row">
             <div className={classes.root}>
               <b style={{ fontSize: "18px"}}> Offers </b>
+              <button  type="button" class="button button3" style={{ 
+                textAlign: 'center',
+                padding: '8px',fontSize: "16px"}} onClick={AllOffers} >All</button>
               {CategoriesOffer.map((data) => (
                
                 <button type="button" class="button button3" style={{ 
@@ -242,7 +284,7 @@ const SubPlaces = (event) => {
         <div class="container ">
           <div class="row">
             <div className={classes.root}>
-              <b style={{ fontSize: "18px"}}> Sub Offers </b>
+               {/* to get it soon <b style={{ fontSize: "18px"}}> Sub Offers </b> */}
               {CategoriesOfferSub.map((data) => (
                
                 <button type="button" class="button button3" style={{ 

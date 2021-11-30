@@ -270,7 +270,7 @@ const PopupForm = ({ handleClose, SubmitPost, idCard, nameCard,siteCard, regionC
                             <option value="Coworking places">
                                 Coworking places
                             </option>
-                            <option value="Clubs">Clubs</option>
+                            <option value="Incubator">Incubator</option>
                         </select>
                         <select
                             id="browsers3"
