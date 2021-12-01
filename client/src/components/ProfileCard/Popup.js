@@ -29,7 +29,7 @@ import axios from  'axios'
 }
         
 
-        axios.post('/api/v1/post',params, {
+        axios.post('http://localhost:5000/api/v1/post',params, {
           headers:{
                 'Content-Type': 'multipart/form-data',
                 

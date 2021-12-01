@@ -17,7 +17,7 @@ function UpdateProfile({ handleCloseProfile, Pname, Pbio}) {
         {
             params.append("picture", picture)
         
-       axios.patch(`http://localhost:5000/api/v1/user/updatePicture`, params, {
+       axios.patch(`http://localhost:5000/api/v1/user/update`, params, {
           headers:{
                 'Content-Type': 'multipart/form-data',
                 
