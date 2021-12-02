@@ -123,7 +123,7 @@ router.patch(
 const validateUser = (user) => {
   const schema = {
     name: Joi.string().min(5).max(50),
-    bio: Joi.string().min(50),
+    bio: Joi.string().min(5),
     region: Joi.string().min(5).max(50),
     address: Joi.string().min(5).max(50),
     email: Joi.string().min(5).max(50).email(),

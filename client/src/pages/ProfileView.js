@@ -80,7 +80,7 @@ function ProfileView({ data, newObject }) {
 
 
     return (
-        <div className="container">
+        <div className="containerProfile">
 
 {authContext.user.cover ?
  <div class="cover" style={{background:"no-repeat"}}>
