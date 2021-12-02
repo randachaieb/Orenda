@@ -23,11 +23,15 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-.home{
-  min-height:100vh;
+.home {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+img {
+  object-fit: cover;
 }
 
 .App-link {

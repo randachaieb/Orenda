@@ -6,8 +6,12 @@
   "scripts": {
     "server": "nodemon server/server.js",
     "client": "cd ./client && npm start",
+    "admin": "cd ./admin && npm start",
+    "build:client": "cd ./client && npm run build",
+    "build:admin": "cd ./admin && npm run build",
     "start": "node server/server.js",
-    "dev": "concurrently \"npm run client\" \"npm run server\""
+    "dev": "concurrently \"npm run client\" \"npm run admin\" \"npm run server\"",
+    "build:project": "npm run build:client && npm run build:admin"
   },
   "author": "",
   "license": "ISC",

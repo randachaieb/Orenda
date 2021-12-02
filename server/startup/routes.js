@@ -15,6 +15,7 @@ const post_group = require("../routes/api/post_group");
 
 module.exports = (app) => {
   app.use("/static", express.static(path.join(__dirname, "..", "public")));
+  app.use("/", express.static(path.join(__dirname, "..", "frontend")));
   app.use(cors());
   app.use(error);
   app.use(express.json());
