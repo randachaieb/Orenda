@@ -77,6 +77,20 @@ router.post("/", async (req, res) => {
   });
 });
 
+// @route   GET api/v1/card
+// @desc    Search for cards
+// @access  public
+router.get("/search", async (req, res) => {
+    const { q } = req.query;
+    if (!q) return res.status(400).json({ message: "no query" });
+
+    const searchResualt = await User.find({
+        name: { $regex: `(?:${q.split(' ').join('|')})`, $options: 'i' }
+    });
+
+    res.status(200).json(searchResualt);
+});
+
 // @route   GET api/v1/user/update
 // @desc    update profile
 // @access  private

@@ -53,8 +53,8 @@ function Header(){
                        
                         <NavLink exact className='link-to-active' activeClassName='clicked' to="/Acceuil" id='nav2' onClick={e=>addActiveClass(e)}>Home</NavLink>
                        <NavLink exact className='link-to-active' activeClassName='clicked'  to="/ProfileView" id='nav3' onClick={e=>addActiveClass(e)}>Profile</NavLink>
-                       <img src={'http://localhost:5000'+ authContext.user.picture} className="avatar-user2"  to="/"  onClick={()=>logout()}/>
-                   </div>
+                       <span className='imageAvatarTop'><img src={'http://localhost:5000'+ authContext.user.picture} className="avatar-user2"  to="/"  onClick={()=>logout()}/></span>
+                        </div>
         </>           
                ) : (
                        <div className="container-nav">

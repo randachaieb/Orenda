@@ -10,6 +10,8 @@ export  function AuthProvider(props){
     const [user, setUser]=useState({
       
     });
+    const [search, setSearch] = useState(true)
+
 
 
     useEffect ( async()=>{
@@ -36,7 +38,7 @@ export  function AuthProvider(props){
     }, [])
 
     return(
-        <AuthContext.Provider value={{auth, setAuth, user, setUser}}>
+        <AuthContext.Provider value={{auth, setAuth, user, setUser, setSearch, search}}>
             {props.children}
         </AuthContext.Provider>
     )
