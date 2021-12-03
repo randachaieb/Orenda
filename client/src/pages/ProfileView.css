@@ -254,3 +254,10 @@ body {
 .card-box {
   width: 350px;
 }
+
+.itemCardProfile {
+  width:350px;
+}
+.rowProfileCards{
+  justify-content: center;
+}
