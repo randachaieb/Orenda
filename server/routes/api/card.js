@@ -38,6 +38,9 @@ router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
+    if (!req.body.place && !req.body.offer)
+      return res.status(400).json({ message: "a place/offer is required " });
+
     const { error } = validateCard({ ...req.body, user: req.user._id });
     if (error) {
       deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
@@ -69,6 +72,9 @@ router.patch(
   uploadImage.single("picture"),
   async (req, res) => {
     const { id } = req.params;
+    if (!req.body.place && !req.body.offer)
+      return res.status(400).json({ message: "a place/offer is required " });
+
     const { error } = validate_update(req.body);
     if (error) {
       if (req.file)
@@ -116,7 +122,7 @@ router.delete("/delete", auth, async (req, res) => {
 // @route   DELETE api/v1/card
 // @desc    delete a single card
 // @access  private
-router.delete("/card_delete", auth, async (req, res) => {
+router.delete("/delete", auth, async (req, res) => {
   const { id } = req.body;
   const card = await Card.findOne({ id, user: req.user._id });
   if (card === null)
@@ -182,7 +188,7 @@ const validate_search_schema = (query) => {
 const validate_update = (req) => {
   const schema = {
     name: Joi.string().min(5).max(50),
-    description: Joi.string().min(50),
+    description: Joi.string(),
     region: Joi.string().min(3).max(50),
     categories: Joi.array().items(Joi.string().required()),
     keywords: Joi.array().items(Joi.string().required()),

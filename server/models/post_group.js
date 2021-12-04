@@ -9,7 +9,7 @@ const post_groupSchema = new mongoose.Schema({
     maxlength: 50,
   },
  
-posts: {
+  posts: {
     type: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",

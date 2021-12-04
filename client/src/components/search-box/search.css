@@ -6,13 +6,23 @@
     border-radius: 30px;
     padding-left: 1.5rem;
     overflow: hidden;
-    width: 380px;
+    width: 100%;
     color: rgb(119, 121, 140);
-    background-color: rgb(255, 255, 255);
-    border-width: 0px;
+    background-color: #fafafa;
+    border-width: 1px;
     border-style: solid;
-    border-color: rgb(255, 255, 255);
-    box-shadow: rgb(0 0 0 / 5%) 0px 1px 5px;
+    border-color: #eee;
+    
+}
+
+.op-profile{
+    
+    background-color: #fcfcfc;
+}
+
+.mrgn{
+    color: #b3b3b3;
+    margin-right: 10px;
 }
 
 .search-input {
@@ -65,24 +75,14 @@
 }
 
 @media only screen and (max-width: 820px) {
-    .banner-search {
-        width: 100%
-    }
-    .search-input {
-        padding-left: 2rem;
-    }
+  
     .btn-search, .select-item {
         display: none;
     }
 }
 
 @media only screen and (max-width: 600px) {
-    .banner-search {
-        width: 280px
-    }
-    .search-input {
-        padding-left: 2rem;
-    }
+    
     .btn-search, .select-item {
         display: none;
     }

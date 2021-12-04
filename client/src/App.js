@@ -13,15 +13,25 @@ import Footer from './components/footer/footer'
 import ProfileView from "./pages/ProfileView";
 import ContactUs from "./components/Contact/ContactUs";
 import AboutUs from "./pages/AboutUs"; 
-import acceuil from './pages/acceuil'
+import Acceuil from './pages/acceuil'
+import Profile from "./pages/profile";
+import Search from "./pages/Search";
 
 
 function App() {
  const authContext=useContext(AuthContext);
   return (
       <BrowserRouter>
+      <div>
         <Header/>
         <Switch>
+  
+          <Route  path='/Acceuil'>
+           <Acceuil />
+          </Route>
+          <Route  path='/Search'>
+           <Search />
+          </Route>
           <Route exact path='/'>
            {authContext.auth.token? <Home/> : <Redirect to='/signin' />}
           </Route>
@@ -31,17 +41,18 @@ function App() {
         <Route  path='/signin'>
             {!authContext.auth.token? <Signin/> : <Redirect to='/' />}
           </Route>
-          <Route  path='/ProfileView'>
+          <Route  path='/profileView'>
            <ProfileView />
+        </Route>
+        <Route  path='/:username'>
+           <Profile />
           </Route>
           <Route  path='/ContactUs'>
            <ContactUs />
           </Route>
-          <Route  path='/Acceuil'>
-           <acceuil />
-          </Route>
         </Switch>
         <Footer/> 
+        </div>
       </BrowserRouter>
   );
 }

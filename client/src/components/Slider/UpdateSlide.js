@@ -72,7 +72,7 @@ const Repost = ({ handleClose }) => {
                 <div className="form-UP-container">
                     <button
                         type="button"
-                        class="close btn-close"
+                        className="close btn-close"
                         onClick={handleClose}
                     />
                     <div className="UP-field">

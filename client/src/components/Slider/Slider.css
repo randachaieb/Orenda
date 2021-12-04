@@ -28,10 +28,7 @@
     height: 100%;
 }
 
-input::placeholder {
-    color: rgb(194, 194, 194);
-    font-size: 20px;
-}
+
 
 /* Set a style for the submit/login button */
 
@@ -184,5 +181,6 @@ input[type="file"] {
     box-shadow: 5px 10px 18px #888888;
 }
 .carousel {
-    width: 60%;
+    width: 100%;
+ 
 }
