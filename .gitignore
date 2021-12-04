@@ -1,6 +1,6 @@
 # File folder
 server/public/
-
+server/frontend/*
 
 /TODO.txt
 # Logs

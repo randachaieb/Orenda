@@ -3,7 +3,6 @@ const Joi = require("joi");
 const router = express.Router();
 const { join, basename } = require("path");
 const { Card, validateCard } = require("../../models/card");
-
 const { moveFile, deleteFile } = require("../../utilities/fileManager");
 const _ = require("lodash");
 const auth = require("../../middleware/auth");
@@ -26,15 +25,17 @@ const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
 // @access  private
 router.get("/", auth, async (req, res) => {
   const { _id } = req.user;
-  const page = req.query.page || 0;
-  const all_cards = await getCardsPages({ user: _id }, page);
+  const all_cards = await Card.find({ user: _id }).populate("user");
   res.json(all_cards);
 });
 
 // @route   POST api/v1/card
 // @desc    Add card
 // @access  private
-router.post("/", auth, uploadCardImage.single("picture"), async (req, res) => {
+router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
+  console.log(req.file);
+  console.log(req.body);
+
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
@@ -106,25 +107,12 @@ router.patch(
 );
 
 // @route   DELETE api/v1/card
-// @desc    delete a card
-// @access  private
-router.delete("/delete", auth, async (req, res) => {
-  const { card_list } = req.body;
-  const l = await Card.deleteMany({
-    _id: { $in: card_list },
-    user: req.user._id,
-  });
-  debug(l);
-  if (l.deletedCount === 0) return res.json({ success: false });
-  return res.json({ message: "card deleted", success: true });
-});
-
-// @route   DELETE api/v1/card
 // @desc    delete a single card
 // @access  private
 router.delete("/delete", auth, async (req, res) => {
   const { id } = req.body;
-  const card = await Card.findOne({ id, user: req.user._id });
+  const card = await Card.findByIdAndDelete(id);
+
   if (card === null)
     return res.status(400).json({ message: "card not exists" });
   else {
@@ -171,11 +159,25 @@ router.get("/all", async (req, res) => {
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id).populate({
-    path: "user",
-    select: "name picture username",
-  });
+  const card = await Card.findById(id); //.populate("user");
   res.json({ card });
+});
+
+// @route   GET api/v1/card
+// @desc    Filter cards
+// @access  public
+router.get("/filter", async (req, res) => {
+  var query;
+  var filterResult;
+  const { place, offer, region } = req.query;
+
+  if (place) query = { ...query, place: place };
+  if (offer) query = { ...query, offer: offer };
+  if (region) query = { ...query, region: region };
+  if (query) filterResult = await Card.find(query);
+  else filterResult = await Card.find();
+
+  res.json(filterResult);
 });
 
 const validate_search_schema = (query) => {
@@ -190,9 +192,11 @@ const validate_update = (req) => {
     name: Joi.string().min(5).max(50),
     description: Joi.string(),
     region: Joi.string().min(3).max(50),
-    categories: Joi.array().items(Joi.string().required()),
-    keywords: Joi.array().items(Joi.string().required()),
+    place: Joi.string().allow(null),
+    offer: Joi.array().items(Joi.string().allow(null)),
+    profile: Joi.string().allow(null),
     website: Joi.string(),
+    keywords: Joi.array().items(Joi.string().required()),
   };
   return Joi.validate(req, schema);
 };

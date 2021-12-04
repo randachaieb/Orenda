@@ -58,12 +58,6 @@ router.post("/", auth, uploadPost.single("link"), async (req, res) => {
       link: `${fileUploadPaths.POST_FILE_URL}/${fileName}`,
     };
   }
-  const { error } = validatePost(newPost);
-  if (error) {
-    if (req.file)
-      deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
-    return res.status(400).json(error.details[0].message);
-  }
   moveFile(
     join(fileUploadPaths.FILE_UPLOAD_PATH, fileName),
     join(fileUploadPaths.POST_FILE_UPLOAD_PATH, fileName)
