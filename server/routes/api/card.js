@@ -147,7 +147,7 @@ router.get("/search", async (req, res) => {
 
 // @route   GET api/v1/card
 // @desc    Get user card
-// @access  private
+// @access  public
 router.get("/all", async (req, res) => {
   const page = parseInt(req.query.page) || 0;
   const all_cards = await getCardsPages({}, page);

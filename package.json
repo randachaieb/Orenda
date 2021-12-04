@@ -12,7 +12,7 @@
     "start": "node server/server.js",
     "dev": "concurrently \"npm run client\" \"npm run admin\" \"npm run server\"",
     "build:project": "npm run build:client && npm run build:admin",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build:client"
   },
   "author": "",
   "license": "ISC",
