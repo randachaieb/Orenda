@@ -11,7 +11,8 @@
     "build:admin": "cd ./admin && npm run build",
     "start": "node server/server.js",
     "dev": "concurrently \"npm run client\" \"npm run admin\" \"npm run server\"",
-    "build:project": "npm run build:client && npm run build:admin"
+    "build:project": "npm run build:client && npm run build:admin",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "",
   "license": "ISC",

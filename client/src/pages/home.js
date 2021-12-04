@@ -26,34 +26,30 @@ function Home() {
   const [byRegion, setRegion] = useState("");
   const [byPlaces, setPlaces] = useState("");
   const [byOffer, setOffer] = useState("");
-  const [bgColor, setBgColor] = React.useState("");
-  const [bgColorPlaces, setBgColorPlaces] = React.useState("");
-  const [BgColorOffer, setBgColorOffer] = React.useState("");
-  const [BgColorOffers, setBgColorOffers] = React.useState("");
+  const [bgColor, setBgColor] = useState("");
+  const [bgColorPlaces, setBgColorPlaces] = useState("");
+  const [BgColorOffer, setBgColorOffer] = useState("");
+  const [BgColorOffers, setBgColorOffers] = useState("");
 
-  const [Categories, setCategories] = React.useState([]);
-  const [CategoriesOffer, setCategoriesOffer] = React.useState([]);
-  const [CategoriesOfferSub, setCategoriesOfferSub] = React.useState("");
-  const [CategoriesPlaceSub, setCategoriesPlaceSub] = React.useState("");
+  const [Categories, setCategories] = useState([]);
+  const [CategoriesOffer, setCategoriesOffer] = useState([]);
+  const [CategoriesOfferSub, setCategoriesOfferSub] = useState("");
+  const [CategoriesPlaceSub, setCategoriesPlaceSub] = useState("");
   const handleShow = () => setShow(true);
   const [images, setImages] = useState();
 
   useEffect(async () => {
     // Met à jour le titre du document via l’API du navigateur
-    axios
-      .get("http://localhost:5000/api/v1/categories/PlacesCategories")
-      .then((response) => {
-        console.log(response.data);
+    axios.get("/api/v1/categories/PlacesCategories").then((response) => {
+      console.log(response.data);
 
-        setCategories(response.data);
-      });
-    axios
-      .get("http://localhost:5000/api/v1/categories/offerCategories")
-      .then((response) => {
-        if (response.data.length > 0) {
-          setCategoriesOffer(response.data);
-        }
-      });
+      setCategories(response.data);
+    });
+    axios.get("/api/v1/categories/offerCategories").then((response) => {
+      if (response.data.length > 0) {
+        setCategoriesOffer(response.data);
+      }
+    });
     setImages(
       Array.from(Array(10).keys()).map((id) => ({
         id,
@@ -73,18 +69,12 @@ function Home() {
   const changePlaces = (event) => {
     if (event.target.value != "") {
       axios
-        .get(
-          "http://localhost:5000/api/v1/categories/PlacesCategories/" +
-            event.target.value
-        )
+        .get("/api/v1/categories/PlacesCategories/" + event.target.value)
         .then((res) => {
           console.log(res.data.place);
           if (res.data.place.length != 0) {
             axios
-              .patch(
-                "http://localhost:5000/api/v1/categories/update/" +
-                  res.data.place[0]._id
-              )
+              .patch("/api/v1/categories/update/" + res.data.place[0]._id)
               .then((res) => {
                 console.log(res.data);
               });
@@ -97,18 +87,12 @@ function Home() {
   const changeOffer = (event) => {
     if (event.target.value != "") {
       axios
-        .get(
-          "http://localhost:5000/api/v1/categories/offerCategories/" +
-            event.target.value
-        )
+        .get("/api/v1/categories/offerCategories/" + event.target.value)
         .then((res) => {
           console.log(res.data.offer);
           if (res.data.offer.length != 0) {
             axios
-              .patch(
-                "http://localhost:5000/api/v1/categories/updateOffer/" +
-                  res.data.offer[0]._id
-              )
+              .patch("/api/v1/categories/updateOffer/" + res.data.offer[0]._id)
               .then((res) => {
                 console.log(res.data);
               });
@@ -121,10 +105,7 @@ function Home() {
   const SubOffers = (event) => {
     if (event.target.value != "") {
       axios
-        .get(
-          "http://localhost:5000/api/v1/categories/offerCategoriesSub/" +
-            event.target.value
-        )
+        .get("/api/v1/categories/offerCategoriesSub/" + event.target.value)
         .then((res) => {
           console.log(res.data[0].subCategory);
           setCategoriesOfferSub(res.data[0].subCategory);
@@ -137,10 +118,7 @@ function Home() {
   const SubPlaces = (event) => {
     if (event.target.value != "") {
       axios
-        .get(
-          "http://localhost:5000/api/v1/categories/PlaceCategoriesSub/" +
-            event.target.value
-        )
+        .get("/api/v1/categories/PlaceCategoriesSub/" + event.target.value)
         .then((res) => {
           console.log(res.data);
           setCategoriesPlaceSub(res.data[0].subCategory);
@@ -152,7 +130,7 @@ function Home() {
 
   const AllPlaces = (event) => {
     setPlaces("");
-    if (bgColor == "") {
+    if (bgColor === "") {
       setBgColor("contained");
       setBgColorPlaces("");
     }
@@ -167,7 +145,7 @@ function Home() {
 
   const AllOffers = (event) => {
     setOffer("");
-    if (BgColorOffer == "") {
+    if (BgColorOffer === "") {
       setBgColorOffer("contained");
       setBgColorOffers("");
     }

@@ -39,7 +39,7 @@ const Card = ({ card }) => {
 
     console.log(idC);
     axios
-      .delete("http://127.0.0.1:5000/api/v1/post/delete", {
+      .delete("/api/v1/post/delete", {
         data: { id: idC }, // or data: jdId, depending on how you handle it in the back end
         headers: {
           "Content-Type": "Application/json",
@@ -110,11 +110,7 @@ const Card = ({ card }) => {
             </Menu>
           </div>
 
-          <img
-            className="img"
-            src={"http://localhost:5000" + card.link}
-            Alt="post"
-          />
+          <img className="img" src={`/${card.link}`} Alt="post" />
           <div className="description">{card.text}</div>
         </div>
       )}
@@ -144,7 +140,7 @@ const Repost = ({ handleClose, id, text, picture }) => {
 
     console.log("id", id);
     axios
-      .patch(`http://127.0.0.1:5000/api/v1/post/update/${id}`, params, {
+      .patch(`/api/v1/post/update/${id}`, params, {
         headers: {
           "Content-Type": "multipart/form-data",
 
