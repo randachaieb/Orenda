@@ -15,12 +15,15 @@ const post_group = require("../routes/api/post_group");
 
 module.exports = (app) => {
   app.use("/static", express.static(path.join(__dirname, "..", "public")));
-  app.use("/", express.static(path.join(__dirname, "..", "frontend")));
+  app.use(
+    "/",
+    express.static(path.join(__dirname, "..", "frontend", "client"))
+  );
   app.use(cors());
   app.use(error);
   app.use(express.json());
   //app.use(fileUploader()); // File uploader middleware
-  app.use(helmet());
+  // app.use(helmet());
   app.use(morgan("tiny"));
   app.use("/api/v1/user", user);
   app.use("/api/v1/card", card);
