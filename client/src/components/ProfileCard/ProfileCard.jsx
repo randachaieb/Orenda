@@ -110,7 +110,7 @@ const Card = ({ card }) => {
             </Menu>
           </div>
 
-          <img className="img" src={`/${card.link}`} Alt="post" />
+          <img className="img" src={`${card.link}`} Alt="post" />
           <div className="description">{card.text}</div>
         </div>
       )}

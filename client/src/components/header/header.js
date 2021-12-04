@@ -73,7 +73,7 @@ function Header() {
               </NavLink>
               <span className="imageAvatarTop">
                 <img
-                  src={`/${authContext.user.picture}`}
+                  src={`${authContext.user.picture}`}
                   className="avatar-user2"
                   to="/"
                   onClick={() => logout()}
