@@ -4,12 +4,12 @@
   "private": true,
   "secure": false,
   "dependencies": {
-    "3d-react-carousal": "^4.0.1",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "3d-react-carousal": "^4.0.1",
     "axios": "^0.21.4",
     "bootstrap": "5.0.2",
     "bootstrap-icons": "^1.5.0",
