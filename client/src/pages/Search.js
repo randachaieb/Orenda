@@ -59,9 +59,9 @@ const Search = (props) => {
           <br></br>
           <br></br>
         </div>
-        <div className="row">
+        <div className="row rowProfileCards">
           {searchedResults.map((searchedResult) => (
-            <div className="col-lg-4">
+            <div className="itemCardProfile col-lg-4">
               <div className="text-center card-box">
                 <div className="member-card pb-2">
                   <img className="card-img-profile-top" src={cardBackground} />
