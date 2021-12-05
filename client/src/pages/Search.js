@@ -61,7 +61,7 @@ const Search = (props) => {
         </div>
         <div className="row rowProfileCards">
           {searchedResults.map((searchedResult) => (
-            <div className="itemCardProfile col-lg-4">
+            <div className="col-lg-4 itemCardProfile">
               <div className="text-center card-box">
                 <div className="member-card pb-2">
                   <img className="card-img-profile-top" src={cardBackground} />

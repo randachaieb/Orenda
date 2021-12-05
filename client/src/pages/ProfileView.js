@@ -77,7 +77,7 @@ function ProfileView({ data, newObject }) {
     <div className="containerProfile">
       {authContext.user.cover ? (
         <div class="cover" style={{ background: "no-repeat" }}>
-          <img src={"" + authContext.user.cover} alt="profile-picture" />
+          <img src={authContext.user.cover} alt="profile-picture" />
           <button
             class="glyphicon glyphicon-edit edit_cover_btn"
             onClick={handleShowUp}
@@ -92,7 +92,7 @@ function ProfileView({ data, newObject }) {
       <div className="column is-12 has-text-centered">
         <img
           className="profile-picture"
-          src={"" + authContext.user.picture}
+          src={authContext.user.picture}
           alt="profile-picture"
         />
         {/* Profile Name */}
