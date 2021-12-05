@@ -37,7 +37,7 @@ class Cards extends React.Component {
       };
 
       showModalEdit  = (event) => {
-          axios.get('http://localhost:5000/api/v1/card/' + event)
+          axios.get('/api/v1/card/' + event)
               .then(response => {
                   this.setState({
                     id:event,
@@ -62,7 +62,7 @@ class Cards extends React.Component {
        this.setState({isModalVisiblEdit:false})
       };
       showModalDelete  = (event) => {
-          axios.get('http://localhost:5000/api/v1/card/' + event)
+          axios.get('/api/v1/card/' + event)
               .then(response => {
                   this.setState({
                     id:event,
@@ -88,7 +88,7 @@ class Cards extends React.Component {
         })
       }
      handleOkDelete  = (event) => {
-      axios.delete("http://localhost:5000/api/v1/card/delete/",
+      axios.delete("/api/v1/card/delete/",
       {
  data: {"id": event }, 
  headers: {
@@ -116,7 +116,7 @@ class Cards extends React.Component {
         setInterval(this.getData, 1000); // runs every 1 second.
     }
     getData = () => {
-      axios.get('http://localhost:5000/api/v1/card/all/')
+      axios.get('/api/v1/card/all/')
           .then(response => {
               if (response.data.length > 0) {
                   this.setState({
@@ -220,7 +220,7 @@ class Cards extends React.Component {
                                       cover={
                                         <img
                                           alt="example"
-                                          src={"http://localhost:5000" +card.picture}
+                                          src={"/" +card.picture}
                                           style={{"height" : "300px", "width" : "300px"}}
                                         />
                                       }

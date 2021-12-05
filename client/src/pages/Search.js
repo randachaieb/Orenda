@@ -13,7 +13,7 @@ const Search = (props) => {
   const [searchedResults, setSearchedResult] = React.useState([]);
   React.useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/v1/user/search?q=${context.search}`, {
+      .get(`/api/v1/user/search?q=${context.search}`, {
         headers: {
           "Content-Type": "multipart/form-data;",
           "x-auth-token": localStorage.getItem("token"),
@@ -27,7 +27,7 @@ const Search = (props) => {
   const handleFollow = async (profileId) => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/user/follow/${profileId}`,
+        `/api/v1/user/follow/${profileId}`,
         null,
         {
           headers: {
@@ -67,7 +67,7 @@ const Search = (props) => {
                   <img className="card-img-profile-top" src={cardBackground} />
                   <div className="avatarCardSearch thumb-lg member-thumb mx-auto">
                     <img
-                      src={`http://localhost:5000${searchedResult.picture}`}
+                      src={`${searchedResult.picture}`}
                       className="rounded-circle img-thumbnail"
                       alt="profile-image"
                     />
