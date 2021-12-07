@@ -65,14 +65,16 @@ const validateCard = (card) => {
     name: Joi.string().min(5).max(50).required(),
     description: Joi.string().required(),
     region: Joi.string().min(3).max(50).required(),
-    categories: Joi.array().items(Joi.string().required()).required().min(1),
-    user: Joi.string().min(5).max(255).required(),
+    place: Joi.string().allow(null),
+    offer: Joi.array().items(Joi.string().allow(null)),
+    profile: Joi.string().allow(null),
+    website: Joi.string().required(),
     keywords: Joi.array()
       .items(Joi.string().required())
       .max(5)
       .min(1)
-      .required(),
-    website: Joi.string(),
+      .allow(null),
+    user: Joi.string().min(5).max(255).required(),
   };
   return Joi.validate(card, schema);
 };
