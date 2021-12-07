@@ -50,7 +50,7 @@ router.post("/", auth, uploadPost.single("link"), async (req, res) => {
   }
 
   if (req.file) {
-    const fileName = req.file.filename;
+    var fileName = req.file.filename;
     const post_type = fileType(req.file);
     newPost = {
       ...newPost,

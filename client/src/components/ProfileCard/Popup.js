@@ -27,7 +27,6 @@ const Popup = ({ handleClose, SubmitPost }) => {
       .post("/api/v1/post", params, {
         headers: {
           "Content-Type": "multipart/form-data",
-
           "x-auth-token": localStorage.getItem("token"),
         },
       })
