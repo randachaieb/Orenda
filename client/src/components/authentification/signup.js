@@ -3,6 +3,9 @@ import { useHistory } from "react-router";
 import axios from "axios";
 import avatar from "../../assets/avatar.png";
 import "./auth.css";
+import connecting from "../../assets/connecting.jpg";
+import exploring from "../../assets/exploring.jpg";
+import deals from "../../assets/deals.jpg";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -38,19 +41,51 @@ const Signup = () => {
 
   return (
     <div className="items">
+      <div className="centered">
+        <section className="cardsCreator">
+          <article className="cardAuthor">
+            <a href="#">
+              <picture className="thumbnail">
+                <img src={deals}
+                     className="imageCreator"
+                     alt="deals" />
+              </picture>
+              <div className="card-content">
+                <h3>Announcement & Deals</h3>
+                <p>Find or post  places and offers.</p>
+              </div>
+            </a>
+          </article>
+          <article className="cardAuthor">
+            <a href="#">
+              <picture className="thumbnail">
+                <img src={connecting}
+                     className="imageCreator"
+                     alt="connecting"/>
+              </picture>
+              <div className="card-content">
+                <h3>Communication</h3>
+                <p>Being exposed to a huge network of creative People.</p>
+              </div>
+            </a>
+          </article>
+          <article className="cardAuthor">
+            <a href="#">
+              <picture className="thumbnail">
+                <img src={exploring}
+                     className="imageCreator"
+                     alt="exploring"/>
+              </picture>
+              <div className="card-content">
+                <h3>Discovery</h3>
+                <p>Have fun wihle exploring New places, offers and people.</p>
+              </div>
+            </a>
+          </article>
+        </section>
+      </div>
       <div className="card-signup">
         <div className="card-content">
-          <div className="avt">
-            <div className="av-align">
-              <img
-                src={avatar}
-                className="avatar"
-                alt="Login"
-                width={110}
-                height={110}
-              />
-            </div>
-          </div>
           <div className="mrg">
             <label className="center">Create an account</label>
           </div>

@@ -1,9 +1,59 @@
 .items {
     background-color: var(--main-bg);
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     min-height: 100vh;
+    margin-right: 100px;
+}
+.sloganText {
+    margin-right: 150px;
+}
+.leftSideInfo {
+    position: absolute;
+    justify-content: left;
+    align-items: center;
+    width: 400px;
+    left: 0;
+}
+.typing-demo {
+    width: 37ch;
+    animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: monospace;
+    font-size: 2em;
+}
+@keyframes typing {
+    from {
+        width: 0
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent
+    }
+}
+.paragraphTarget {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #21242c;
+    display: block;
+    font-family: Lato, 'Noto Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    margin: 36px 0 32px 0;
+    letter-spacing: -0.1px;
+    width: 600px;
+}
+.textTarget {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: keep-all;
 }
 
 .card-content {
@@ -14,7 +64,6 @@
 }
 
 .card-signin {
-    margin-top: 70px;
     position: relative;
     background-color: var(--card-bg);
     display: flex;
@@ -40,7 +89,7 @@
     justify-content: center;
     align-items: center;
     height: 600px;
-    width: 800px;
+    width: 550px;
     box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
     padding: 24px 32px 32px;
     border-radius: 8px;
@@ -48,7 +97,7 @@
 
 .inputs {
     margin: 10px;
-    margin-left: 25%;
+    margin-left: 17%;
 }
 
 .space-between {
@@ -181,6 +230,61 @@ label {
 
 .btn-login:hover {
     background-color: #be781d;
+}
+
+.imageCreator {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    cursor: default;
+}
+
+.imageCreatorCto {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    cursor: default;
+    border: 1px solid #e5ecf3;
+}
+
+
+.cardsCreator {
+    background: white;
+    margin-bottom: 2em;
+}
+
+.cardAuthor a {
+    color: black;
+    text-decoration: none;
+}
+
+.card-content {
+    padding: 1.4em;
+}
+
+.card-content h2 {
+    margin-top: 0;
+    margin-bottom: .5em;
+    font-weight: bold;
+}
+
+.card-content p {
+    font-size: 80%;
+}
+
+/* Flexbox stuff */
+
+.cardsCreator {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 50vw;
+    left: 0;
+    margin-right: 30px;
+}
+
+.cardAuthor {
+    flex: 0 1 24%;
 }
 
 @media only screen and (max-width: 820px) {
