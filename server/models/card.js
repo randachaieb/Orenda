@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const cardSchema = new mongoose.Schema({
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
   name: {
     type: String,
     required: true,
@@ -31,25 +35,11 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  keywords: {
-    type: [String],
-    require: true,
-    // validate: {
-    //   validator: (v) => {
-    //     return v.length <= 5;
-    //   },
-    //   message: (props) => `keywords must contain less than or equal to 5 items`,
-    // },
-  },
   picture: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 1024,
-  },
-  keywords: {
-    type: [String],
-    required: false,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -69,11 +59,6 @@ const validateCard = (card) => {
     offer: Joi.array().items(Joi.string().allow(null)),
     profile: Joi.string().allow(null),
     website: Joi.string().required(),
-    keywords: Joi.array()
-      .items(Joi.string().required())
-      .max(5)
-      .min(1)
-      .allow(null),
     user: Joi.string().min(5).max(255).required(),
   };
   return Joi.validate(card, schema);

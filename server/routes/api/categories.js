@@ -23,10 +23,9 @@ router.delete("/delete", async (req, res) => {
 
   if (PlacesCategoryy === null)
     return res.status(400).json({ message: "PlacesCategory not exists" });
-    res.json({
-      message: "PlacesCategory deleted",
-    });
-  
+  res.json({
+    message: "PlacesCategory deleted",
+  });
 });
 // @route   DELETE api/v1/categories
 // @desc    delete a single categories offer
@@ -37,10 +36,9 @@ router.delete("/deleteOffer", async (req, res) => {
 
   if (OffersCategoryy === null)
     return res.status(400).json({ message: "OffersCategory not exists" });
-    res.json({
-      message: "OffersCategory deleted",
-    });
-  
+  res.json({
+    message: "OffersCategory deleted",
+  });
 });
 
 // @route   POST api/v1/categories
@@ -83,7 +81,9 @@ router.post("/places/:category_id/subCategory", async (req, res) => {
 // @access  public
 router.get("/PlacesCategories", async (req, res) => {
   var mysort = { count: -1 };
-  const OfferCategories = await PlacesCategory.find().populate("subCategory").sort(mysort);
+  const OfferCategories = await PlacesCategory.find()
+    .populate("subCategory")
+    .sort(mysort);
   res.json(OfferCategories);
 });
 
@@ -123,81 +123,85 @@ router.post("/offers/:category_id/subCategory", async (req, res) => {
   return res.json(OfferCategory);
 });
 // Update place
-router.patch('/updatePlace/:id',
-  async (req, res) => {
-    const { id } = req.params;
-    const place = await PlacesCategory.findById(id);
-    if (place.deleted) return res.json({ message: "place not found" });
+router.patch("/updatePlace/:id", async (req, res) => {
+  const { id } = req.params;
+  const place = await PlacesCategory.findById(id);
+  if (place.deleted) return res.json({ message: "place not found" });
 
-    let update_values = { name:req.body.name};
+  let update_values = { name: req.body.name };
 
-    const updatedplace = await PlacesCategory.findByIdAndUpdate(id, update_values);
-    res.json({ message: "place updated", success: true });
-  }
-);
+  const updatedplace = await PlacesCategory.findByIdAndUpdate(
+    id,
+    update_values
+  );
+  res.json({ message: "place updated", success: true });
+});
 // @route   PATCH api/v1/categories
 // @desc    udate offer
 // @access  Admin
-router.patch('/updateOffer/:id',
-async (req, res) => {
+router.patch("/updateOffer/:id", async (req, res) => {
   const { id } = req.params;
   const offer = await OffersCategory.findById(id);
   if (offer.deleted) return res.json({ message: "offer not found" });
 
-  let update_values = { name:req.body.name};
+  let update_values = { name: req.body.name };
 
-  const updatedoffer = await OffersCategory.findByIdAndUpdate(id, update_values);
+  const updatedoffer = await OffersCategory.findByIdAndUpdate(
+    id,
+    update_values
+  );
   res.json({ message: "offer updated", success: true });
-}
-);
+});
 // Update place count
-router.patch('/update/:id',
-  async (req, res) => {
-    const { id } = req.params;
-    const place = await PlacesCategory.findById(id);
-    if (place.deleted) return res.json({ message: "place not found" });
+router.patch("/update/:id", async (req, res) => {
+  const { id } = req.params;
+  const place = await PlacesCategory.findById(id);
+  if (place.deleted) return res.json({ message: "place not found" });
 
-    let update_values = { count:place.count+1};
+  let update_values = { count: place.count + 1 };
 
-    const updatedplace = await PlacesCategory.findByIdAndUpdate(id, update_values);
-    res.json({ message: "place updated", success: true });
-  }
-);
-//find  place by id 
+  const updatedplace = await PlacesCategory.findByIdAndUpdate(
+    id,
+    update_values
+  );
+  res.json({ message: "place updated", success: true });
+});
+//find  place by id
 router.get("/PlacesCategoriesid/:id", async (req, res) => {
   const { id } = req.params;
   const place = await PlacesCategory.findById(id); //.populate("user");
   res.json({ place });
 });
-//find  place by name 
+//find  place by name
 router.get("/PlacesCategories/:id", async (req, res) => {
   const { id } = req.params;
-  const place = await PlacesCategory.find({name:id}); //.populate("user");
+  const place = await PlacesCategory.find({ name: id }); //.populate("user");
   res.json({ place });
 });
 // Update offer
-router.patch('/updateOffer/:id',
-  async (req, res) => {
-    const { id } = req.params;
-    const offer = await OffersCategory.findById(id);
-    if (offer.deleted) return res.json({ message: "offer not found" });
+router.patch("/updateOffer/:id", async (req, res) => {
+  const { id } = req.params;
+  const offer = await OffersCategory.findById(id);
+  if (offer.deleted) return res.json({ message: "offer not found" });
 
-    let update_values = { count:offer.count+1};
+  let update_values = { count: offer.count + 1 };
 
-    const updatedoffer = await OffersCategory.findByIdAndUpdate(id, update_values);
-    res.json({ message: "offer updated", success: true });
-  }
-);
-//find  offer by id 
+  const updatedoffer = await OffersCategory.findByIdAndUpdate(
+    id,
+    update_values
+  );
+  res.json({ message: "offer updated", success: true });
+});
+//find  offer by id
 router.get("/offerCategoriesid/:id", async (req, res) => {
   const { id } = req.params;
-  const offer = await OffersCategory.findById(id); 
+  const offer = await OffersCategory.findById(id);
   res.json({ offer });
 });
-//find  offer by name 
+//find  offer by name
 router.get("/offerCategories/:id", async (req, res) => {
   const { id } = req.params;
-  const offer = await OffersCategory.find({name:id}); 
+  const offer = await OffersCategory.find({ name: id });
   res.json({ offer });
 });
 // @route   GET api/v1/categories
@@ -205,15 +209,17 @@ router.get("/offerCategories/:id", async (req, res) => {
 // @access  public
 router.get("/offerCategories", async (req, res) => {
   var mysort = { count: -1 };
-  const offerCategories = await OffersCategory.find().populate("subCategory").sort(mysort);
+  const offerCategories = await OffersCategory.find()
+    .populate("subCategory")
+    .sort(mysort);
   res.json(offerCategories);
 });
 // @route   GET api/v1/categories
-// @desc    Get all offers category
+// @desc    Get offers category by _id
 // @access  public
 router.get("/offerCategoriesSub/:_id", async (req, res) => {
   const { _id } = req.params;
-  const offerCategories = await OffersCategory.find({name:_id}).populate(
+  const offerCategories = await OffersCategory.find({ name: _id }).populate(
     "subCategory"
   );
   if (!offerCategories)
@@ -222,21 +228,23 @@ router.get("/offerCategoriesSub/:_id", async (req, res) => {
   res.json(offerCategories);
 });
 // @route   GET api/v1/categories
-// @desc    Get all places category
+// @desc    Get places category by _id
 // @access  public
 router.get("/PlaceCategoriesSub/:_id", async (req, res) => {
   const { _id } = req.params;
-  const placesCategory = await PlacesCategory.find({name:_id}).populate(
+  const placesCategory = await PlacesCategory.find({ name: _id }).populate(
     "subCategory"
   );
   if (!placesCategory)
     return res.status(404).json({ message: "no such category" });
   res.json(placesCategory);
 });
-router.get("/", auth, async (req, res) => {
-  let user = await User.findById(req.user._id);
-  user.isAdmin = true;
-  user = await user.save();
-  res.json(user);
-});
+
+// router.get("/", auth, async (req, res) => {
+//   let user = await User.findById(req.user._id);
+//   user.isAdmin = true;
+//   user = await user.save();
+//   res.json(user);
+// });
+
 module.exports = router;

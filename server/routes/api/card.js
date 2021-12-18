@@ -16,6 +16,7 @@ const {
 const getCardsPages = async (query = {}, page = 0, perPage = 20) => {
   return await Card.find(query)
     .populate({ path: "user", select: "name picture username" })
+    .sort({ created_at: -1 })
     .limit(perPage)
     .skip(perPage * page);
 };
@@ -146,11 +147,11 @@ router.get("/search", async (req, res) => {
 });
 
 // @route   GET api/v1/card
-// @desc    Get user card
+// @desc    Get all cards
 // @access  public
 router.get("/all", async (req, res) => {
   const page = parseInt(req.query.page) || 0;
-  const all_cards = await getCardsPages({}, page);
+  const all_cards = await getCardsPages({}, page, 2);
   res.json(all_cards);
 });
 
@@ -196,7 +197,6 @@ const validate_update = (req) => {
     offer: Joi.array().items(Joi.string().allow(null)),
     profile: Joi.string().allow(null),
     website: Joi.string(),
-    keywords: Joi.array().items(Joi.string().required()),
   };
   return Joi.validate(req, schema);
 };
