@@ -151,7 +151,7 @@ router.get("/search", async (req, res) => {
 // @access  public
 router.get("/all", async (req, res) => {
   const page = parseInt(req.query.page) || 0;
-  const all_cards = await getCardsPages({}, page, 2);
+  const all_cards = await getCardsPages({}, page);
   res.json(all_cards);
 });
 

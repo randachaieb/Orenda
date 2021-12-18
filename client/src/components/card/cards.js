@@ -44,7 +44,7 @@ export default function Cards(props) {
       .then((res) => {
         setLoading(true);
         console.log(res.data);
-        const data = res.data.reverse();
+        const data = res.data;
         setCard(data);
       })
       .catch((err) => err.message);
