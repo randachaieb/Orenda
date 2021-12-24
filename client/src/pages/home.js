@@ -5,7 +5,7 @@ import PopupForm from "../components/filter-box/filter";
 //import Sidebar from "../components/sidebar/sidebar";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import Carsouel from "../components/carsouel/carsouel";
+// import Carsouel from "../components/carsouel/carsouel";
 import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -158,7 +158,7 @@ function Home() {
   };
   return (
     <div>
-      <Carsouel />
+      {/* <Carsouel /> */}
 
       <div className="content-home">
         {/* <Sidebar/> */}
@@ -221,7 +221,7 @@ function Home() {
               </div>
               <button className=" btn-pry" onClick={handleShow}>
                 {" "}
-                Add Card{" "}
+                Add Place / Offer{" "}
               </button>
 
               {show ? <PopupForm handleClose={handleClose} /> : null}

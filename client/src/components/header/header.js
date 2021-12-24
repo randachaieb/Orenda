@@ -35,7 +35,9 @@ function Header() {
           <>
             <div className="search-b">
               <a href="/">
-                <h1 className="navbar-brand mb-0 h1 orendaRedirection">ORENDA</h1>
+                <h1 className="navbar-brand mb-0 h1 orendaRedirection">
+                  ORENDA
+                </h1>
               </a>
             </div>
             <div className="search-nav">
@@ -50,7 +52,7 @@ function Header() {
                 id="nav1"
                 onClick={(e) => addActiveClass(e)}
               >
-                Cards
+                Places&Offers
               </NavLink>
 
               <NavLink
