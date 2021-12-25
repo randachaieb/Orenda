@@ -66,7 +66,7 @@ class Categories extends React.Component {
         this.setState({isModalVisibleSubCategory:true})
       };
       showModalDelete  = (event) => {
-        axios.get('/api/v1/categories/PlacesCategoriesid/' + event)
+        axios.get('http://localhost:5000/api/v1/categories/PlacesCategoriesid/' + event)
             .then(response => {
               console.log(response.data);
                 this.setState({
@@ -83,7 +83,7 @@ class Categories extends React.Component {
      
     };
     handleOkDelete  = (event) => {
-      axios.delete("/api/v1/categories/delete",
+      axios.delete("http://localhost:5000/api/v1/categories/delete",
       {
  data: {"id": event }
 })
@@ -100,7 +100,7 @@ class Categories extends React.Component {
        this.setState({isModalVisiblDelete:false})
       };
       showModalEdit  = (event) => {
-        axios.get('/api/v1/categories/PlacesCategoriesid/' + event)
+        axios.get('http://localhost:5000/api/v1/categories/PlacesCategoriesid/' + event)
         .then(response => {
           console.log(response.data);
             this.setState({
@@ -120,7 +120,7 @@ class Categories extends React.Component {
       name: this.state.namee
     }
   
-    axios.patch('/api/v1/categories/updatePlace/'+event,formData)
+    axios.patch('http://localhost:5000/api/v1/categories/updatePlace/'+event,formData)
         .then(res => {
             console.log(res.data)
       
@@ -181,7 +181,7 @@ class Categories extends React.Component {
       count: 0
     }
 
-    axios.post('/api/v1/categories/placeCategory',formData)
+    axios.post('http://localhost:5000/api/v1/categories/placeCategory',formData)
         .then(res => {
             console.log(res.data)
       
@@ -194,7 +194,7 @@ formSubmitSub(event) {
     name: this.state.itemsub
   }
 
-  axios.post('/api/v1/categories/places/'+this.state.category+'/subCategory',formData)
+  axios.post('http://localhost:5000/api/v1/categories/places/'+this.state.category+'/subCategory',formData)
       .then(res => {
           console.log(res.data)
     
@@ -209,7 +209,7 @@ componentDidMount() {
   setInterval(this.getData, 1000); // runs every 1 second.
 }
 getData = () => {
-axios.get('/api/v1/categories/PlacesCategories')
+axios.get('http://localhost:5000/api/v1/categories/PlacesCategories')
     .then(response => {
         if (response.data.length > 0) {
             this.setState({

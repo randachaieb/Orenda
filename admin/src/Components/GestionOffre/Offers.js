@@ -94,7 +94,7 @@ class Offers extends React.Component {
       };
     
       showModalDelete  = (event) => {
-        axios.get('/api/v1/categories/offerCategoriesid/' + event)
+        axios.get('http://localhost:5000/api/v1/categories/offerCategoriesid/' + event)
             .then(response => {
               console.log(response.data);
                 this.setState({
@@ -111,7 +111,7 @@ class Offers extends React.Component {
      
     };
     handleOkDelete  = (event) => {
-      axios.delete("/api/v1/categories/deleteOffer",
+      axios.delete("http://localhost:5000/api/v1/categories/deleteOffer",
       {
  data: {"id": event }
 })
@@ -128,7 +128,7 @@ class Offers extends React.Component {
        this.setState({isModalVisiblDelete:false})
       };
       showModalEdit  = (event) => {
-        axios.get('/api/v1/categories/offerCategoriesid/' + event)
+        axios.get('http://localhost:5000/api/v1/categories/offerCategoriesid/' + event)
         .then(response => {
           console.log(response.data);
             this.setState({
@@ -148,7 +148,7 @@ class Offers extends React.Component {
       name: this.state.namee
     }
   
-    axios.patch('/api/v1/categories/updateOffer/'+event,formData)
+    axios.patch('http://localhost:5000/api/v1/categories/updateOffer/'+event,formData)
         .then(res => {
             console.log(res.data)
       
@@ -176,7 +176,7 @@ class Offers extends React.Component {
       count: 0
     }
 
-    axios.post('/api/v1/categories/OfferCategory',formData)
+    axios.post('http://localhost:5000/api/v1/categories/OfferCategory',formData)
         .then(res => {
             console.log(res.data)
       
@@ -194,7 +194,7 @@ class Offers extends React.Component {
       name: this.state.itemsub
     }
   
-    axios.post('/api/v1/categories/offers/'+this.state.category+'/subCategory',formData)
+    axios.post('http://localhost:5000/api/v1/categories/offers/'+this.state.category+'/subCategory',formData)
         .then(res => {
             console.log(res.data)
       
@@ -209,7 +209,7 @@ class Offers extends React.Component {
     setInterval(this.getData, 1000); // runs every 1 second.
   }
   getData = () => {
-  axios.get('/api/v1/categories/offerCategories')
+  axios.get('http://localhost:5000/api/v1/categories/offerCategories')
       .then(response => {
           if (response.data.length > 0) {
               this.setState({
