@@ -82,12 +82,13 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <div className="select-box">
             <select onChange={(e) => setCategoriesP(e.target.value)}>
               <option>Places By Category</option>
-              <option value="Training center">Training Center</option>
-              <option value="School">School</option>
-              <option value="Coworking Space">Coworking Space</option>
-              <option value="Club">Club</option>
-              <option value="Incubator">Incubator</option>
-              <option value="Camping">Camping</option>
+              <option value="Training centers">Training Centers</option>
+              <option value="Schools">Schools</option>
+              <option value="Incubators">Incubators</option>
+              <option value="Coworking Spaces">Coworking Spaces</option>
+              <option value="Campings">Campings</option>
+              <option value="Clubs">Clubs</option>
+              
             </select>
             <select
               id="browsers3"
@@ -95,9 +96,11 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
               onChange={(e) => setCategoriesO([...categoriesO, e.target.value])}
             >
               <option>Offers By Category</option>
-              <option value="Scholarships">Scholarships</option>
               <option value="Job offers">Job offers</option>
+              <option value="Internships">Internships</option>
+              <option value="Scholarships">Scholarships</option>
               <option value="Competitions">Competitions</option>
+              <option value="Discounts">Discounts</option>
               <option value="Events">Events</option>
             </select>
 
