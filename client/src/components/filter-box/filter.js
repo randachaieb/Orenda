@@ -82,7 +82,7 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <div className="select-box">
             <select onChange={(e) => setCategoriesP(e.target.value)}>
               <option>Places By Category</option>
-              <option value="Training centers">Training Centers</option>
+              <option value="Training Centers">Training Centers</option>
               <option value="Schools">Schools</option>
               <option value="Incubators">Incubators</option>
               <option value="Coworking Spaces">Coworking Spaces</option>
@@ -96,12 +96,16 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
               onChange={(e) => setCategoriesO([...categoriesO, e.target.value])}
             >
               <option>Offers By Category</option>
-              <option value="Job offers">Job offers</option>
+              <option value="Exchange Programs">Exchange Programs</option>
+              <option value="Job Offers">Job Offers</option>
               <option value="Internships">Internships</option>
               <option value="Scholarships">Scholarships</option>
               <option value="Competitions">Competitions</option>
               <option value="Discounts">Discounts</option>
               <option value="Events">Events</option>
+              <option value="Hackathons">Hackathons</option>
+
+
             </select>
 
             <select onChange={(e) => setRegion(e.target.value)}>
