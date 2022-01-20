@@ -82,6 +82,7 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <div className="select-box">
             <select onChange={(e) => setCategoriesP(e.target.value)}>
               <option>Places By Category</option>
+              <option value="Accelerators">Accelerators</option>
               <option value="Training Centers">Training Centers</option>
               <option value="Schools">Schools</option>
               <option value="Incubators">Incubators</option>
