@@ -13,14 +13,42 @@ const {
   uploadImage,
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
+const { Types } = require("mongoose");
+const { _invalids } = require("joi/lib/types/lazy");
 
 // @route   GET api/v1/user/me
 // @desc    user info
 // @access  private
 router.get("/me", auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const users = await User.aggregate([
+    { $match: { _id: Types.ObjectId(req.user._id) } },
+    {
+      $project: {
+        name: 1,
+        picture: 1,
+        email: 1,
+        username: 1,
+        bio: 1,
+        region: 1,
+        address: 1,
+        followers: {
+          $size: {
+            $cond: [{ $isArray: "$followers" }, "$followers", []],
+          },
+        },
+        following: {
+          $size: {
+            $cond: [{ $isArray: "$following" }, "$following", []],
+          },
+        },
+      },
+    },
+  ]);
+
+  if (!users[0]) return res.status(404).json({ message: "no user found" });
+
   res.json(
-    _.pick(user, [
+    _.pick(users[0], [
       "_id",
       "name",
       "username",
@@ -29,6 +57,8 @@ router.get("/me", auth, async (req, res) => {
       "region",
       "address",
       "picture",
+      "followers",
+      "following",
     ])
   );
 });
@@ -81,14 +111,14 @@ router.post("/", async (req, res) => {
 // @desc    Search for cards
 // @access  public
 router.get("/search", async (req, res) => {
-    const { q } = req.query;
-    if (!q) return res.status(400).json({ message: "no query" });
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ message: "no query" });
 
-    const searchResualt = await User.find({
-        name: { $regex: `(?:${q.split(' ').join('|')})`, $options: 'i' }
-    });
+  const searchResualt = await User.find({
+    name: { $regex: `(?:${q.split(" ").join("|")})`, $options: "i" },
+  });
 
-    res.status(200).json(searchResualt);
+  res.status(200).json(searchResualt);
 });
 
 // @route   GET api/v1/user/update
@@ -134,6 +164,84 @@ router.patch(
   }
 );
 
+router.get("/olla", async (req, res) => {
+  // const user = await User.findOne({ email: "test24@gmail.com" });
+  const user = await User.find();
+  res.json({ user });
+});
+
+// @route   GET api/v1/user
+// @desc   follow a user
+// @access  private
+router.post("/follow", auth, async (req, res) => {
+  const { user } = req;
+  const { _id } = req.body;
+  const loggedUser = await User.findById(user._id);
+  if (!loggedUser.following.includes(_id) && _id !== user._id) {
+    loggedUser.following.push(_id);
+    await loggedUser.save();
+    await User.updateOne({ _id }, { $push: { followers: user._id } });
+    return res.status(201).end();
+  } else
+    return res
+      .status(400)
+      .json({ message: "You are already following this user" });
+});
+
+// @route   GET api/v1/user
+// @desc   unfollow a user
+// @access  private
+router.post("/unfollow", auth, async (req, res) => {
+  const { user } = req;
+  const { _id } = req.body;
+
+  const followingsRemoved = await User.updateOne(
+    { _id: user._id },
+    { $pull: { following: _id } }
+  );
+  if (followingsRemoved === 0)
+    return res.status(400).json({
+      message: "This user isn't in your followers",
+    });
+  await User.updateOne({ _id }, { $pull: { followers: user._id } });
+  return res.status(200).end();
+});
+
+// @route   GET api/v1/user
+// @desc    get user profile by id
+// @access  private
+router.get("/profile/:_id", async (req, res) => {
+  const { _id } = req.params;
+
+  const users = await User.aggregate([
+    { $match: { _id: Types.ObjectId(_id) } },
+    {
+      $project: {
+        name: 1,
+        picture: 1,
+        email: 1,
+        username: 1,
+        bio: 1,
+        region: 1,
+        address: 1,
+        followers: {
+          $size: {
+            $cond: [{ $isArray: "$followers" }, "$followers", []],
+          },
+        },
+        following: {
+          $size: {
+            $cond: [{ $isArray: "$following" }, "$following", []],
+          },
+        },
+      },
+    },
+  ]);
+
+  if (!users[0]) return res.status(404).json({ message: "no user found" });
+
+  return res.json(users[0]);
+});
 const validateUser = (user) => {
   const schema = {
     name: Joi.string().min(5).max(50),
