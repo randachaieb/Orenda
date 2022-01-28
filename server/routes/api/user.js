@@ -164,12 +164,6 @@ router.patch(
   }
 );
 
-router.get("/olla", async (req, res) => {
-  // const user = await User.findOne({ email: "test24@gmail.com" });
-  const user = await User.find();
-  res.json({ user });
-});
-
 // @route   GET api/v1/user
 // @desc   follow a user
 // @access  private
