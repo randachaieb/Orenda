@@ -59,7 +59,7 @@ export default function Card(props) {
 
   return (
     <div className="card" style={{ margin: "20px" }}>
-      {authContext.user._id === props.id ? (
+      {authContext.user._id === props.user._id ? (
         <div className="cards-dots">
           <IconButton
             aria-label="more"
@@ -97,7 +97,8 @@ export default function Card(props) {
             </MenuItem>
           </Menu>
         </div>
-      ) : null}
+       ) 
+        : null}
       {show ? (
         <PopupForm
           handleClose={handleClose}
@@ -114,8 +115,10 @@ export default function Card(props) {
       <img src={"" + props.picture} className="card-img-top" alt="..."></img>
       <div className="user-name" onClick={(e) => goToProfile(e, props.id)}>
         <div className="content-user">
-          <img src={"" + props.picture} className="avatar-user"></img>
-          <span className="name">{props.name}</span>
+          <img src={"http://localhost:5000" + props.user.picture} className="avatar-user"></img>
+          {/* to be revisited this is where the name repeat */}
+          <span className="name">{props.user.name}</span> 
+          {console.log("props: ", props)}
         </div>
       </div>
       <div className="card-body">

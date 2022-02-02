@@ -39,13 +39,13 @@ function Profile({ data, newObject }) {
   const handleShowProfile = () => setShowPro(true);
   const handleCloseProfile = () => setShowPro(false);
 
-  const [card, setCard] = useState([]);
+  // const [card, setCard] = useState([]);
   const [user, setUser] = useState();
-  const { username } = useParams();
-  console.log(username);
+  const { id } = useParams();
+  
   useEffect(async () => {
     axios
-      .get(`/api/v1/user/profile/${username}`, {
+      .get(`/api/v1/user/profile/${id}`, {
         headers: {
           "x-auth-token": localStorage.getItem("token"),
         },
@@ -55,7 +55,8 @@ function Profile({ data, newObject }) {
         console.log(res.data);
 
         setUser(res.data);
-        setCard(res.data.posts);
+        console.log('swsws', res.data)
+        // setCard(res.data.posts);
       })
       .catch((err) => err.message);
   }, []);
@@ -79,12 +80,14 @@ function Profile({ data, newObject }) {
     <div className="container">
       {/* Photo Couverture */}
 
+      {console.log('user :',user)}
+
       {user ? (
         <>
-          {user.profile.cover ? (
+          {user.picture ? (
             <img
               className="photo_couverture"
-              src={`${user.profile.cover}`}
+              src={`${user.picture}`}
               alt="couverture_image"
             />
           ) : (
@@ -99,11 +102,11 @@ function Profile({ data, newObject }) {
 
           <img
             className="profile_img"
-            src={`${user.profile.picture}`}
+            src={`${user.picture}`}
             alt="profile_img"
           />
           {/* Profile Name */}
-          <h1 className="profile-user-name">{user.profile.name}</h1>
+          <h1 className="profile-user-name">{user.name}</h1>
 
           <div className="profile">
             <div className="Profile_desc">
@@ -111,25 +114,25 @@ function Profile({ data, newObject }) {
                 {/* Profile Stat */}
                 <ul>
                   <li>
-                    <span className="profile-stat-count">{card.length}</span>{" "}
-                    publications
+                    {/* <span className="profile-stat-count">{card.length}</span>{" "} */}
+                   16 posts
                   </li>
                   <li>
-                    <span className="profile-stat-count">188</span> abonnés
+                    <span className="profile-stat-count">188</span> followers
                   </li>
                   <li>
-                    <span className="profile-stat-count">206</span> abonnements
+                    <span className="profile-stat-count">206</span> following
                   </li>
                 </ul>
               </div>
               {/* Bio  */}
               <div className="profile-bio">
-                {user.profile.bio ? <p>{user.bio}</p> : null}
+                {user.bio ? <p>{user.bio}</p> : null}
               </div>
             </div>
           </div>
 
-          <ProfileCard card={card} />
+          {/* <ProfileCard card={card} /> */}
         </>
       ) : null}
     </div>
