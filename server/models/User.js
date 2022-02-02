@@ -60,8 +60,18 @@ const userSchema = new mongoose.Schema({
     require: true,
     unique: true,
   },
-  folowers: [this],
-  folowing: [this],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 userSchema.methods.generateAuthToken = function () {
