@@ -294,8 +294,13 @@ function Home() {
               <div class="container ">
                 <div class="row">
                   <div className={classes.root}>
+                    
+                    <div className="home_radio_group">
                     <b style={{ fontSize: "18px" }}> Places </b>
-                    <button
+                      <input className="home_radio_input" type="radio" value={"All"} name="myRadio1" id="All Places"/>
+                      <label className="home_radio_label" for="All Places" onClick={AllPlaces} >All</label>
+                    
+                    {/* <button
                       type="button"
                       class="button button3 btn-borderless"
                       style={{
@@ -306,22 +311,14 @@ function Home() {
                       onClick={AllPlaces}
                     >
                       All
-                    </button>
+                    </button> */}
                     {Categories.map((data) => (
-                      <button
-                        type="button"
-                        class="button button3 btn-borderless"
-                        style={{
-                          textAlign: "center",
-                          padding: "8px",
-                          fontSize: "16px",
-                        }}
-                        value={data.name}
-                        onClick={SubPlaces}
-                      >
-                        {data.name}
-                      </button>
+
+                      <><input className="home_radio_input" type="radio" value={data.name} name="myRadio1" id={data.name} onClick={SubPlaces} ></input><label className="home_radio_label" for={data.name} > {data.name} </label></>
+
                     ))}
+
+                    </div>
                   </div>
                 </div>
               </div>
@@ -357,8 +354,12 @@ function Home() {
               <div class="container ">
                 <div class="row">
                   <div className={classes.root}>
+                    
+                    <div className="home_radio_group">
                     <b style={{ fontSize: "18px" }}> Offers </b>
-                    <button
+                    <input className="home_radio_input" type="radio" value={"All"} name="myRadio2" id="All Offers"/>
+                    <label className="home_radio_label" for="All Offers" onClick={AllOffers} >All</label>
+                    {/* <button
                       type="button"
                       class="button button3 btn-borderless"
                       style={{
@@ -369,22 +370,13 @@ function Home() {
                       onClick={AllOffers}
                     >
                       All
-                    </button>
+                    </button> */}
                     {CategoriesOffer.map((data) => (
-                      <button
-                        type="button"
-                        class="button button3 btn-borderless"
-                        style={{
-                          textAlign: "center",
-                          padding: "8px",
-                          fontSize: "16px",
-                        }}
-                        value={data.name}
-                        onClick={SubOffers}
-                      >
-                        {data.name}
-                      </button>
+                      <><input className="home_radio_input" type="radio" value={data.name} name="myRadio2" id={data.name} onClick={SubOffers} ></input><label className="home_radio_label" for={data.name} > {data.name} </label></>
+
+                     
                     ))}
+                    </div>
                   </div>
                 </div>
               </div>

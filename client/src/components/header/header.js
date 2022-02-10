@@ -75,12 +75,22 @@ function Header() {
               >
                 Profile
               </NavLink>
+              <NavLink
+                exact
+                className="link-to-active"
+                activeClassName="clicked"
+                to="/signin"
+                id="nav4"
+                onClick={() => logout()}
+              >
+                Logout
+              </NavLink>
               <span className="imageAvatarTop">
                 <img
                   src={`${authContext.user.picture}`}
                   className="avatar-user2"
-                  to="/"
-                  onClick={() => logout()}
+                  to="/ProfileView"
+                  
                 />
               </span>
             </div>

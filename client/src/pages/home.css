@@ -185,7 +185,7 @@
     
     
 .bar-divider {
-  height: 60px;
+  height: 40px;
   width: 2px;
   background-color: #E2E2E2;
   color: transparent;
@@ -206,3 +206,23 @@ input::-webkit-calendar-picker-indicator {
 }
 
 
+.home_radio_input {
+  display: none;
+}
+
+
+.home_radio_label {
+  padding: 0 10px;
+  margin: 5px 5px;
+  background-color: white;
+  border-radius: 50px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  line-height: 2;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.home_radio_input:checked + .home_radio_label {
+  background-color: #6FA8FF;
+  color: white;
+}
