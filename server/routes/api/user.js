@@ -14,7 +14,6 @@ const {
   fileUploadPaths,
 } = require("../../middleware/uploadHandler");
 const { Types } = require("mongoose");
-const { _invalids } = require("joi/lib/types/lazy");
 
 // @route   GET api/v1/user/me
 // @desc    user info

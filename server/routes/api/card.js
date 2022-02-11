@@ -160,7 +160,10 @@ router.get("/all", async (req, res) => {
 // @access  public
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id); //.populate("user");
+  const card = await Card.findById(id).populate({
+    path: "user",
+    select: "name picture username",
+  });
   res.json({ card });
 });
 
