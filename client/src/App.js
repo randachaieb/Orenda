@@ -32,7 +32,8 @@ function App() {
             <Search />
           </Route>
           <Route exact path="/">
-            {authContext.auth.token ? <Home /> : <Redirect to="/signin" />}
+            {/* {authContext.auth.token ? <Home /> : <Redirect to="/signin" />} */}
+            <Home />
           </Route>
           <Route path="/signup">
             <Signup />
@@ -43,7 +44,7 @@ function App() {
           <Route path="/profileView">
             <ProfileView />
           </Route>
-          <Route path="/:username">
+          <Route path="/user/:id">
             <Profile />
           </Route>
           <Route path="/ContactUs">

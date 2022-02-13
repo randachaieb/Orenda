@@ -61,6 +61,7 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
   return (
     <>
       <div className="form-pop">
+        <h3 className="filter-title">Add Place/Offer</h3>
         <div className="content">
           <button
             type="button"
@@ -69,27 +70,27 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           />
           <input
             type="file"
-            placeholder="enter img"
+            placeholder=" Choose an Image"
             onChange={(e) => setPicture(e.target.files[0])}
           />
           <label>Title</label>
           <input
             type="text"
-            placeholder="enter title"
+            placeholder="Enter Title"
             className="input"
             onChange={(e) => setName(e.target.value)}
           />
           <div className="select-box">
             <select onChange={(e) => setCategoriesP(e.target.value)}>
               <option>Places By Category</option>
-              <option value="Accelerators">Accelerators</option>
               <option value="Training Centers">Training Centers</option>
+              <option value="Campings">Campings</option>
               <option value="Schools">Schools</option>
               <option value="Incubators">Incubators</option>
               <option value="Coworking Spaces">Coworking Spaces</option>
-              <option value="Campings">Campings</option>
               <option value="Clubs">Clubs</option>
-              
+              <option value="Leisure Tourism">Leisure Tourism</option>
+              <option value="Accelerators">Accelerators</option>
             </select>
             <select
               id="browsers3"
@@ -133,7 +134,7 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <label>Description</label>
           <input
             type="text"
-            placeholder="enter description"
+            placeholder="Enter Description"
             className="input"
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -141,11 +142,11 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <label>Website</label>
           <input
             type="text"
-            placeholder="enter Web Site Url"
+            placeholder="Enter Web Site Url"
             className="input"
             onChange={(e) => setSite(e.target.value)}
           />
-          <button className="button" onClick={(e) => handleSubmit(e)}>
+          <button className="button filter-btn" onClick={(e) => handleSubmit(e)}>
             Add
           </button>
         </div>

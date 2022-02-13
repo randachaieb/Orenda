@@ -7,6 +7,7 @@
     padding-left: 1.5rem;
     overflow: hidden;
     width: 100%;
+    max-width: 300px;
     color: rgb(119, 121, 140);
     background-color: #fafafa;
     border-width: 1px;

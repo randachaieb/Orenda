@@ -22,7 +22,7 @@ export function AuthProvider(props) {
         })
 
         .then((res) => {
-          console.log(res.data);
+          console.log('USER: ',res.data);
           setUser(res.data);
         })
         .catch((err) => err.message);

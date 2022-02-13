@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Cards from "../components/card/cards";
 import "./home.css";
 import PopupForm from "../components/filter-box/filter";
@@ -7,6 +7,10 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 // import Carsouel from "../components/carsouel/carsouel";
 import axios from "axios";
+// import HomeIcon from '@mui/icons-material/Home';
+import { AuthContext } from '../context/authContext';
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -17,9 +21,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
 }));
+
 function Home() {
   const classes = useStyles();
-
+  const authContext = useContext(AuthContext);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const history = useHistory();
@@ -42,7 +47,6 @@ function Home() {
     // Met à jour le titre du document via l’API du navigateur
     axios.get("/api/v1/categories/PlacesCategories").then((response) => {
       console.log(response.data);
-
       setCategories(response.data);
     });
     axios.get("/api/v1/categories/offerCategories").then((response) => {
@@ -67,21 +71,30 @@ function Home() {
   ];
 
   const changePlaces = (event) => {
+    
     if (event.target.value != "") {
+      
+      console.log("in", event.target.value)
       axios
         .get("/api/v1/categories/PlacesCategories/" + event.target.value)
         .then((res) => {
+          
           console.log(res.data.place);
           if (res.data.place.length != 0) {
+            
             axios
               .patch("/api/v1/categories/update/" + res.data.place[0]._id)
               .then((res) => {
                 console.log(res.data);
               });
+              
           }
         });
     }
+
+    console.log("out", event.target.value)
     setPlaces(event.target.value);
+    
   };
 
   const changeOffer = (event) => {
@@ -156,6 +169,12 @@ function Home() {
     }
     setCategoriesOfferSub([]);
   };
+
+
+  const clear = (event) => {
+    event.target.value = "";
+  };
+
   return (
     <div>
       {/* <Carsouel /> */}
@@ -166,18 +185,35 @@ function Home() {
         <div className="container-card">
           <br /> <br /> <br /> <br /> <br />
           <div className="container box">
+
+{/* 
+            ----------------------------------------------------------
+            the start of the bar
+            ----------------------------------------------------------
+            */}
+
             <div className=" category-search">
               <div className="display">
+
+
+
+
                 <div className="category">
+               
+                  {/* <HomeIcon color="secondary" /> */}
+                  <svg className="svg-size" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                   <input
                     className="form-select"
                     list="browsers2"
                     name="byPlaces"
                     id="browser"
-                    placeholder="Places By Category"
+                    placeholder="Places"
                     onChange={changePlaces}
+                    // onClick={clear}
                   ></input>
-                  <datalist id="browsers2" aria-label="Default select example">
+                  {console.log("categoryxx: ", Categories)}
+                  {/* aria-label="Default select example" */}
+                  <datalist id="browsers2">
                     {Categories.map((data) => (
                       <option key={data.name} value={data.name}>
                         {data.name}
@@ -185,24 +221,42 @@ function Home() {
                     ))}
                   </datalist>
                 </div>
+
+
+                      <div className="bar-divider">
+                        .
+                      </div>
+
                 <div className="category">
+                <svg className="svg-size" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                   <input
                     className="form-select"
                     list="browsers3"
                     name="byOffer"
                     id="browser"
-                    placeholder="Offers By Category"
+                    placeholder="Offers"
                     onChange={changeOffer}
                   ></input>
-                  <datalist id="browsers3" aria-label="Default select example">
+                  <datalist id="browsers3">
+                    
                     {CategoriesOffer.map((data) => (
-                      <option key={data._id} value={data.name}>
+                      <option key={data._id} value={data.name ? data.name.trim() : data.name}>
                         {data.name}
+                        {console.log('options: ', data)}
+                        {console.log('options: ', data.name)}
                       </option>
                     ))}
                   </datalist>
                 </div>
+
+
+                <div className="bar-divider">
+                      .
+                </div>
+
+
                 <div className="category">
+                <svg className="svg-size" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                   <input
                     className="form-select"
                     list="browsers"
@@ -211,7 +265,7 @@ function Home() {
                     placeholder="Region"
                     onChange={(e) => setRegion(e.target.value)}
                   ></input>
-                  <datalist id="browsers" aria-label="Default select example">
+                  <datalist id="browsers">
                     <option value="Tunis">Tunis</option>
                     <option value="Sousse">Sousse</option>
                     <option value="Monastir">Monastir</option>
@@ -219,21 +273,36 @@ function Home() {
                   </datalist>
                 </div>
               </div>
-              <button className=" btn-pry" onClick={handleShow}>
-                {" "}
-                Add Place / Offer{" "}
-              </button>
-
               {show ? <PopupForm handleClose={handleClose} /> : null}
             </div>
-            <div class="container horizontal-scrollable">
+
+            {/* 
+            ----------------------------------------------------------
+            the end of the bar
+            ----------------------------------------------------------
+            */}
+
+            {authContext.user._id ?
+
+            <button className=" btn-pry btn-margin-above" onClick={handleShow}>
+                {" "}
+                Add Place / Offer{" "}
+              </button> : <></>}
+
+
+            <div class="container horizontal-scrollable padding-above">
               <div class="container ">
                 <div class="row">
                   <div className={classes.root}>
+                    
+                    <div className="home_radio_group">
                     <b style={{ fontSize: "18px" }}> Places </b>
-                    <button
+                      <input className="home_radio_input" type="radio" value={"All"} name="myRadio1" id="All Places"/>
+                      <label className="home_radio_label" for="All Places" onClick={AllPlaces} >All</label>
+                    
+                    {/* <button
                       type="button"
-                      class="button button3"
+                      class="button button3 btn-borderless"
                       style={{
                         textAlign: "center",
                         padding: "8px",
@@ -242,22 +311,14 @@ function Home() {
                       onClick={AllPlaces}
                     >
                       All
-                    </button>
+                    </button> */}
                     {Categories.map((data) => (
-                      <button
-                        type="button"
-                        class="button button3"
-                        style={{
-                          textAlign: "center",
-                          padding: "8px",
-                          fontSize: "16px",
-                        }}
-                        value={data.name}
-                        onClick={SubPlaces}
-                      >
-                        {data.name}
-                      </button>
+
+                      <><input className="home_radio_input" type="radio" value={data.name} name="myRadio1" id={data.name} onClick={SubPlaces} ></input><label className="home_radio_label" for={data.name} > {data.name} </label></>
+
                     ))}
+
+                    </div>
                   </div>
                 </div>
               </div>
@@ -293,10 +354,14 @@ function Home() {
               <div class="container ">
                 <div class="row">
                   <div className={classes.root}>
+                    
+                    <div className="home_radio_group">
                     <b style={{ fontSize: "18px" }}> Offers </b>
-                    <button
+                    <input className="home_radio_input" type="radio" value={"All"} name="myRadio2" id="All Offers"/>
+                    <label className="home_radio_label" for="All Offers" onClick={AllOffers} >All</label>
+                    {/* <button
                       type="button"
-                      class="button button3"
+                      class="button button3 btn-borderless"
                       style={{
                         textAlign: "center",
                         padding: "8px",
@@ -305,22 +370,13 @@ function Home() {
                       onClick={AllOffers}
                     >
                       All
-                    </button>
+                    </button> */}
                     {CategoriesOffer.map((data) => (
-                      <button
-                        type="button"
-                        class="button button3"
-                        style={{
-                          textAlign: "center",
-                          padding: "8px",
-                          fontSize: "16px",
-                        }}
-                        value={data.name}
-                        onClick={SubOffers}
-                      >
-                        {data.name}
-                      </button>
+                      <><input className="home_radio_input" type="radio" value={data.name} name="myRadio2" id={data.name} onClick={SubOffers} ></input><label className="home_radio_label" for={data.name} > {data.name} </label></>
+
+                     
                     ))}
+                    </div>
                   </div>
                 </div>
               </div>
