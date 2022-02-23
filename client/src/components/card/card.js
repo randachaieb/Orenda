@@ -290,10 +290,14 @@ const PopupForm = ({
               value={categoriesO}
             >
               <option>Offers By Category</option>
+              <option value="Exchange Programs">Exchange Programs</option>
+              <option value="Job Offers">Job Offers</option>
+              <option value="Internships">Internships</option>
               <option value="Scholarships">Scholarships</option>
-              <option value="Job offers">Job offers</option>
               <option value="Competitions">Competitions</option>
+              <option value="Discounts">Discounts</option>
               <option value="Events">Events</option>
+              <option value="Hackathons">Hackathons</option>
             </select>
             <select onChange={(e) => setRegion(e.target.value)} value={region}>
               <option>Region</option>
