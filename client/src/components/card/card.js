@@ -274,13 +274,15 @@ const PopupForm = ({
               value={categoriesP}
             >
               <option>Places By Category</option>
-              <option value="Training centers">Training centers</option>
+              <option value="Training Centers">Training Centers</option>
+              <option value="Campings">Campings</option>
               <option value="Schools">Schools</option>
-              <option value="Coworking places">Coworking Spaces</option>
-              <option value="Incubator">Incubators</option>
-              <option value="Campers">Campers</option>
-
-            </select>
+              <option value="Incubators">Incubators</option>
+              <option value="Coworking Spaces">Coworking Spaces</option>
+              <option value="Clubs">Clubs</option>
+              <option value="Leisure Tourism">Leisure Tourism</option>
+              <option value="Accelerators">Accelerators</option>
+             </select>
             <select
               id="browsers3"
               aria-label="Default select example"
