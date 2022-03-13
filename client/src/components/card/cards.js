@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import Card from "./card";
 import "./cards.css";
@@ -6,6 +6,7 @@ import "./cards.css";
 import axios from "axios";
 import Loader from "../loader/loader";
 import { useParams } from "react-router-dom";
+import { stateToPath } from '../../util/updatePath';
 
 export default function Cards(props) {
   const [card, setCard] = useState([]);
@@ -52,6 +53,15 @@ export default function Cards(props) {
 
   const [limit, setLimit] = useState(6);
   const items = card.slice(0, limit);
+  // save filters to path (but not on first render)
+  const firstUpdate = useRef(true);
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    stateToPath(props);
+  }, [props]);
 
   console.log(search);
   return (
