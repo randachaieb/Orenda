@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
     User.findById(decoded._id)
       .then((user) => {
         if (user) {
-          req.user = decoded;
+          req.user = user;
           next();
         } else res.status(401).json({ message: "Invalid token" });
       })
