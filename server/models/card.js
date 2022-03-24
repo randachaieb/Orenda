@@ -48,6 +48,15 @@ const cardSchema = new mongoose.Schema({
   website: {
     type: String,
   },
+  facebook: {
+    type: String,
+  },
+  instagram: {
+    type: String,
+  },
+  linkedin: {
+    type: String,
+  },
 });
 
 const validateCard = (card) => {
@@ -58,7 +67,11 @@ const validateCard = (card) => {
     place: Joi.string().allow(null),
     offer: Joi.array().items(Joi.string().allow(null)),
     profile: Joi.string().allow(null),
-    website: Joi.string().required(),
+    website: Joi.string().allow(null),
+    facebook: Joi.string().allow(null),
+    instagram: Joi.string().allow(null),
+    linkedin: Joi.string().allow(null),
+
     user: Joi.string().min(5).max(255).required(),
   };
   return Joi.validate(card, schema);

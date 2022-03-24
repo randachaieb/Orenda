@@ -34,16 +34,12 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add card
 // @access  private
 router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-
   if (!req.file) {
     return res.status(400).json({ message: "No image uploaded" });
   } else {
-    if (!req.body.place && !req.body.offer)
-      return res.status(400).json({ message: "a place/offer is required " });
-
-    const { error } = validateCard({ ...req.body, user: req.user._id });
+    // if (!req.body.place && !req.body.offer)
+    //   return res.status(400).json({ message: "a place/offer is required " });
+    const { error } = validateCard({ ...req.body, user: String(req.user._id) });
     if (error) {
       deleteFile(join(fileUploadPaths.FILE_UPLOAD_PATH, req.file.filename));
       return res.status(400).json(error.details[0].message);
@@ -59,6 +55,7 @@ router.post("/", auth, uploadImage.single("picture"), async (req, res) => {
       join(fileUploadPaths.FILE_UPLOAD_PATH, imageName),
       join(fileUploadPaths.CART_IMAGE_UPLOAD_PATH, imageName)
     );
+    console.log("file");
     const savedCard = await newCard.save();
 
     return res.json({ card: savedCard });
@@ -74,9 +71,6 @@ router.patch(
   uploadImage.single("picture"),
   async (req, res) => {
     const { id } = req.params;
-    if (!req.body.place && !req.body.offer)
-      return res.status(400).json({ message: "a place/offer is required " });
-
     const { error } = validate_update(req.body);
     if (error) {
       if (req.file)
@@ -112,8 +106,8 @@ router.patch(
 // @access  private
 router.delete("/delete", auth, async (req, res) => {
   const { id } = req.body;
-  const card = await Card.findByIdAndDelete(id);
-
+  const { _id } = req.user._id;
+  const card = await Card.findOneAndDelete({ _id: id, user: _id });
   if (card === null)
     return res.status(400).json({ message: "card not exists" });
   else {
@@ -193,13 +187,16 @@ const validate_search_schema = (query) => {
 
 const validate_update = (req) => {
   const schema = {
-    name: Joi.string().min(5).max(50),
-    description: Joi.string(),
-    region: Joi.string().min(3).max(50),
+    name: Joi.string().min(5).max(50).allow(null),
+    description: Joi.string().allow(null),
+    region: Joi.string().min(3).max(50).allow(null),
     place: Joi.string().allow(null),
     offer: Joi.array().items(Joi.string().allow(null)),
     profile: Joi.string().allow(null),
-    website: Joi.string(),
+    website: Joi.string().allow(null),
+    facebook: Joi.string().allow(null),
+    instagram: Joi.string().allow(null),
+    linkedin: Joi.string().allow(null),
   };
   return Joi.validate(req, schema);
 };
