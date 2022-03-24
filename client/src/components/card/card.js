@@ -274,13 +274,15 @@ const PopupForm = ({
               value={categoriesP}
             >
               <option>Places By Category</option>
-              <option value="Training centers">Training centers</option>
+              <option value="Training Centers">Training Centers</option>
+              <option value="Campings">Campings</option>
               <option value="Schools">Schools</option>
-              <option value="Coworking places">Coworking Spaces</option>
-              <option value="Incubator">Incubators</option>
-              <option value="Campers">Campers</option>
-
-            </select>
+              <option value="Incubators">Incubators</option>
+              <option value="Coworking Spaces">Coworking Spaces</option>
+              <option value="Clubs">Clubs</option>
+              <option value="Leisure Tourism">Leisure Tourism</option>
+              <option value="Accelerators">Accelerators</option>
+             </select>
             <select
               id="browsers3"
               aria-label="Default select example"
@@ -288,10 +290,14 @@ const PopupForm = ({
               value={categoriesO}
             >
               <option>Offers By Category</option>
+              <option value="Exchange Programs">Exchange Programs</option>
+              <option value="Job Offers">Job Offers</option>
+              <option value="Internships">Internships</option>
               <option value="Scholarships">Scholarships</option>
-              <option value="Job offers">Job offers</option>
               <option value="Competitions">Competitions</option>
+              <option value="Discounts">Discounts</option>
               <option value="Events">Events</option>
+              <option value="Hackathons">Hackathons</option>
             </select>
             <select onChange={(e) => setRegion(e.target.value)} value={region}>
               <option>Region</option>
