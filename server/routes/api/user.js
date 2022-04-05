@@ -66,7 +66,7 @@ router.get("/me", auth, async (req, res) => {
 // @desc    register user
 // @access  Public
 router.post("/", async (req, res) => {
-  const { error } = validate(req.body);
+  const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const { email, password } = req.body;
@@ -242,8 +242,9 @@ const validateUser = (user) => {
     region: Joi.string().min(5).max(50),
     address: Joi.string().min(5).max(50),
     email: Joi.string().min(5).max(50).email(),
+    password: Joi.string().min(5).max(50).required(),
     // isAdmin: Joi.boolean(),
-    // isPro: Joi.boolean(),
+    isPro: Joi.boolean(),
   };
   return Joi.validate(user, schema);
 };

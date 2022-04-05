@@ -9,8 +9,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 // import HomeIcon from '@mui/icons-material/Home';
 import { AuthContext } from '../context/authContext';
+<<<<<<< HEAD
 import Button from 'react-bootstrap/Button';
 import AddPlaceModel from "./AddPlaceModel";
+=======
+import { stateFromPath } from '../util/updatePath';
+>>>>>>> 4b320ab23c8e78c9a5cdd30b8e2e93378bf430fc
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +70,11 @@ function Home() {
         url: `https://picsum.photos/1000?random=${id}`,
       }))
     );
+    // load filters from url
+    const { sOffer, sPlace, sregion } = stateFromPath();
+    sOffer && setOffer(sOffer);
+    sPlace && setPlaces(sPlace);
+    sregion && setRegion(sregion);
   }, []);
 
   let slides = [
@@ -216,6 +225,7 @@ function Home() {
                     id="browser"
                     placeholder="Places"
                     onChange={changePlaces}
+                    value={byPlaces}
                     // onClick={clear}
                   ></input>
                   {console.log("categoryxx: ", Categories)}
@@ -243,6 +253,7 @@ function Home() {
                     id="browser"
                     placeholder="Offers"
                     onChange={changeOffer}
+                    value={byOffer}
                   ></input>
                   <datalist id="browsers3">
                     
@@ -271,6 +282,7 @@ function Home() {
                     id="browser"
                     placeholder="Region"
                     onChange={(e) => setRegion(e.target.value)}
+                    value={byRegion}
                   ></input>
                   <datalist id="browsers">
                     <option value="Tunis">Tunis</option>

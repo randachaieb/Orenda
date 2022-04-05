@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const { User } = require("../models/User");
 module.exports = (req, res, next) => {
   const token = req.header("x-auth-token");
   if (!token)
@@ -9,9 +9,15 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
+    User.findById(decoded._id)
+      .then((user) => {
+        if (user) {
+          req.user = user;
+          next();
+        } else res.status(401).json({ message: "Invalid token" });
+      })
+      .catch((err) => next(err));
   } catch (error) {
-    res.status(400).json({ message: "Invalid token" });
+    next(error);
   }
 };
