@@ -1,0 +1,21 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%;
+}
+
+.content .input {
+    width: 100%;
+    padding: 5px 20px;
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: black;
+}
+
+.add-place-model-social-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+

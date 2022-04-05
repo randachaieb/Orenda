@@ -1,10 +1,15 @@
-import "./filter.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-// popup window
-const PopupForm = ({ handleClose, SubmitPost }) => {
-  //New Empty Object To get Post Value
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+import { Form } from "react-bootstrap";
+
+
+import './AddPlaceModel.css'
+
+function AddPlaceModel(props) {
 
   const [name, setName] = useState("");
   const [region, setRegion] = useState("");
@@ -14,6 +19,9 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState();
   const [site, setSite] = useState();
+  const [facebook, setFacebook] = useState();
+  const [instagram, setInstagram] = useState();
+  const [linkedin, setLinkedin] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,12 +39,15 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
     params.append("description", description);
     params.append("picture", picture);
     params.append("website", site);
+    params.append("facebook", facebook);
+    params.append("instagram", instagram);
+    params.append("linkedin", linkedin);
     const token = localStorage.getItem("token");
     console.log(token);
     for (var value of params.values()) {
       console.log(value);
     }
-
+    console.log("params:: ",params)
     axios
       .post("/api/v1/card", params, {
         headers: {
@@ -58,18 +69,21 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
     console.log(categoriesO);
   };
 
-  
-
   return (
-    <>
-      <div className="form-pop">
-        <h3 className="filter-title">Add Place/Offer</h3>
-        <div className="content">
-          <button
-            type="button"
-            className="close btn-close"
-            onClick={handleClose}
-          />
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Add Place/Offer
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <div className="content">
+          <label>Select an Image</label>
           <input
             type="file"
             placeholder=" Choose an Image"
@@ -79,12 +93,12 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <input
             type="text"
             placeholder="Enter Title"
-            className="input"
+            className="form-control"
             onChange={(e) => setName(e.target.value)}
           />
           <div className="select-box">
-            <select onChange={(e) => setCategoriesP(e.target.value)}>
-              <option>Places By Category</option>
+            <select className="form-select" onChange={(e) => setCategoriesP(e.target.value)}>
+              <option >Places By Category</option>
               <option value="Training Centers">Training Centers</option>
               <option value="Campings">Campings</option>
               <option value="Schools">Schools</option>
@@ -94,12 +108,15 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
               <option value="Leisure Tourism">Leisure Tourism</option>
               <option value="Accelerators">Accelerators</option>
             </select>
+
+
             <select
               id="browsers3"
+              className="form-select"
               aria-label="Default select example"
               onChange={(e) => setCategoriesO([...categoriesO, e.target.value])}
             >
-              <option>Offers By Category</option>
+              <option >Offers By Category</option>
               <option value="Exchange Programs">Exchange Programs</option>
               <option value="Job Offers">Job Offers</option>
               <option value="Internships">Internships</option>
@@ -112,8 +129,8 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
 
             </select>
 
-            <select onChange={(e) => setRegion(e.target.value)}>
-              <option>Region</option>
+            <select className="form-select" onChange={(e) => setRegion(e.target.value)}>
+              <option >Region</option>
               <option value="Tunis">Tunis</option>
               <option value="Sousse">Sousse</option>
               <option value="Sfax">Sfax</option>
@@ -137,23 +154,80 @@ const PopupForm = ({ handleClose, SubmitPost }) => {
           <input
             type="text"
             placeholder="Enter Description"
-            className="input"
+            className="form-control"
             onChange={(e) => setDescription(e.target.value)}
           />
-
-          <label>Website</label>
-          <input
+          {/* <input
             type="text"
             placeholder="Enter Web Site Url"
-            className="input"
+            className="form-control"
             onChange={(e) => setSite(e.target.value)}
-          />
-          <button className="button filter-btn" onClick={(e) => handleSubmit(e)}>
-            Add
-          </button>
+          /> */}
+          {/* <InputGroup className="mb-3">
+              <DropdownButton
+                variant="outline-primary"
+                title="Website"
+                id="input-group-dropdown-1"
+              >
+                <Dropdown.Item href="#">Website</Dropdown.Item>
+                <Dropdown.Item href="#">Facebook</Dropdown.Item>
+                <Dropdown.Item href="#">Instagram</Dropdown.Item>
+                <Dropdown.Item href="#">LinkedIn</Dropdown.Item>
+              </DropdownButton>
+              <FormControl aria-label="Text input with dropdown button" onChange={(e) => setSite(e.target.value)} placeholder="Please Enter Web Site URL"/>
+            </InputGroup> */}
+            <div className="add-place-model-social-container">
+                <div className="add-place-model-social-item">
+                <Form.Label htmlFor="website">Website</Form.Label>
+                <Form.Control
+                  type="website"
+                  id="website"
+                  aria-describedby="website"
+                  placeholder="Please Enter Web Site URL"
+                  onChange={(e) => setSite(e.target.value)}
+                />
+                </div>
+                <div className="add-place-model-social-item">
+                <Form.Label htmlFor="facbook">Facebook</Form.Label>
+                <Form.Control
+                  type="website"
+                  id="facbook"
+                  aria-describedby="facbook"
+                  placeholder="Please Enter Facebook URL"
+                  onChange={(e) => setFacebook(e.target.value)}
+                />
+                </div>
+                <div className="add-place-model-social-item">
+                <Form.Label htmlFor="instagram">Instagram</Form.Label>
+                <Form.Control
+                  type="website"
+                  id="instagram"
+                  aria-describedby="instagram"
+                  placeholder="Please Enter Instagram URL"
+                  onChange={(e) => setInstagram(e.target.value)}
+                />
+                </div>
+                <div className="add-place-model-social-item">
+                <Form.Label htmlFor="linkedin">LinkedIn</Form.Label>
+                <Form.Control
+                  type="website"
+                  id="linkedin"
+                  aria-describedby="linkedin"
+                  placeholder="Please Enter LinkedIn URL"
+                  onChange={(e) => setLinkedin(e.target.value)}
+                />
+                </div>
+            </div>
+          
         </div>
-      </div>
-    </>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={props.onHide}>Close</Button>
+        <Button onClick={(e) => handleSubmit(e)}>Add</Button>
+      </Modal.Footer>
+    </Modal>
   );
-};
-export default PopupForm;
+}
+
+
+export default AddPlaceModel;
