@@ -9,15 +9,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 // import HomeIcon from '@mui/icons-material/Home';
 import { AuthContext } from '../context/authContext';
-<<<<<<< HEAD
 import Button from 'react-bootstrap/Button';
 import AddPlaceModel from "./AddPlaceModel";
-=======
 import { stateFromPath } from '../util/updatePath';
->>>>>>> 4b320ab23c8e78c9a5cdd30b8e2e93378bf430fc
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -307,7 +302,8 @@ function Home() {
             //     {" "}
             //     Add Place / Offer{" "}
             //   </button> 
-            <Button variant="primary" onClick={() => setModalShow(true)}>
+
+            <Button variant="primary" className=" btn-pry btn-margin-above" onClick={() => setModalShow(true)}>
             Add Place / Offer
             </Button>
               
