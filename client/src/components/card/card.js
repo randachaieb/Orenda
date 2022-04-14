@@ -1,5 +1,9 @@
 import React, { useContext, useState } from "react";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import Facebook from "@material-ui/icons/Facebook";
+import Instagram from "@material-ui/icons/Instagram";
+import LinkedIn from "@material-ui/icons/LinkedIn";
+import Computer from "@material-ui/icons/Computer";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -154,22 +158,52 @@ export default function Card(props) {
             : null}
         </div>
       </div>
+      {console.log("link:: ", props.website)}
       <div className="footer-c">
         <div className="bottom">
           <a
-            className="links"
+            className="links card__website"
             target="_blank"
             rel="noopener noreferrer"
             href={props.website}
           >
             {" "}
-            <i class="mr-2 bi-eye-fill"></i> view website
+            <Computer />
+          </a>
+          <a
+            className="links card__facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={props.facebook}
+          >
+            {" "}
+            <Facebook />
+          </a>
+          <a
+            className="links card__instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={props.instagram}
+          >
+            {" "}
+            <Instagram />
+          </a>
+          <a
+            className="links card__linkedin"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={props.linkedin}
+          >
+            {" "}
+            <LinkedIn />
           </a>
         </div>
       </div>
     </div>
   );
 }
+
+// --------------------- End of Card ------------------------------
 
 // popup window
 const PopupForm = ({

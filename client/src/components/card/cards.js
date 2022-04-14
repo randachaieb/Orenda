@@ -85,6 +85,9 @@ export default function Cards(props) {
                         place={c.place}
                         offer={c.offer}
                         website={c.website}
+                        facebook={c.facebook}
+                        instagram={c.instagram}
+                        linkedin={c.linkedin}
                         region={c.region}
                         picture={c.picture}
                         name={c.name}

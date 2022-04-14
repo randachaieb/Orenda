@@ -9,6 +9,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 // import HomeIcon from '@mui/icons-material/Home';
 import { AuthContext } from '../context/authContext';
+import Button from 'react-bootstrap/Button';
+import AddPlaceModel from "./AddPlaceModel";
 import { stateFromPath } from '../util/updatePath';
 
 
@@ -43,6 +45,8 @@ function Home() {
   const [CategoriesPlaceSub, setCategoriesPlaceSub] = useState("");
   const handleShow = () => setShow(true);
   const [images, setImages] = useState();
+
+  const [modalShow, setModalShow] = React.useState(false);
 
   useEffect(async () => {
     // Met à jour le titre du document via l’API du navigateur
@@ -181,6 +185,7 @@ function Home() {
     event.target.value = "";
   };
 
+
   return (
     <div>
       {/* <Carsouel /> */}
@@ -293,11 +298,25 @@ function Home() {
 
             {authContext.user._id ?
 
-            <button className=" btn-pry btn-margin-above" onClick={handleShow}>
-                {" "}
-                Add Place / Offer{" "}
-              </button> : <></>}
+            // <button className=" btn-pry btn-margin-above" onClick={handleShow}>
+            //     {" "}
+            //     Add Place / Offer{" "}
+            //   </button> 
 
+            <Button variant="primary" className=" btn-pry btn-margin-above" onClick={() => setModalShow(true)}>
+            Add Place / Offer
+            </Button>
+              
+              : <></>}
+
+
+              
+
+              <AddPlaceModel
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                handleClose={handleClose}
+              />
 
             <div class="container horizontal-scrollable padding-above">
               <div class="container ">
